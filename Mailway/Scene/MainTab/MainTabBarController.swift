@@ -37,12 +37,16 @@ final class MainTabBarController: UITabBarController {
         
         func viewController(context: AppContext) -> UIViewController {
             switch self {
-            case .chats:    return UIHostingController(rootView: ChatsView().environmentObject(context))
+            case .chats:
+                let viewController = ChatListViewController()
+                viewController.context = context
+                return UINavigationController(rootViewController: viewController)
             case .contacts:
                 let viewController = ContactListViewController()
                 viewController.context = context
                 return UINavigationController(rootViewController: viewController)
-            case .settings: return UIHostingController(rootView: SettingsView().environmentObject(context))
+            case .settings:
+                return UIHostingController(rootView: SettingsView().environmentObject(context))
             }
         }
     }

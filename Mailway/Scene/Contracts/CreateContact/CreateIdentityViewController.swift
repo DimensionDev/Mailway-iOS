@@ -89,3 +89,13 @@ extension CreateIdentityViewController: UIAdaptivePresentationControllerDelegate
     }
     
 }
+
+struct CreateIdentityViewController_Previews: PreviewProvider {
+    static var previews: some View {
+        UIViewControllerPreview {
+            let viewController = CreateIdentityViewController()
+            viewController.context = AppContext.shared
+            return UINavigationController(rootViewController: viewController)
+        }
+    }
+}

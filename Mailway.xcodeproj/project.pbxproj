@@ -19,6 +19,8 @@
 		DB19388E2477BD1D00E24AFB /* IdentitiesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB19388D2477BD1D00E24AFB /* IdentitiesListView.swift */; };
 		DB1938912477E4CD00E24AFB /* IdentityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1938902477E4CD00E24AFB /* IdentityDetailView.swift */; };
 		DB1938952477E8BA00E24AFB /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1938942477E8BA00E24AFB /* ContactListViewController.swift */; };
+		DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1B0135247D09E700098254 /* UIViewPreview.swift */; };
+		DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */; };
 		DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF11247527D80001F9C0 /* FileStorage.swift */; };
 		DB60BF16247528E20001F9C0 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF15247528E10001F9C0 /* FileHelper.swift */; };
 		DB60BF18247529DB0001F9C0 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF17247529DB0001F9C0 /* Chat.swift */; };
@@ -27,6 +29,9 @@
 		DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */; };
 		DB7E1E40247BC73B002FC90E /* IdentityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3F247BC73B002FC90E /* IdentityListViewController.swift */; };
 		DB7E1E43247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E42247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift */; };
+		DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */; };
+		DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498CC247D17A600EFBACD /* ChatListViewController.swift */; };
+		DBB498CF247D1AE900EFBACD /* CreateChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498CE247D1AE900EFBACD /* CreateChatViewController.swift */; };
 		DBE306A62474DF7B00EB7193 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306A52474DF7B00EB7193 /* AppDelegate.swift */; };
 		DBE306A82474DF7B00EB7193 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */; };
 		DBE306AC2474DF7C00EB7193 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBE306AB2474DF7C00EB7193 /* Assets.xcassets */; };
@@ -87,6 +92,8 @@
 		DB19388D2477BD1D00E24AFB /* IdentitiesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesListView.swift; sourceTree = "<group>"; };
 		DB1938902477E4CD00E24AFB /* IdentityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityDetailView.swift; sourceTree = "<group>"; };
 		DB1938942477E8BA00E24AFB /* ContactListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
+		DB1B0135247D09E700098254 /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
+		DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatGroupTableViewCell.swift; sourceTree = "<group>"; };
 		DB60BF11247527D80001F9C0 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		DB60BF15247528E10001F9C0 /* FileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		DB60BF17247529DB0001F9C0 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
@@ -95,6 +102,9 @@
 		DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListContactTableViewCell.swift; sourceTree = "<group>"; };
 		DB7E1E3F247BC73B002FC90E /* IdentityListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityListViewController.swift; sourceTree = "<group>"; };
 		DB7E1E42247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityListIdentityTableViewCell.swift; sourceTree = "<group>"; };
+		DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityBannerView.swift; sourceTree = "<group>"; };
+		DBB498CC247D17A600EFBACD /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
+		DBB498CE247D1AE900EFBACD /* CreateChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatViewController.swift; sourceTree = "<group>"; };
 		DBE306A22474DF7B00EB7193 /* Mailway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mailway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBE306A52474DF7B00EB7193 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -177,8 +187,8 @@
 		DB008AAC247666DC00CE6A7E /* CreateContact */ = {
 			isa = PBXGroup;
 			children = (
+				DBB498CB247D174100EFBACD /* View */,
 				DB008AB12476750800CE6A7E /* CreateIdentityViewController.swift */,
-				DB008AAA247666D200CE6A7E /* CreateIdentityView.swift */,
 			);
 			path = CreateContact;
 			sourceTree = "<group>";
@@ -213,6 +223,15 @@
 			children = (
 				DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */,
 				DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */,
+				DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DB553F03247D22760043285A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -222,6 +241,7 @@
 			children = (
 				DB60BF15247528E10001F9C0 /* FileHelper.swift */,
 				DB60BF11247527D80001F9C0 /* FileStorage.swift */,
+				DB1B0135247D09E700098254 /* UIViewPreview.swift */,
 			);
 			path = Vender;
 			sourceTree = "<group>";
@@ -248,11 +268,38 @@
 		DB7E1E54247CF0E8002FC90E /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				DB60BF19247534C70001F9C0 /* CreateChatView.swift */,
+				DBE306CA2474E15800EB7193 /* ChatsView.swift */,
 				DBE306C72474E11500EB7193 /* ContactsView.swift */,
 				DB008AA8247661E300CE6A7E /* ContractListHeaderView.swift */,
 				DB19388D2477BD1D00E24AFB /* IdentitiesListView.swift */,
 			);
 			path = Deprecated;
+			sourceTree = "<group>";
+		};
+		DBB498CB247D174100EFBACD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DB008AAA247666D200CE6A7E /* CreateIdentityView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DBB498D0247D1AED00EFBACD /* CreateChat */ = {
+			isa = PBXGroup;
+			children = (
+				DB553F03247D22760043285A /* View */,
+				DBB498CE247D1AE900EFBACD /* CreateChatViewController.swift */,
+			);
+			path = CreateChat;
+			sourceTree = "<group>";
+		};
+		DBB498D1247D1AF400EFBACD /* ChatList */ = {
+			isa = PBXGroup;
+			children = (
+				DBB498CC247D17A600EFBACD /* ChatListViewController.swift */,
+			);
+			path = ChatList;
 			sourceTree = "<group>";
 		};
 		DBE306992474DF7B00EB7193 = {
@@ -357,8 +404,8 @@
 		DBE306DD2474EDD700EB7193 /* Chats */ = {
 			isa = PBXGroup;
 			children = (
-				DBE306CA2474E15800EB7193 /* ChatsView.swift */,
-				DB60BF19247534C70001F9C0 /* CreateChatView.swift */,
+				DBB498D1247D1AF400EFBACD /* ChatList */,
+				DBB498D0247D1AED00EFBACD /* CreateChat */,
 			);
 			path = Chats;
 			sourceTree = "<group>";
@@ -545,12 +592,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBB498CF247D1AE900EFBACD /* CreateChatViewController.swift in Sources */,
 				DB7E1E40247BC73B002FC90E /* IdentityListViewController.swift in Sources */,
 				DBE306A62474DF7B00EB7193 /* AppDelegate.swift in Sources */,
 				DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */,
 				DBE306E0247515C000EB7193 /* DocumentStore.swift in Sources */,
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
 				DB19388E2477BD1D00E24AFB /* IdentitiesListView.swift in Sources */,
+				DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */,
+				DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */,
 				DB008AB02476737100CE6A7E /* ViewStata+Contacts.swift in Sources */,
 				DBE306CB2474E15800EB7193 /* ChatsView.swift in Sources */,
 				DB60BF1A247534C70001F9C0 /* CreateChatView.swift in Sources */,
@@ -565,6 +615,7 @@
 				DBE306E524751AAD00EB7193 /* ViewState+ChatsView.swift in Sources */,
 				DBE306D12474ECE100EB7193 /* ViewStateStore.swift in Sources */,
 				DBE306D62474ED0700EB7193 /* AppCommand.swift in Sources */,
+				DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */,
 				DBE306CD2474E19200EB7193 /* SettingsView.swift in Sources */,
 				DB008AB22476750800CE6A7E /* CreateIdentityViewController.swift in Sources */,
 				DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */,
@@ -572,6 +623,7 @@
 				DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */,
 				DB008AA9247661E300CE6A7E /* ContractListHeaderView.swift in Sources */,
 				DB60BF18247529DB0001F9C0 /* Chat.swift in Sources */,
+				DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */,
 				DB60BF16247528E20001F9C0 /* FileHelper.swift in Sources */,
 				DB1938912477E4CD00E24AFB /* IdentityDetailView.swift in Sources */,
 				DBE306C82474E11500EB7193 /* ContactsView.swift in Sources */,

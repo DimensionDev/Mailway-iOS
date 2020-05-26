@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 import Combine
 
 final class ContactListViewModel: NSObject {
@@ -49,17 +50,17 @@ extension ContactListViewModel {
     
     static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
         if identities.count == 0 {
-            cell.personIconImageView.image = UIImage(systemName: "person.crop.circle.fill.badge.plus")
-            cell.headerLabel.text = "No Identity"
-            cell.captionLabel.text = "Tap to add identity"
+            cell.bannerView.personIconImageView.image = UIImage(systemName: "person.crop.circle.fill.badge.plus")
+            cell.bannerView.headerLabel.text = "No Identity"
+            cell.bannerView.captionLabel.text = "Tap to add identity"
         } else if identities.count == 1 {
-            cell.personIconImageView.image = UIImage(systemName: "person.crop.square.fill")
-            cell.headerLabel.text = "My Identity"
-            cell.captionLabel.text = "1 identity"
+            cell.bannerView.personIconImageView.image = UIImage(systemName: "person.crop.square.fill")
+            cell.bannerView.headerLabel.text = "My Identity"
+            cell.bannerView.captionLabel.text = "1 identity"
         } else {
-            cell.personIconImageView.image = UIImage(systemName: "rectangle.stack.person.crop.fill")
-            cell.headerLabel.text = "My Identity"
-            cell.captionLabel.text = "\(identities.count) identities"
+            cell.bannerView.personIconImageView.image = UIImage(systemName: "rectangle.stack.person.crop.fill")
+            cell.bannerView.headerLabel.text = "My Identity"
+            cell.bannerView.captionLabel.text = "\(identities.count) identities"
         }
     }
     
@@ -179,4 +180,14 @@ extension ContactListViewController: UITableViewDelegate {
         }
     }
     
+}
+
+struct ContactListViewController_Previews: PreviewProvider {
+    static var previews: some View {
+        UIViewControllerPreview {
+            let viewController = ContactListViewController()
+            viewController.context = AppContext.shared
+            return viewController
+        }
+    }
 }

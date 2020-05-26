@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class ContactListContactTableViewCell: UITableViewCell {
     
@@ -41,4 +42,16 @@ extension ContactListContactTableViewCell {
         ])
     }
     
+}
+
+
+struct ContactListContactTableViewCell_Previews: PreviewProvider {
+    static var previews: some View {
+        UIViewPreview {
+            let cell = ContactListContactTableViewCell()
+            cell.nameLabel.text = "Alice"
+            return cell
+        }
+        .previewLayout(.fixed(width: 320, height: 44))
+    }
 }

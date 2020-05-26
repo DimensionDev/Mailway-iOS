@@ -42,11 +42,11 @@ extension IdentityListViewModel {
         
         // override header
         if identities.count == 0 {
-            cell.headerLabel.text = "No Identity"
+            cell.bannerView.headerLabel.text = "No Identity"
         } else if identities.count == 1 {
-            cell.headerLabel.text = "1 Identity"
+            cell.bannerView.headerLabel.text = "1 Identity"
         } else {
-            cell.headerLabel.text = "\(identities.count) Identity"
+            cell.bannerView.headerLabel.text = "\(identities.count) Identity"
         }
     }
 }
