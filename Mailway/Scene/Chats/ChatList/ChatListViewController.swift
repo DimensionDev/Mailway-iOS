@@ -48,10 +48,12 @@ extension ChatListViewModel: UITableViewDataSource {
     
 }
 
-final class ChatListViewController: UIViewController {
+final class ChatListViewController: UIViewController, NeedsDependency {
+    
+     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
+     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     var disposeBag = Set<AnyCancellable>()
-    weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     
     private lazy var composeBarButtonItem: UIBarButtonItem = {
         let item = UIBarButtonItem()
@@ -98,10 +100,7 @@ extension ChatListViewController {
 extension ChatListViewController {
     
     @objc private func composeBarButtonItemPressed(_ sender: UIBarButtonItem) {
-        let viewController = CreateChatViewController()
-        viewController.context = context
-        let navigationController = UINavigationController(rootViewController: viewController)
-        present(navigationController, animated: true, completion: nil)
+        coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
     }
     
 }

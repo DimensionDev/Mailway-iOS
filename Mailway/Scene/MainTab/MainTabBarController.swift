@@ -11,8 +11,9 @@ import SwiftUI
 
 // Use UIKit TabBarController to avoid SwiftUI.TabView deinit the tab when switching issue
 final class MainTabBarController: UITabBarController {
-    
-    weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
+        
+    weak var context: AppContext!
+    weak var coordinator: SceneCoordinator!
     
     enum Tabs: CaseIterable {
         case chats
@@ -35,15 +36,17 @@ final class MainTabBarController: UITabBarController {
             }
         }
         
-        func viewController(context: AppContext) -> UIViewController {
+        func viewController(context: AppContext, coordinator: SceneCoordinator) -> UIViewController {
             switch self {
             case .chats:
                 let viewController = ChatListViewController()
                 viewController.context = context
+                viewController.coordinator = coordinator
                 return UINavigationController(rootViewController: viewController)
             case .contacts:
                 let viewController = ContactListViewController()
                 viewController.context = context
+                viewController.coordinator = coordinator
                 return UINavigationController(rootViewController: viewController)
             case .settings:
                 return UIHostingController(rootView: SettingsView().environmentObject(context))
@@ -51,8 +54,10 @@ final class MainTabBarController: UITabBarController {
         }
     }
     
-    init(context: AppContext) {
+    // TabBar will immediately load view without interval
+    init(context: AppContext, coordinator: SceneCoordinator) {
         self.context = context
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -70,7 +75,7 @@ extension MainTabBarController {
         let tabs = Tabs.allCases
         
         let viewControllers: [UIViewController] = tabs.map { tab in
-            let viewController = tab.viewController(context: context)
+            let viewController = tab.viewController(context: context, coordinator: coordinator)
             viewController.tabBarItem.title = tab.title
             viewController.tabBarItem.image = tab.image
             return viewController

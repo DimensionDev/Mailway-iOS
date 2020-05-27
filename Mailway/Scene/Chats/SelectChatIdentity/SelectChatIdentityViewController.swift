@@ -1,15 +1,16 @@
 //
-//  IdentityListViewController.swift
+//  SelectChatIdentityViewController.swift
 //  Mailway
 //
-//  Created by Cirno MainasuK on 2020-5-25.
+//  Created by Cirno MainasuK on 2020-5-27.
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
+import os
 import UIKit
 import Combine
 
-final class IdentityListViewModel: NSObject {
+final class SelectChatIdentityViewModel: NSObject {
     
     var disposeBag = Set<AnyCancellable>()
     
@@ -28,31 +29,14 @@ final class IdentityListViewModel: NSObject {
     
 }
 
-extension IdentityListViewModel {
+extension SelectChatIdentityViewModel {
     enum Section: CaseIterable {
         case identities
-        case createIdentityFooter
-    }
-}
-
-extension IdentityListViewModel {
-    static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
-        // set to no identities style
-        ContactListViewModel.configure(cell: cell, with: [])
-        
-        // override header
-        if identities.count == 0 {
-            cell.bannerView.headerLabel.text = "No Identity"
-        } else if identities.count == 1 {
-            cell.bannerView.headerLabel.text = "1 Identity"
-        } else {
-            cell.bannerView.headerLabel.text = "\(identities.count) Identity"
-        }
     }
 }
 
 // MARK: - UITableViewDataSource
-extension IdentityListViewModel: UITableViewDataSource {
+extension SelectChatIdentityViewModel: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return Section.allCases.count
@@ -63,8 +47,6 @@ extension IdentityListViewModel: UITableViewDataSource {
         switch section {
         case .identities:
             return identities.value.count
-        case .createIdentityFooter:
-            return 1
         }
     }
     
@@ -80,48 +62,39 @@ extension IdentityListViewModel: UITableViewDataSource {
             let identity = identities.value[indexPath.row]
             
             _cell.nameLabel.text = identity.name
-            
-            
-        case .createIdentityFooter:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
-            cell = _cell
-            
-            identities
-                .sink { identities in
-                    IdentityListViewModel.configure(cell: _cell, with: identities)
-                }
-                .store(in: &_cell.disposeBag)
         }
         
         return cell
     }
 }
 
-final class IdentityListViewController: UIViewController, NeedsDependency {
+final class SelectChatIdentityViewController: UIViewController, NeedsDependency {
     
     var disposeBag = Set<AnyCancellable>()
-    
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
-    
+
     private(set) lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(IdentityListIdentityTableViewCell.self, forCellReuseIdentifier: String(describing: IdentityListIdentityTableViewCell.self))
-        tableView.register(ContactListIdentityBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self))
         tableView.tableFooterView = UIView()
         return tableView
     }()
     
-    private(set) lazy var viewModel = IdentityListViewModel(context: context)
+    private(set) lazy var viewModel = SelectChatIdentityViewModel(context: context)
+    
+    deinit {
+        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+    }
     
 }
 
-extension IdentityListViewController {
+extension SelectChatIdentityViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Identites"
+        title = "Select Identity"
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -134,7 +107,7 @@ extension IdentityListViewController {
         
         tableView.delegate = self
         tableView.dataSource = viewModel
-
+        
         viewModel.identities
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -145,16 +118,12 @@ extension IdentityListViewController {
     
 }
 
+
 // MARK: - UITableViewDelegate
-extension IdentityListViewController: UITableViewDelegate {
+extension SelectChatIdentityViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        if tableView.cellForRow(at: indexPath) is ContactListIdentityBannerTableViewCell {
-            // create identity
-            coordinator.present(scene: .createIdentity, from: self, transition: .modal(animated: true))
-        }
     }
     
 }

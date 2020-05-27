@@ -109,10 +109,11 @@ extension ContactListViewModel: UITableViewDataSource {
     }
 }
 
-final class ContactListViewController: UIViewController {
+final class ContactListViewController: UIViewController, NeedsDependency {
     
     var disposeBag = Set<AnyCancellable>()
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
+    weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     private(set) lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -166,16 +167,10 @@ extension ContactListViewController: UITableViewDelegate {
         if tableView.cellForRow(at: indexPath) is ContactListIdentityBannerTableViewCell {
             if viewModel.identities.value.isEmpty {
                 // create identity
-                let rootViewController = CreateIdentityViewController()
-                rootViewController.context = self.context
-                let navigationController = UINavigationController(rootViewController: rootViewController)
-                navigationController.presentationController?.delegate = rootViewController
-                self.present(navigationController, animated: true, completion: nil)
+                coordinator.present(scene: .createIdentity, from: self, transition: .modal(animated: true))
             } else {
                 // open list
-                let viewController = IdentityListViewController()
-                viewController.context = self.context
-                self.navigationController?.pushViewController(viewController, animated: true)
+                coordinator.present(scene: .identityList, from: self)
             }
         }
     }

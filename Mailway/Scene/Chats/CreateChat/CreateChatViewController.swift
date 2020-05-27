@@ -6,6 +6,7 @@
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
+import os
 import UIKit
 import SwiftUI
 import Combine
@@ -79,17 +80,13 @@ extension CreateChatViewModel: UITableViewDataSource {
     
 }
 
-final class CreateChatViewController: UIViewController {
+final class CreateChatViewController: UIViewController, NeedsDependency {
     
     var disposeBag = Set<AnyCancellable>()
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
+    weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
-//    private lazy var composeBarButtonItem: UIBarButtonItem = {
-//        let item = UIBarButtonItem()
-//        item.image = UIImage(systemName: "square.and.pencil")
-//        item.action = #selector(ChatListViewController.composeBarButtonItemPressed(_:))
-//        return item
-//    }()
+    private lazy var cancelBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(CreateChatViewController.cancelBarButtonItemPressed(_:)))
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -101,6 +98,16 @@ final class CreateChatViewController: UIViewController {
     
     private(set) lazy var viewModel = CreateChatViewModel(context: context)
     
+    deinit {
+        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+    }
+    
+}
+
+extension CreateChatViewController {
+    @objc private func cancelBarButtonItemPressed(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 extension CreateChatViewController {
@@ -109,7 +116,7 @@ extension CreateChatViewController {
         super.viewDidLoad()
         
         title = "New Message"
-        // navigationItem.rightBarButtonItem = composeBarButtonItem
+        navigationItem.leftBarButtonItem = cancelBarButtonItem
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -130,7 +137,7 @@ extension CreateChatViewController {
             }
             .store(in: &disposeBag)
     }
-    
+
 }
 
 // MARK: - UITableViewDelegate
@@ -138,6 +145,10 @@ extension CreateChatViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell {
+            coordinator.present(scene: .selectChatIdentity, from: self)
+        }
     }
     
 }

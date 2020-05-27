@@ -10,11 +10,13 @@ import UIKit
 import SwiftUI
 import Combine
 
-final class CreateIdentityViewController: UIViewController {
+final class CreateIdentityViewController: UIViewController, NeedsDependency {
     
     var disposeBag = Set<AnyCancellable>()
     
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
+    weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
+    
     let createIdentityView = CreateIdentityView()
     
     private(set) lazy var cancelBarButtonItem: UIBarButtonItem = {

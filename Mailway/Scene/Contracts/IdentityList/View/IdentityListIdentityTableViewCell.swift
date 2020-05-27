@@ -41,12 +41,14 @@ extension IdentityListIdentityTableViewCell {
     private func _init() {
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(avatarImageView)
+        let avatarImageViewHeightLayoutContraint = avatarImageView.heightAnchor.constraint(equalToConstant: 44)
+        avatarImageViewHeightLayoutContraint.priority = .defaultHigh
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             avatarImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 44),
             avatarImageView.widthAnchor.constraint(equalToConstant: 44),
+            avatarImageViewHeightLayoutContraint,
         ])
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false

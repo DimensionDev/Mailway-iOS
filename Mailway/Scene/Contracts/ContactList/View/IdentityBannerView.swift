@@ -49,9 +49,7 @@ final class IdentityBannerView: UIView {
 
 extension IdentityBannerView {
     
-    private func _init() {
-        backgroundColor = .systemBackground
-        
+    private func _init() {        
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 10
