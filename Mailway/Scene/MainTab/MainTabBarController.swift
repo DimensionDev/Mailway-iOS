@@ -72,6 +72,8 @@ extension MainTabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .systemBackground
+        
         let tabs = Tabs.allCases
         
         let viewControllers: [UIViewController] = tabs.map { tab in

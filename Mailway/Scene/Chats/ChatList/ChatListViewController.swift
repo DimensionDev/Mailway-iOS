@@ -17,16 +17,23 @@ final class ChatListViewModel: NSObject {
     // input
     let context: AppContext
     
+    // output
+    let chats = CurrentValueSubject<[Chat], Never>([])
+    
     init(context: AppContext) {
         self.context = context
         super.init()
 
+        context.documentStore.$chats
+            .assign(to: \.value, on: self.chats)
+            .store(in: &disposeBag)
     }
     
 }
 
 extension ChatListViewModel {
     enum Section: CaseIterable {
+        case inboxBanner
         case chats
     }
 }
@@ -35,15 +42,34 @@ extension ChatListViewModel {
 extension ChatListViewModel: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return Section.allCases.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        let section = Section.allCases[section]
+        switch section {
+        case .inboxBanner:
+            return 1
+        case .chats:
+            return chats.value.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let section = Section.allCases[indexPath.section]
+        let cell: UITableViewCell
+        
+        switch section {
+        case .inboxBanner:
+            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatListInboxBannerTableViewCell.self), for: indexPath) as! ChatListInboxBannerTableViewCell
+            cell = _cell
+            
+        case .chats:
+            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatListChatRoomTableViewCell.self), for: indexPath) as! ChatListChatRoomTableViewCell
+            cell = _cell
+        }
+        
+        return cell
     }
     
 }
@@ -54,7 +80,8 @@ final class ChatListViewController: UIViewController, NeedsDependency {
      weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     var disposeBag = Set<AnyCancellable>()
-    
+    private(set) lazy var viewModel = ChatListViewModel(context: context)
+
     private lazy var composeBarButtonItem: UIBarButtonItem = {
         let item = UIBarButtonItem()
         item.image = UIImage(systemName: "square.and.pencil")
@@ -65,11 +92,11 @@ final class ChatListViewController: UIViewController, NeedsDependency {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.register(ChatListInboxBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ChatListInboxBannerTableViewCell.self))
+        tableView.register(ChatListChatRoomTableViewCell.self, forCellReuseIdentifier: String(describing: ChatListChatRoomTableViewCell.self))
         tableView.tableFooterView = UIView()
         return tableView
     }()
-    
-    private(set) lazy var viewModel = ChatListViewModel(context: context)
     
 }
 
@@ -92,7 +119,13 @@ extension ChatListViewController {
         
         tableView.delegate = self
         tableView.dataSource = viewModel
-
+        
+        viewModel.chats
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &disposeBag)
     }
     
 }

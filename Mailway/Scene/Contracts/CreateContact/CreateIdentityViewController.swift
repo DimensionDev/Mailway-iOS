@@ -73,7 +73,7 @@ extension CreateIdentityViewController {
             return
         }
         
-        context.documentStore.insert(contact: contact)
+        context.documentStore.create(identity: contact)
         dismissModal()
     }
     

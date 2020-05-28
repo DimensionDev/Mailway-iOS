@@ -68,11 +68,18 @@ extension SelectChatIdentityViewModel: UITableViewDataSource {
     }
 }
 
+protocol SelectChatIdentityViewControllerDelegate: class {
+    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact)
+}
+
 final class SelectChatIdentityViewController: UIViewController, NeedsDependency {
     
     var disposeBag = Set<AnyCancellable>()
+    
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
+    
+    weak var delegate: SelectChatIdentityViewControllerDelegate?
 
     private(set) lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -124,6 +131,12 @@ extension SelectChatIdentityViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if tableView.cellForRow(at: indexPath) is IdentityListIdentityTableViewCell,
+        indexPath.row < viewModel.identities.value.count {
+            let identity = viewModel.identities.value[indexPath.row]
+            delegate?.selectChatIdentityViewController(self, didSelectIdentity: identity)
+        }
     }
     
 }

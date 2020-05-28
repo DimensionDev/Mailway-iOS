@@ -17,6 +17,7 @@ final class CreateChatViewModel: NSObject {
     
     // input
     let context: AppContext
+    let selectContact = CurrentValueSubject<Contact?, Never>(nil)
     
     // output
     let contacts = CurrentValueSubject<[Contact], Never>([])
@@ -146,8 +147,34 @@ extension CreateChatViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell {
-            coordinator.present(scene: .selectChatIdentity, from: self)
+        if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell, indexPath.row < viewModel.contacts.value.count {
+            viewModel.selectContact.value = viewModel.contacts.value[indexPath.row]
+            coordinator.present(scene: .selectChatIdentity(delegate: self), from: self)
+        }
+    }
+    
+}
+
+// MARK: - SelectChatIdentityViewControllerDelegate
+extension CreateChatViewController: SelectChatIdentityViewControllerDelegate {
+    
+    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
+        
+        var chat = Chat()
+        chat.identityKeyID = identity.keyID
+        chat.memberKeyIDs = {
+            let keyIDs = [viewModel.selectContact.value, identity]
+                .compactMap { $0 }
+                .map { $0.keyID }
+            
+            return Array(Set(keyIDs))
+        }()
+        
+        let targetChat = context.documentStore.queryExists(chat: chat) ?? chat
+        let chatRoomViewModel = ChatRoomViewModel(context: context, chat: targetChat)
+        
+        dismiss(animated: true) { [weak self] in
+            self?.coordinator.present(scene: .chatRoom(viewModel: chatRoomViewModel), from: nil, transition: .detail(animated: true))
         }
     }
     

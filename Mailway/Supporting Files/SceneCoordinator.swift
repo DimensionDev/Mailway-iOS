@@ -62,8 +62,9 @@ extension SceneCoordinator {
     enum Scene {
         case main
         case createChat
-        case selectChatIdentity
+        case selectChatIdentity(delegate: SelectChatIdentityViewControllerDelegate)
         case createIdentity
+        case chatRoom(viewModel: ChatRoomViewModel)
         case identityList
     }
 }
@@ -79,7 +80,18 @@ extension SceneCoordinator {
             let viewController = get(scene: scene)
             
             let parent = sender ?? sceneDelegate.window?.rootViewController
-            let navigationController = (parent as? UINavigationController) ?? parent?.navigationController
+            let navigationController: UINavigationController? = {
+                if let navigationController = parent as? UINavigationController {
+                    return navigationController
+                } else if let navigationController =  parent?.navigationController {
+                    return navigationController
+                } else if let tabBarController = parent as? UITabBarController {
+                    let selectedViewController = tabBarController.selectedViewController
+                    return selectedViewController as? UINavigationController ?? tabBarController.selectedViewController?.navigationController
+                } else {
+                    return nil
+                }
+            }()
             
             switch transition {
             case .detail(let animated):
@@ -117,10 +129,17 @@ extension SceneCoordinator {
             viewController = MainTabBarController(context: appContext, coordinator: self)
         case .createChat:
             viewController = CreateChatViewController()
-        case .selectChatIdentity:
-            viewController = SelectChatIdentityViewController()
+        case .selectChatIdentity(let delegate):
+            let _viewController = SelectChatIdentityViewController()
+            _viewController.delegate = delegate
+            viewController = _viewController
         case .createIdentity:
             viewController = CreateIdentityViewController()
+        case .chatRoom(let viewModel):
+            let _viewController = ChatRoomViewController()
+            _viewController.viewModel = viewModel
+            _viewController.hidesBottomBarWhenPushed = true
+            viewController = _viewController
         case .identityList:
             viewController = IdentityListViewController()
         }

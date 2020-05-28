@@ -6,8 +6,8 @@ target 'Mailway' do
   use_frameworks!
 
   # Pods for Mailway
-  pod 'NtgeCore', :path => '/Users/MainasuK/Developer/Rust/ntge', :testspecs => ['Tests']
-
+  pod 'NtgeCore', :path => '../ntge', :testspecs => ['Tests']
+  
   target 'MailwayTests' do
     inherit! :search_paths
     # Pods for testing

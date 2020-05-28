@@ -6,6 +6,7 @@
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
+import os
 import UIKit
 import Combine
 
@@ -114,6 +115,10 @@ final class IdentityListViewController: UIViewController, NeedsDependency {
     
     private(set) lazy var viewModel = IdentityListViewModel(context: context)
     
+    deinit {
+        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+    }
+
 }
 
 extension IdentityListViewController {

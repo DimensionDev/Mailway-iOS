@@ -9,5 +9,10 @@
 import Foundation
 
 struct Chat: Codable, Identifiable, Hashable {
-    let id: UUID
+    
+    let id: UUID = UUID()
+    
+    var identityKeyID: KeyID = ""
+    var memberKeyIDs: [KeyID] = []
+
 }
