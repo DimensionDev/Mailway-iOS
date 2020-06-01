@@ -13,6 +13,7 @@ class DocumentStore: ObservableObject {
     @Published private(set) var chats: [Chat] = []
     @Published private(set) var contacts: [Contact] = []
     @Published private(set) var keys: [Key] = []
+    @Published private(set) var messages: [Message] = []
 }
 
 extension DocumentStore {
@@ -60,17 +61,41 @@ extension DocumentStore {
     }
 }
 
+#if PREVIEW
+
 extension DocumentStore {
     
-    #if PREVIEW
     func setupPreview() {
         let (contacts, keys) = DocumentStore.samples
         self.keys.append(contentsOf: keys)
         self.contacts.append(contentsOf: contacts)
+        
+        // stub chat
+        let identity = self.contacts
+            .first(where: { $0.isIdentity })
+        
+        let identityKey = identity
+            .flatMap { identity in
+                self.keys.first(where: { $0.keyID == identity.keyID })
+            }
+        
+        let contact = self.contacts
+            .first(where: { !$0.isIdentity })
+
+        if let identity = identity, let identityKey = identityKey {
+            var chat = Chat()
+            chat.identityKeyID = identityKey.keyID
+            chat.identityName = identity.name
+            chat.memberKeyIDs = [identityKey.keyID, contact?.keyID].compactMap { $0 }
+            chat.memberNames = [identity.name, contact?.name].compactMap { $0 }
+            chat.title = chat.memberNames.joined(separator: ", ")
+            self.chats.append(chat)
+        }
+        
     }
-    #endif
     
 }
+#endif
 
 #if PREVIEW
 extension DocumentStore {

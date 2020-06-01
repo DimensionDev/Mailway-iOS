@@ -64,7 +64,7 @@ extension SceneCoordinator {
         case createChat
         case selectChatIdentity(delegate: SelectChatIdentityViewControllerDelegate)
         case createIdentity
-        case chatRoom(viewModel: ChatRoomViewModel)
+        case chatRoom(viewModel: ChatViewModel)
         case identityList
     }
 }
@@ -136,7 +136,7 @@ extension SceneCoordinator {
         case .createIdentity:
             viewController = CreateIdentityViewController()
         case .chatRoom(let viewModel):
-            let _viewController = ChatRoomViewController()
+            let _viewController = ChatViewController()
             _viewController.viewModel = viewModel
             _viewController.hidesBottomBarWhenPushed = true
             viewController = _viewController

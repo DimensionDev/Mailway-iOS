@@ -18,7 +18,7 @@ struct Contact: Codable, Identifiable, Hashable {
     var email: String = ""
     var note: String = ""
     
-    var isIdentity: Bool = false
+    var isIdentity: Bool = false    // FIXME: to be remove
     var keyID: KeyID = ""
     
 }

@@ -171,7 +171,8 @@ extension CreateChatViewController: SelectChatIdentityViewControllerDelegate {
         }()
         
         let targetChat = context.documentStore.queryExists(chat: chat) ?? chat
-        let chatRoomViewModel = ChatRoomViewModel(context: context, chat: targetChat)
+        let chatRoomViewModel = ChatViewModel(context: context, chat: targetChat)
+        chatRoomViewModel.shouldEnterEditModeAtAppear = true
         
         dismiss(animated: true) { [weak self] in
             self?.coordinator.present(scene: .chatRoom(viewModel: chatRoomViewModel), from: nil, transition: .detail(animated: true))

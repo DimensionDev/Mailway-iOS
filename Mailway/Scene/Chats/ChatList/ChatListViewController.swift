@@ -67,6 +67,9 @@ extension ChatListViewModel: UITableViewDataSource {
         case .chats:
             let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatListChatRoomTableViewCell.self), for: indexPath) as! ChatListChatRoomTableViewCell
             cell = _cell
+            
+            let chat = chats.value[indexPath.row]
+            _cell.titleLabel.text = chat.title
         }
         
         return cell
@@ -143,6 +146,12 @@ extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if tableView.cellForRow(at: indexPath) is ChatListChatRoomTableViewCell, indexPath.row < viewModel.chats.value.count {
+            let chat = viewModel.chats.value[indexPath.row]
+            let chatViewModel = ChatViewModel(context: context, chat: chat)
+            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .detail(animated: true))
+        }
     }
     
 }

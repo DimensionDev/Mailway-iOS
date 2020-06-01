@@ -7,6 +7,7 @@ target 'Mailway' do
 
   # Pods for Mailway
   pod 'NtgeCore', :path => '../ntge', :testspecs => ['Tests']
+  pod 'GrowingTextView', '~> 0.7.2'
   
   target 'MailwayTests' do
     inherit! :search_paths

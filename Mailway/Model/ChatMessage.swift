@@ -18,6 +18,8 @@ struct ChatMessage: Codable, Identifiable, Hashable {
     var receiveTimestamp = Date()
     
     var senderName = ""
+    var senderEmail = ""
+    var senderKeyID = ""
     var recipientKeyIDs: [KeyID] = []
     var message = ""
     var plaintext = ""

@@ -1,18 +1,25 @@
 PODS:
+  - GrowingTextView (0.7.2)
   - NtgeCore (0.1.0)
   - NtgeCore/Tests (0.1.0)
 
 DEPENDENCIES:
+  - GrowingTextView (~> 0.7.2)
   - NtgeCore (from `../ntge`)
   - NtgeCore/Tests (from `../ntge`)
+
+SPEC REPOS:
+  trunk:
+    - GrowingTextView
 
 EXTERNAL SOURCES:
   NtgeCore:
     :path: "../ntge"
 
 SPEC CHECKSUMS:
+  GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
   NtgeCore: e0437e1167105ded1b91f4a4f5975f36a8c6a9b2
 
-PODFILE CHECKSUM: cb6ecf7b73da04aaac06976d589fde407d78407e
+PODFILE CHECKSUM: 33fb56a0d8c620f471a73711c13cab0ab589d017
 
 COCOAPODS: 1.9.1

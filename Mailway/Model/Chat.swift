@@ -12,7 +12,11 @@ struct Chat: Codable, Identifiable, Hashable {
     
     let id: UUID = UUID()
     
+    var title = "Chat Room"
+    
     var identityKeyID: KeyID = ""
+    var identityName = ""
+    
     var memberKeyIDs: [KeyID] = []
-
+    var memberNames: [String] = []
 }

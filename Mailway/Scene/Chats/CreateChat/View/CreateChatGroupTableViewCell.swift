@@ -21,7 +21,7 @@ final class CreateChatGroupTableViewCell: UITableViewCell {
     
     let promptLabel: UILabel = {
         let label = UILabel()
-        label.text = "Create Chat Room"
+        label.text = "Create Group Chat Room"
         label.font = .systemFont(ofSize: 14, weight: .semibold)
         return label
     }()
