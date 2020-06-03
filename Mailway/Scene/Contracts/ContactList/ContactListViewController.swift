@@ -170,7 +170,7 @@ extension ContactListViewController: UITableViewDelegate {
                 coordinator.present(scene: .createIdentity, from: self, transition: .modal(animated: true))
             } else {
                 // open list
-                coordinator.present(scene: .identityList, from: self)
+                coordinator.present(scene: .identityList, from: self, transition: .show)
             }
         }
     }

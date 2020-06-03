@@ -98,7 +98,7 @@ final class MessageInputView: UIView {
         NSLayoutConstraint.activate([
             inputTextView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
             inputTextView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
-            self.layoutMarginsGuide.bottomAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 8),
+            self.layoutMarginsGuide.bottomAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 8),  // align to safe area guideline
         ])
         
         submitButton.translatesAutoresizingMaskIntoConstraints = false

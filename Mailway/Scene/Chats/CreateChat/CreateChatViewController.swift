@@ -149,7 +149,7 @@ extension CreateChatViewController: UITableViewDelegate {
         
         if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell, indexPath.row < viewModel.contacts.value.count {
             viewModel.selectContact.value = viewModel.contacts.value[indexPath.row]
-            coordinator.present(scene: .selectChatIdentity(delegate: self), from: self)
+            coordinator.present(scene: .selectChatIdentity(delegate: self), from: self, transition: .show)
         }
     }
     
@@ -159,7 +159,6 @@ extension CreateChatViewController: UITableViewDelegate {
 extension CreateChatViewController: SelectChatIdentityViewControllerDelegate {
     
     func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
-        
         var chat = Chat()
         chat.identityKeyID = identity.keyID
         chat.memberKeyIDs = {
@@ -175,7 +174,7 @@ extension CreateChatViewController: SelectChatIdentityViewControllerDelegate {
         chatRoomViewModel.shouldEnterEditModeAtAppear = true
         
         dismiss(animated: true) { [weak self] in
-            self?.coordinator.present(scene: .chatRoom(viewModel: chatRoomViewModel), from: nil, transition: .detail(animated: true))
+            self?.coordinator.present(scene: .chatRoom(viewModel: chatRoomViewModel), from: nil, transition: .showDetail)
         }
     }
     

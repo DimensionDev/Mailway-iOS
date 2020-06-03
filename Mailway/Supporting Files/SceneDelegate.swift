@@ -23,9 +23,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sceneCoordinator = SceneCoordinator(scene: scene, sceneDelegate: self, appContext: AppContext.shared)
         self.coordinator = sceneCoordinator
     
-        sceneCoordinator.present(scene: .main, from: nil)
+        sceneCoordinator.setup()
         window.makeKeyAndVisible()
-        
         
         #if PREVIEW
         AppContext.shared.documentStore.setupPreview()

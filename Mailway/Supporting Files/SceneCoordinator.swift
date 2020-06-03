@@ -40,6 +40,7 @@ final public class SceneCoordinator {
     private weak var appContext: AppContext!
     
     let id = UUID().uuidString
+    private var secondaryStackHashValues = Set<Int>()
     
     init(scene: UIScene, sceneDelegate: SceneDelegate, appContext: AppContext) {
         self.scene = scene
@@ -52,70 +53,56 @@ final public class SceneCoordinator {
 
 extension SceneCoordinator {
     enum Transition {
-        case root
+        case show                           // push
+        case showDetail                     // replace
         case modal(animated: Bool, completion: (() -> Void)? = nil)
-        case detail(animated: Bool)
-        case alert
-        case custom
+        // case alert
+        // case custom
     }
     
     enum Scene {
-        case main
         case createChat
         case selectChatIdentity(delegate: SelectChatIdentityViewControllerDelegate)
         case createIdentity
         case chatRoom(viewModel: ChatViewModel)
         case identityList
+        case setting(viewModel: SettingListViewModel)
     }
 }
 
 extension SceneCoordinator {
-    func present(scene: Scene, from sender: UIViewController?, transition: Transition = .detail(animated: true)) {
-        switch scene {
-        case .main:
-            let viewController = get(scene: .main)
-            sceneDelegate.window?.rootViewController = viewController
-            
-        default:
-            let viewController = get(scene: scene)
-            
-            let parent = sender ?? sceneDelegate.window?.rootViewController
-            let navigationController: UINavigationController? = {
-                if let navigationController = parent as? UINavigationController {
-                    return navigationController
-                } else if let navigationController =  parent?.navigationController {
-                    return navigationController
-                } else if let tabBarController = parent as? UITabBarController {
-                    let selectedViewController = tabBarController.selectedViewController
-                    return selectedViewController as? UINavigationController ?? tabBarController.selectedViewController?.navigationController
-                } else {
-                    return nil
-                }
-            }()
-            
-            switch transition {
-            case .detail(let animated):
-                guard let _navigationController = navigationController else {
-                    assertionFailure("cannot find navigation controller to push")
-                    return
-                }
-                _navigationController.pushViewController(viewController, animated: animated)
-                
-            case .modal(let animated, let completion):
-                guard let _navigationController = navigationController else {
-                    assertionFailure("cannot find navigation controller to push")
-                    return
-                }
-                
-                let modalNavigationController = UINavigationController(rootViewController: viewController)
-                if let adaptivePresentationControllerDelegate = viewController as? UIAdaptivePresentationControllerDelegate {
-                    modalNavigationController.presentationController?.delegate = adaptivePresentationControllerDelegate
-                }
-                _navigationController.present(modalNavigationController, animated: animated, completion: completion)
-                
-            default:
-                assertionFailure("TODO")
+    
+    func setup() {
+        let viewController = RootSplitViewController()
+        setupDependency(for: viewController)
+        viewController.delegate = self
+        sceneDelegate.window?.rootViewController = viewController
+    }
+    
+    func present(scene: Scene, from sender: UIViewController?, transition: Transition) {
+        let viewController = get(scene: scene)
+        guard let presentingViewController = sender ?? sceneDelegate.window?.rootViewController else {
+            return
+        }
+        
+        switch transition {
+        case .show:
+            if secondaryStackHashValues.contains(presentingViewController.hashValue) {
+                secondaryStackHashValues.insert(viewController.hashValue)
             }
+            presentingViewController.show(viewController, sender: sender)
+            
+        case .showDetail:
+            secondaryStackHashValues.insert(viewController.hashValue)
+            let navigationController = UINavigationController(rootViewController: viewController)
+            presentingViewController.showDetailViewController(navigationController, sender: sender)
+            
+        case .modal(let animated, let completion):
+            let modalNavigationController = UINavigationController(rootViewController: viewController)
+            if let adaptivePresentationControllerDelegate = viewController as? UIAdaptivePresentationControllerDelegate {
+                modalNavigationController.presentationController?.delegate = adaptivePresentationControllerDelegate
+            }
+            presentingViewController.present(modalNavigationController, animated: animated, completion: completion)
         }
     }
 }
@@ -125,8 +112,6 @@ extension SceneCoordinator {
         let viewController: UIViewController
         
         switch scene {
-        case .main:
-            viewController = MainTabBarController(context: appContext, coordinator: self)
         case .createChat:
             viewController = CreateChatViewController()
         case .selectChatIdentity(let delegate):
@@ -142,6 +127,11 @@ extension SceneCoordinator {
             viewController = _viewController
         case .identityList:
             viewController = IdentityListViewController()
+        case .setting(let viewModel):
+            // FIXME:
+            let _viewController = SettingListViewController()
+            _viewController.viewModel = viewModel
+            viewController = _viewController
         }
         
         setupDependency(for: viewController as? NeedsDependency)
@@ -152,6 +142,75 @@ extension SceneCoordinator {
     private func setupDependency(for needs: NeedsDependency?) {
         needs?.context = appContext
         needs?.coordinator = self
+    }
+    
+}
+
+// MARK: - UISplitViewControllerDelegate
+extension SceneCoordinator: UISplitViewControllerDelegate {
+    
+    public func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
+        if splitViewController.isCollapsed {
+            let selectedNavigationController = ((splitViewController.viewControllers.first as? UITabBarController)?.selectedViewController as? UINavigationController)
+            if let navigationController = vc as? UINavigationController, let topViewController = navigationController.topViewController {
+                selectedNavigationController?.pushViewController(topViewController, animated: true)
+            } else {
+                selectedNavigationController?.pushViewController(vc, animated: true)
+            }
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    public func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        guard let primaeryTabBarController = primaryViewController as? UITabBarController,
+        let selectedNavigationController = primaeryTabBarController.selectedViewController as? UINavigationController else {
+            return false
+        }
+        
+        guard let secondaryNavigationController = secondaryViewController as? UINavigationController else {
+            return false
+        }
+        
+        guard !(secondaryNavigationController.topViewController is PlaceholderDetailViewController) else {
+            // discard collapse operation
+            return true
+        }
+        
+        let secondaryNavigationStack = secondaryNavigationController.viewControllers
+        let collapsedNavigationStack = [selectedNavigationController.viewControllers, secondaryNavigationStack].flatMap { $0 }
+        selectedNavigationController.setViewControllers(collapsedNavigationStack, animated: false)
+        
+        return true
+    }
+    
+    public func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
+        guard let primaeryTabBarController = primaryViewController as? UITabBarController,
+        let selectedNavigationController = primaeryTabBarController.selectedViewController as? UINavigationController else {
+            return nil
+        }
+        
+        var primaryViewControllerStack: [UIViewController] = []
+        var secondaryViewControllerStack: [UIViewController] = []
+        for viewController in selectedNavigationController.viewControllers {
+            if secondaryStackHashValues.contains(viewController.hashValue) {
+                secondaryViewControllerStack.append(viewController)
+            } else {
+                primaryViewControllerStack.append(viewController)
+            }
+        }
+        
+        selectedNavigationController.setViewControllers(primaryViewControllerStack, animated: false)
+        
+        let secondaryNavigationController = UINavigationController()
+        if secondaryViewControllerStack.isEmpty {
+            secondaryNavigationController.setViewControllers([PlaceholderDetailViewController()], animated: false)
+        } else {
+            secondaryNavigationController.setViewControllers(secondaryViewControllerStack, animated: false)
+        }
+        
+        return secondaryNavigationController
     }
     
 }

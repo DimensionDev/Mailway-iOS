@@ -49,7 +49,12 @@ final class MainTabBarController: UITabBarController {
                 viewController.coordinator = coordinator
                 return UINavigationController(rootViewController: viewController)
             case .settings:
-                return UIHostingController(rootView: SettingsView().environmentObject(context))
+                let viewController = SettingListViewController()
+                viewController.context = context
+                viewController.coordinator = coordinator
+                viewController.viewModel = SettingListViewModel()
+                return UINavigationController(rootViewController: viewController)
+                //return UIHostingController(rootView: SettingsView().environmentObject(context))
             }
         }
     }
@@ -71,7 +76,7 @@ extension MainTabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         view.backgroundColor = .systemBackground
         
         let tabs = Tabs.allCases
@@ -84,6 +89,7 @@ extension MainTabBarController {
         }
         setViewControllers(viewControllers, animated: false)
         selectedIndex = 0
+
     }
     
 }

@@ -150,7 +150,7 @@ extension ChatListViewController: UITableViewDelegate {
         if tableView.cellForRow(at: indexPath) is ChatListChatRoomTableViewCell, indexPath.row < viewModel.chats.value.count {
             let chat = viewModel.chats.value[indexPath.row]
             let chatViewModel = ChatViewModel(context: context, chat: chat)
-            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .detail(animated: true))
+            self.coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
         }
     }
     

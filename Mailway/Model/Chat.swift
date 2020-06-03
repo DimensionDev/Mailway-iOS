@@ -19,4 +19,11 @@ struct Chat: Codable, Identifiable, Hashable {
     
     var memberKeyIDs: [KeyID] = []
     var memberNames: [String] = []
+
+}
+
+extension Chat {
+    static var empty: Chat {
+        return Chat()
+    }
 }
