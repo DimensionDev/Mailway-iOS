@@ -10,7 +10,8 @@ import UIKit
 import GrowingTextView
 
 protocol MessageInputViewDelegate: class {
-    func messageInputView(_ toolbar: MessageInputView, submitButtonPressed button: UIButton)
+    func messageInputView(_ inputView: MessageInputView, submitButtonPressed button: UIButton)
+    func messageInputView(_ inputView: MessageInputView, boundsDidUpdate bounds: CGRect)
 }
 
 final class MessageInputView: UIView {
@@ -43,6 +44,9 @@ final class MessageInputView: UIView {
         return textView
     }()
     
+    let keyboardPaddingView = UIView()
+    var keyboardPaddingViewHeightLayoutConstraint: NSLayoutConstraint!
+    
     let submitButton = UIButton(type: .custom)
     
     private let progressView: UIProgressView = {
@@ -73,7 +77,7 @@ final class MessageInputView: UIView {
         super.init(frame: frame)
         
         autoresizingMask = .flexibleHeight
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         
         topBorderView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(topBorderView)
@@ -98,7 +102,18 @@ final class MessageInputView: UIView {
         NSLayoutConstraint.activate([
             inputTextView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
             inputTextView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
-            self.layoutMarginsGuide.bottomAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 8),  // align to safe area guideline
+            self.layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: inputTextView.bottomAnchor, constant: 8),
+        ])
+        
+        keyboardPaddingView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(keyboardPaddingView)
+        keyboardPaddingViewHeightLayoutConstraint = keyboardPaddingView.heightAnchor.constraint(equalToConstant: .leastNonzeroMagnitude).priority(.defaultHigh)
+        NSLayoutConstraint.activate([
+            keyboardPaddingView.topAnchor.constraint(equalTo: inputTextView.bottomAnchor),
+            keyboardPaddingView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            trailingAnchor.constraint(equalTo: keyboardPaddingView.trailingAnchor),
+            bottomAnchor.constraint(equalTo: keyboardPaddingView.bottomAnchor),
+            keyboardPaddingViewHeightLayoutConstraint
         ])
         
         submitButton.translatesAutoresizingMaskIntoConstraints = false
@@ -113,8 +128,8 @@ final class MessageInputView: UIView {
         
         submitButton.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         submitButton.setTitle("Send", for: .normal)
-        submitButton.setTitleColor(.black, for: .normal)
-        submitButton.setTitleColor(UIColor.black.withAlphaComponent(0.5), for: .highlighted)
+        submitButton.setTitleColor(.label, for: .normal)
+        submitButton.setTitleColor(UIColor.label.withAlphaComponent(0.5), for: .highlighted)
         submitButton.addTarget(self, action: #selector(MessageInputView.submitButtonPressed(_:)), for: .touchUpInside)
     }
     
@@ -129,8 +144,15 @@ final class MessageInputView: UIView {
         return CGSize.zero
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        delegate?.messageInputView(self, boundsDidUpdate: bounds)
+    }
+    
+}
+
+extension MessageInputView {
     @objc func submitButtonPressed(_ sender: UIButton) {
         delegate?.messageInputView(self, submitButtonPressed: sender)
     }
-    
 }

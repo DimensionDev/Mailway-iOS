@@ -20,7 +20,6 @@ final class ChatViewModel: NSObject {
     let chatMessages = PassthroughSubject<[ChatMessage], Never>()
     
     var shouldEnterEditModeAtAppear = false
-    // var isKeyboardShowing: Bool = false
     
     // output
     var diffableDataSource: UITableViewDiffableDataSource<Section, Item>!
@@ -123,43 +122,27 @@ extension ChatViewModel {
             """,
             """
             If I when my wife is sleeping
-
             and the baby and Kathleen
-
             are sleeping
-
             and the sun is a flame-white disc
-
             in silken mists
-
             above shining trees, —
 
             if I in my north room
-
             dance naked, grotesquely
-
             before my mirror
-
             waving my shirt round my head
-
             and singing softly to myself:
 
             “I am lonely, lonely.
-
             I was born to be lonely,
-
             I am best so!”
 
             If I admire my arms, my face,
-
             my shoulders, flanks, buttocks
-
             against the yellow drawn shades, —
 
-             
-
             Who shall say I am not
-
             the happy genius of my household?
             """
         ]
@@ -242,16 +225,9 @@ final class ChatViewController: UIViewController, NeedsDependency {
     
     lazy var messageInputView: MessageInputView = {
         let inputView = MessageInputView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        // inputView.inputTextView.delegate = self
         inputView.delegate = self
         return inputView
     }()
-    //let messageInputViewFrame = CurrentValueSubject<CGRect, Never>(.zero)
-    //let keyboardFrame = CurrentValueSubject<CGRect, Never>(.zero)
-    
-    //override var inputAccessoryView: UIView? {
-    //    return messageInputView
-    //}
     
     deinit {
         os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
@@ -302,147 +278,62 @@ extension ChatViewController {
             }
             .store(in: &disposeBag)
         
-        //messageInputView.publisher(for: \.frame, options: [.initial, .new])
-        //    .assign(to: \.value, on: messageInputViewFrame)
-        //    .store(in: &disposeBag)
-        //
-        //Publishers.CombineLatest(messageInputViewFrame, keyboardFrame)
-        //    .sink { messageInputViewFrame, keyboardFrame in
-        //        print("messageInputViewFrame: \(messageInputViewFrame), keyboardFrame: \(keyboardFrame)")
-        //        if keyboardFrame != .zero {
-        //            // dock keyboard
-        //            self.tableView.contentInset.bottom = keyboardFrame.height
-        //            self.tableView.verticalScrollIndicatorInsets.bottom = keyboardFrame.height
-        //        } else {
-        //            // float or split keyboard
-        //            self.tableView.contentInset.bottom = messageInputViewFrame.height
-        //            self.tableView.verticalScrollIndicatorInsets.bottom = messageInputViewFrame.height
-        //        }
-        //    }
-        //    .store(in: &disposeBag)
-        
-        
-//        NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification, object: nil)
-//            .receive(on: DispatchQueue.main)
-//            .sink { notification in
-//                os_log("%{public}s[%{public}ld], %{public}s: keyboardWillShowNotification %s", ((#file as NSString).lastPathComponent), #line, #function, notification.debugDescription)
-//                guard !self.viewModel.isKeyboardShowing else { return }
-//
-//                guard let beginFrame = notification.userInfo?["UIKeyboardFrameBeginUserInfoKey"] as? CGRect,
-//                let endFrame = notification.userInfo?["UIKeyboardFrameEndUserInfoKey"] as? CGRect else {
-//                    return
-//                }
-//                guard !beginFrame.equalTo(endFrame) else { return }
-//
-//                // set insets
-//                self.tableView.contentInset.bottom = endFrame.height
-//                self.tableView.verticalScrollIndicatorInsets.bottom = endFrame.height
-//
-//
-//                guard let duration = notification.userInfo?["UIKeyboardAnimationDurationUserInfoKey"] as? TimeInterval,
-//                let curve = notification.userInfo?["UIKeyboardAnimationCurveUserInfoKey"] as? UInt else { return }
-//
-//                guard let lastCellFrame = self.tableView.visibleCells.last?.frame else { return }
-//                let lastCellFrameOnScreen = self.tableView.convert(lastCellFrame, to: nil)
-//                let targetAlignmentBottomY = min(self.view.frame.maxY - beginFrame.height, lastCellFrameOnScreen.maxY)
-//                let endFrameOriginY = endFrame.origin.y
-//                guard targetAlignmentBottomY > endFrameOriginY else {
-//                    return
-//                }
-//                let offset = endFrame.origin.y - targetAlignmentBottomY
-//
-//                let option = UIView.AnimationOptions(rawValue: curve << 16)
-//                UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, option], animations: {
-//                    // set offset
-//                    self.tableView.contentOffset.y -= offset
-//                }, completion: { _ in
-//                    self.viewModel.isKeyboardShowing = true
-//                })
-//                os_log("%{public}s[%{public}ld], %{public}s: keyboardWillShowNotification offse -= %s", ((#file as NSString).lastPathComponent), #line, #function, offset.description)
-//
-//            }
-//            .store(in: &disposeBag)
+        NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification, object: nil)
+            .sink { notification in
+                // os_log("%{public}s[%{public}ld], %{public}s: keyboardWillShowNotification %s", ((#file as NSString).lastPathComponent), #line, #function, notification.debugDescription)
 
-            
-//        NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-//            .sink { [weak self] notification in
-//                guard let `self` = self else { return }
-//                os_log("%{public}s[%{public}ld], %{public}s: keyboardWillShowNotification %s", ((#file as NSString).lastPathComponent), #line, #function, notification.debugDescription)
-////                guard !self.viewModel.isKeyboardShowing else { return }
-//
-//                guard let beginFrame = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect,
-//                let endFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
-//                self.keyboardFrame.value = endFrame ?? .zero
-//                let keyboardEndFrame = self.view.convert(endFrame, from: nil)
-//
-//                guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-//                let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
+                guard let beginFrame = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect,
+                let endFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+                    return
+                }
 
+                guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+                let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
+
+                let option = UIView.AnimationOptions(rawValue: curve << 16)
+                self.messageInputView.keyboardPaddingViewHeightLayoutConstraint.constant = endFrame.height + 8
+                UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, option], animations: {
+                    let oldInputViewHeight = self.messageInputView.frame.height
+                    self.messageInputView.setNeedsLayout()
+                    self.messageInputView.layoutIfNeeded()
                 
-                // set insets
-//                self.tableView.contentInset.bottom = endFrame.height
-//                self.tableView.verticalScrollIndicatorInsets.bottom = endFrame.height
+                    // move tableView content when visible cell overlapped
+                    if let lastCellFrame = self.tableView.visibleCells.last?.frame {
+                        let inputViewMinYInTable = self.tableView.contentOffset.y + self.tableView.frame.height - self.messageInputView.frame.height
+                        let lastCellMaxYInTable = lastCellFrame.maxY
+                        
+                        if lastCellMaxYInTable > inputViewMinYInTable {
+                            let offset = min(lastCellMaxYInTable - inputViewMinYInTable, self.messageInputView.frame.height - oldInputViewHeight)
+                            print(offset)
+                            self.tableView.contentOffset.y += offset
+                        }
+                    }
+                }, completion: { _ in
 
+                })
+            }
+            .store(in: &disposeBag)
 
+        NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification, object: nil)
+            .sink { notification in
+                guard let beginFrame = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect,
+                let endFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+                    return
+                }
 
-//                guard let lastCellFrame = self.tableView.visibleCells.last?.frame else { return }
-//                let lastCellFrameOnScreen = self.tableView.convert(lastCellFrame, to: nil)
-//                let targetAlignmentBottomY = min(self.view.frame.maxY - beginFrame.height, lastCellFrameOnScreen.maxY)
-//                let endFrameOriginY = endFrame.origin.y
-//                guard targetAlignmentBottomY > endFrameOriginY else {
-//                    return
-//                }
-//                let offset = endFrame.origin.y - targetAlignmentBottomY
-//
-//                self.tableViewBottomLayoutConstraint.constant = self.view.bounds.height - keyboardEndFrame.origin.y
-//
-//                let option = UIView.AnimationOptions(rawValue: curve << 16)
-//                UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, option], animations: {
-//                    // set offset
-////                    self.tableView.contentOffset.y -= offset
-//                    self.view.setNeedsLayout()
-//                }, completion: { _ in
-////                    self.viewModel.isKeyboardShowing = true
-//                })
-//                //os_log("%{public}s[%{public}ld], %{public}s: keyboardWillShowNotification offse -= %s", ((#file as NSString).lastPathComponent), #line, #function, offset.description)
-////                print(notification)
-//            }
-//            .store(in: &disposeBag)
-//        self.keyboardFrameChangeObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillChangeFrameNotification, object: nil, queue: nil, using: { [weak self] notification in
-
-//        NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification, object: nil)
-//            .receive(on: DispatchQueue.main)
-//            .sink { notification in
-//                guard self.viewModel.isKeyboardShowing else { return }
-//
-//                guard let beginFrame = notification.userInfo?["UIKeyboardFrameBeginUserInfoKey"] as? CGRect,
-//                let endFrame = notification.userInfo?["UIKeyboardFrameEndUserInfoKey"] as? CGRect else {
-//                    return
-//                }
-//
-//                // set insets
-//                self.tableView.contentInset.bottom = endFrame.height
-//                self.tableView.verticalScrollIndicatorInsets.bottom = endFrame.height
-//
-//                let keyboardOffset = endFrame.origin.y - beginFrame.origin.y
-//                let offset = max(-self.tableView.safeAreaInsets.top, self.tableView.contentOffset.y - keyboardOffset)
-//
-//                print(offset)
-////
-//                guard let duration = notification.userInfo?["UIKeyboardAnimationDurationUserInfoKey"] as? TimeInterval,
-//                let curve = notification.userInfo?["UIKeyboardAnimationCurveUserInfoKey"] as? UInt else { return }
-//
-//                let option = UIView.AnimationOptions(rawValue: curve << 16)
-//                UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, option], animations: {
-//                    // set offset
-//                    self.tableView.contentOffset.y = offset
-//                }, completion: { _ in
-//                    self.viewModel.isKeyboardShowing = false
-//                })
-////                os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, offset.description)
-//
-//            }
-//            .store(in: &disposeBag)
+                guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+                    let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
+                
+                let option = UIView.AnimationOptions(rawValue: curve << 16)
+                self.messageInputView.keyboardPaddingViewHeightLayoutConstraint.constant = .leastNonzeroMagnitude
+                UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, option], animations: {
+                    self.messageInputView.setNeedsLayout()
+                    self.messageInputView.layoutIfNeeded()
+                }, completion: { _ in
+                    
+                })
+            }
+            .store(in: &disposeBag)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -464,19 +355,19 @@ extension ChatViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // print("Offset: \(scrollView.contentOffset), contentSize: \(scrollView.contentSize)")
-    }
 
 }
 
 // MARK: - MessageInputViewDelegate
 extension ChatViewController: MessageInputViewDelegate {
-    
-    func messageInputView(_ toolbar: MessageInputView, submitButtonPressed button: UIButton) {
+        
+    func messageInputView(_ inputView: MessageInputView, submitButtonPressed button: UIButton) {
         os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
     }
     
+    func messageInputView(_ inputView: MessageInputView, boundsDidUpdate bounds: CGRect) {
+        tableView.contentInset.bottom = bounds.height - view.safeAreaInsets.bottom
+        tableView.verticalScrollIndicatorInsets.bottom = bounds.height - view.safeAreaInsets.bottom
+    }
 }
 
