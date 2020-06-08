@@ -27,3 +27,10 @@ extension Chat {
         return Chat()
     }
 }
+
+extension Chat {
+    func contains(message: ChatMessage) -> Bool {
+        let isSame = Set(memberKeyIDs) == Set(message.recipientKeyIDs + [identityKeyID])
+        return isSame
+    }
+}

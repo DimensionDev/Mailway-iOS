@@ -31,8 +31,8 @@ final class IdentityListViewModel: NSObject {
 
 extension IdentityListViewModel {
     enum Section: CaseIterable {
+        case createIdentityHeader
         case identities
-        case createIdentityFooter
     }
 }
 
@@ -62,17 +62,28 @@ extension IdentityListViewModel: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let section = Section.allCases[section]
         switch section {
+        case .createIdentityHeader:
+            return 1
         case .identities:
             return identities.value.count
-        case .createIdentityFooter:
-            return 1
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = Section.allCases[indexPath.section]
         var cell: UITableViewCell
+        
         switch section {
+        case .createIdentityHeader:
+            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
+            cell = _cell
+            
+            identities
+                .sink { identities in
+                    IdentityListViewModel.configure(cell: _cell, with: identities)
+            }
+            .store(in: &_cell.disposeBag)
+
         case .identities:
             let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListIdentityTableViewCell.self), for: indexPath) as! IdentityListIdentityTableViewCell
             cell = _cell
@@ -81,17 +92,6 @@ extension IdentityListViewModel: UITableViewDataSource {
             let identity = identities.value[indexPath.row]
             
             _cell.nameLabel.text = identity.name
-            
-            
-        case .createIdentityFooter:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
-            cell = _cell
-            
-            identities
-                .sink { identities in
-                    IdentityListViewModel.configure(cell: _cell, with: identities)
-                }
-                .store(in: &_cell.disposeBag)
         }
         
         return cell

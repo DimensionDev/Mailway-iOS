@@ -9,7 +9,13 @@
 import UIKit
 import SwiftUI
 
+protocol ChatMessageTableViewCellDelegate: class {
+    func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, shareButtonPressed button: UIButton)
+}
+
 final class ChatMessageTableViewCell: UITableViewCell {
+    
+    weak var delegate: ChatMessageTableViewCellDelegate?
     
     let avatarImageView: UIImageView = {
         let imageView = UIImageView()
@@ -19,7 +25,11 @@ final class ChatMessageTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let senderContactInfoView = ContactInfoView()
+    let senderContactInfoView: ContactInfoView = {
+        let infoView = ContactInfoView()
+        infoView.shortKeyIDLabel.isUserInteractionEnabled = false
+        return infoView
+    }()
 
     // Not use stack view spacing to avoid AutoLayout warning issue
     private(set) lazy var composeInfoContainer: UIView = {
@@ -129,11 +139,24 @@ final class ChatMessageTableViewCell: UITableViewCell {
         return label
     }()
     
+    private(set) lazy var shareButton: UIButton = {
+        let button = HitTestExpandedButton()
+        button.expandEdgeInsets = UIEdgeInsets(top: -20, left: -20, bottom: -20, right: 0)
+        let shareIcon = UIImage(systemName: "square.and.arrow.up",
+                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 13, weight: .light))!
+        button.setImage(shareIcon, for: .normal)
+        button.tintColor = .secondaryLabel
+        button.addTarget(self, action: #selector(ChatMessageTableViewCell.shareButtonPressed(_:)), for: .touchUpInside)
+        return button
+    }()
+    
     let messageContentTextView: UITextView = {
         let textView = UITextView()
         textView.isScrollEnabled = false
         textView.isEditable = false
+        textView.isSelectable = false
         textView.font = .preferredFont(forTextStyle: .body)
+        textView.isUserInteractionEnabled = false
         return textView
     }()
     
@@ -181,22 +204,29 @@ extension ChatMessageTableViewCell {
             stackView.distribution = .fillProportionally
             stackView.spacing = 0
             stackView.accessibilityIdentifier = "Text Container StackView"
-
-            senderContactInfoView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.addArrangedSubview(senderContactInfoView)
-
-            let timestampStackView = UIStackView()
-            timestampStackView.accessibilityIdentifier = "Timestamp StackView"
-            timestampStackView.axis = .horizontal
-
-            timestampStackView.addArrangedSubview(composeInfoContainer)
-            timestampStackView.addArrangedSubview(receiveInfoContainer)
-            timestampStackView.addArrangedSubview(UIView()) // padding
-            
-            stackView.addArrangedSubview(timestampStackView)
+         
             return stackView
         }()
+
+        senderContactInfoView.translatesAutoresizingMaskIntoConstraints = false
+        textContainerStackView.addArrangedSubview(senderContactInfoView)
+
+        let timestampStackView = UIStackView()
+        timestampStackView.accessibilityIdentifier = "Timestamp StackView"
+        timestampStackView.axis = .horizontal
+        timestampStackView.addArrangedSubview(composeInfoContainer)
+        timestampStackView.addArrangedSubview(receiveInfoContainer)
+        timestampStackView.addArrangedSubview(UIView()) // padding
+
+        textContainerStackView.addArrangedSubview(timestampStackView)
         headerStackView.addArrangedSubview(textContainerStackView)
+        
+        shareButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(shareButton)
+        NSLayoutConstraint.activate([
+            headerStackView.trailingAnchor.constraint(equalTo: shareButton.trailingAnchor),
+            shareButton.centerYAnchor.constraint(equalTo: timestampStackView.centerYAnchor),
+        ])
         
         // content
         messageContentTextView.translatesAutoresizingMaskIntoConstraints = false
@@ -207,12 +237,20 @@ extension ChatMessageTableViewCell {
             contentView.readableContentGuide.trailingAnchor.constraint(equalTo: messageContentTextView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: messageContentTextView.bottomAnchor).priority(.defaultHigh),
         ])
+        
+        contentView.bringSubviewToFront(shareButton)
     }
     
     override var intrinsicContentSize: CGSize {
         return CGSize(width: 320, height: 200)
     }
     
+}
+
+extension ChatMessageTableViewCell {
+    @objc private func shareButtonPressed(_ sender: UIButton) {
+        delegate?.chatMessageTableViewCell(self, shareButtonPressed: sender)
+    }
 }
 
 struct ChatMessageTableViewCell_Previews: PreviewProvider {

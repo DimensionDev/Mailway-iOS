@@ -146,11 +146,19 @@ extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) else  { return }
         
-        if tableView.cellForRow(at: indexPath) is ChatListChatRoomTableViewCell, indexPath.row < viewModel.chats.value.count {
+        if cell is ChatListInboxBannerTableViewCell {
+            coordinator.present(scene: .inbox, from: self, transition: .modal(animated: true, completion: nil))
+        }
+    
+        if cell is ChatListChatRoomTableViewCell, indexPath.row < viewModel.chats.value.count {
             let chat = viewModel.chats.value[indexPath.row]
             let chatViewModel = ChatViewModel(context: context, chat: chat)
-            self.coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
+            chatViewModel.items.value = context.documentStore.chatMessages
+                .filter { chat.contains(message: $0) }
+                .map { ChatViewModel.Item.chatMessage($0) }
+            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
         }
     }
     

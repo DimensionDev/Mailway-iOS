@@ -9,6 +9,7 @@
 import os
 import UIKit
 import Combine
+import NtgeCore
 
 final class ChatViewModel: NSObject {
     
@@ -31,17 +32,79 @@ final class ChatViewModel: NSObject {
         super.init()
         
         chatMessages
-            .map { $0.map { Item.chatMessage($0) } }
+            .map { chatMessages -> [Item] in
+                let items = chatMessages
+                    .filter{ chat.contains(message: $0) }
+                    .map { Item.chatMessage($0) }
+                return items
+            }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newItems in
-                guard let `self` = self else { return }
-                self.items.value = self.items.value + newItems
+                guard let `self` = self else {
+                    assertionFailure()
+                    return
+                }
+                self.items.value = newItems
+                //print("sink: \(newItems.count)")
             }
             .store(in: &disposeBag)
+    }
+    
+}
+
+extension ChatViewModel {
+    
+    func sendMessage(plaintext: String) {
+        var recipients: [Contact] = []
+        var recipientKeys: [Key] = []
+        var recipientPublicKeys: [Ed25519.PublicKey] = []
         
-        #if PREVIEW
-        self.setupPreview()
-        #endif
+        guard let identity = context.documentStore.contacts.first(where: { $0.keyID == chat.identityKeyID }),
+        let identityKey = context.documentStore.keys.first(where: { $0.keyID == chat.identityKeyID }),
+        let identityPrivateKey = Ed25519.PrivateKey.deserialize(from: identityKey.privateKey) else {
+            return
+        }
+        
+        for keyID in chat.memberKeyIDs {
+            guard let recipient = context.documentStore.contacts.first(where: { $0.keyID == keyID }),
+            let key = context.documentStore.keys.first(where: { $0.keyID == keyID }),
+            let publicKey = Ed25519.PublicKey.deserialize(serialized: key.publicKey) else {
+                continue
+            }
+            
+            recipients.append(recipient)
+            recipientKeys.append(key)
+            recipientPublicKeys.append(publicKey)
+        }
+        
+        guard !recipients.isEmpty else {
+            return
+        }
+    
+        let encryptor = Message.Encryptor(publicKeys: recipientPublicKeys.map { $0.x25519 })
+        let plaintextData = Data(plaintext.utf8)
+        
+        // TODO: extra
+        do {
+            let message = encryptor.encrypt(plaintext: plaintextData, extraPlaintext: nil, signatureKey: identityPrivateKey)
+            guard let armor = try? message.serialize() else {
+                return
+            }
+            
+            let chatMessage = ChatMessage(plaintextData: plaintextData,
+                                          composeTimestamp: Date(),
+                                          receiveTimestamp: Date(),
+                                          senderName: identity.name,
+                                          senderEmail: identity.email,
+                                          senderKeyID: identity.keyID,
+                                          message: armor,
+                                          createTimestamp: Date(),
+                                          version: 1,
+                                          recipientKeyIDs: recipientPublicKeys.map { $0.keyID })
+            context.documentStore.create(chatMessage: chatMessage, forChat: chat)
+        } catch {
+            
+        }
     }
     
 }
@@ -60,7 +123,7 @@ extension ChatViewModel {
     
     func configureDataSource(tableView: UITableView) {
         let dataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView) { [weak self] tableView, indexPath, item -> UITableViewCell? in
-            // guard let `self` = self else { return nil }
+            guard let `self` = self else { return nil }
             switch item {
             case .chatMessage(let chatMessage):
                 let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatMessageTableViewCell.self), for: indexPath) as! ChatMessageTableViewCell
@@ -73,13 +136,21 @@ extension ChatViewModel {
                 dateFormatter.timeStyle = .none
 
                 if let composeTimestamp = chatMessage.composeTimestamp.flatMap({ dateFormatter.string(from: $0) }) {
-//                    cell.composeInfoContainerStackView.isHidden = false
                     cell.composeTimestampLabel.text = composeTimestamp
                 } else {
-//                    cell.composeInfoContainerStackView.isHidden = true
+                    cell.composeTimestampLabel.text = "-"
                 }
                 cell.receiveTimestampLabel.text = dateFormatter.string(from: chatMessage.receiveTimestamp)
-                cell.messageContentTextView.text = chatMessage.plaintext.isEmpty ? "[Empty]" : chatMessage.plaintext
+                cell.messageContentTextView.text = {
+                    switch chatMessage.plaintextKind {
+                    case .text:
+                        return String(data: chatMessage.plaintextData, encoding: .utf8) ?? "<invalid message content>"
+                    case .image:
+                        return ""
+                    case .file:
+                        return "File: \(chatMessage.plaintextData.count)"
+                    }
+                }()
                 return cell
             }
         }   // end let dataSource = …
@@ -88,100 +159,6 @@ extension ChatViewModel {
     }   // end func configureDataSource(:) { … }
 
 }
-
-#if PREVIEW
-import NtgeCore
-
-extension ChatViewModel {
-    private func setupPreview() {
-        let plaintexts = [
-            "Hi, Alice",
-            "How do you do?",
-            "Have a drink tonight!",
-            "Here is a poem:\nAn Irish Airman Foresees His Death\nfrom William Butler Yeats",
-            """
-            I know that I shall meet my fate
-            Somewhere among the clouds above;
-
-            Those that I fight I do not hate,
-            Those that I guard I do not love;
-
-            My country is Kiltartan Cross,
-            My countrymen Kiltartan’s poor,
-            No likely end could bring them loss
-            Or leave them happier than before.
-            Nor law, nor duty bade me fight,
-            Nor public men, nor cheering crowds,
-            A lonely impulse of delight
-            Drove to this tumult in the clouds;
-
-            I balanced all, brought all to mind,
-            The years to come seemed waste of breath,
-            A waste of breath the years behind
-            In balance with this life, this death.
-            """,
-            """
-            If I when my wife is sleeping
-            and the baby and Kathleen
-            are sleeping
-            and the sun is a flame-white disc
-            in silken mists
-            above shining trees, —
-
-            if I in my north room
-            dance naked, grotesquely
-            before my mirror
-            waving my shirt round my head
-            and singing softly to myself:
-
-            “I am lonely, lonely.
-            I was born to be lonely,
-            I am best so!”
-
-            If I admire my arms, my face,
-            my shoulders, flanks, buttocks
-            against the yellow drawn shades, —
-
-            Who shall say I am not
-            the happy genius of my household?
-            """
-        ]
-        
-        let identityID = chat.identityKeyID
-        guard let identityKey = context.documentStore.keys.first(where: { $0.keyID == identityID }) else {
-            return
-        }
-        guard let identityPrivateKey = Ed25519.PrivateKey.deserialize(serialized: identityKey.privateKey) else {
-            return
-        }
-                
-        let unknown = Ed25519.Keypair()
-        let unknownPublicKey = unknown.publicKey.toX25519()
-        let identityX25519PublicKey = identityPrivateKey.publicKey.toX25519()
-        
-        let encryptor = NtgeCore.Message.Encryptor(publicKeys: [unknownPublicKey, identityX25519PublicKey])
-        var i = 1.0
-        let sampleMessages = plaintexts
-            .map { text -> ChatMessage in
-                let data = Data(text.utf8)
-                let extraData = Data(text.uppercased().utf8)
-                let message = encryptor.encrypt(plaintext: data, extraPlaintext: extraData, signatureKey: unknown.privateKey)
-                
-                var chatMessage = ChatMessage()
-                chatMessage.senderName = chat.memberKeyIDs.last.flatMap { keyID in context.documentStore.contacts.first(where: { $0.keyID == keyID })?.name } ?? "Unknown"
-                chatMessage.senderEmail = ""
-                chatMessage.senderKeyID = "0816fe6c1edebe9fbb83af9102ad9c899abec1a87a1d123bc24bf119035a2853"
-                chatMessage.composeTimestamp = Date().advanced(by: -2 * 24 * 60 * 60 + i * 8 * 60 * 60) // day hour minute second
-                chatMessage.message = (try? message.serialize_to_armor()) ?? ""
-                chatMessage.plaintext = text
-                i += 1
-                return chatMessage
-            }
-        
-        self.chatMessages.send(sampleMessages)
-    }
-}
-#endif
 
 // MARK: - UITableViewDataSource
 // extension ChatViewModel: UITableViewDataSource {
@@ -210,6 +187,8 @@ final class ChatViewController: UIViewController, NeedsDependency {
     
     var disposeBag = Set<AnyCancellable>()
     var viewModel: ChatViewModel! { willSet { precondition(!isViewLoaded) } }
+    
+    private var isViewAppeared = false
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -265,6 +244,12 @@ extension ChatViewController {
         viewModel.diffableDataSource.defaultRowAnimation = .none
         tableView.dataSource = viewModel.diffableDataSource
         
+        context.documentStore.$chatMessages
+            .sink { [weak self] chatMessages in
+                self?.viewModel.chatMessages.send(chatMessages)
+            }
+            .store(in: &disposeBag)
+        
         viewModel.items
             .receive(on: DispatchQueue.main)
             .sink { [weak self] items in
@@ -275,6 +260,17 @@ extension ChatViewController {
                 snapshot.appendItems(items, toSection: .main)
                 
                 dataSource.apply(snapshot)
+                
+                let numberOfSections = self.tableView.numberOfSections
+                guard numberOfSections > 0 else { return }
+                let numberOfRowsInLastSection = self.tableView.numberOfRows(inSection: numberOfSections - 1)
+                guard numberOfRowsInLastSection > 0 else { return }
+                self.tableView.scrollToRow(
+                    at: IndexPath(row: numberOfRowsInLastSection - 1, section: numberOfSections - 1),
+                    at: .bottom,
+                    animated: self.isViewAppeared
+                )
+                self.isViewAppeared = true
             }
             .store(in: &disposeBag)
         
@@ -291,20 +287,20 @@ extension ChatViewController {
                 let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
 
                 let option = UIView.AnimationOptions(rawValue: curve << 16)
-                self.messageInputView.keyboardPaddingViewHeightLayoutConstraint.constant = endFrame.height + 8
+                self.messageInputView.keyboardPaddingViewHeightLayoutConstraint.constant = endFrame.size != .zero ? endFrame.height + 8 : 0
                 UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, option], animations: {
                     let oldInputViewHeight = self.messageInputView.frame.height
                     self.messageInputView.setNeedsLayout()
                     self.messageInputView.layoutIfNeeded()
                 
                     // move tableView content when visible cell overlapped
+                    self.tableView.visibleCells.last?.layoutIfNeeded()
                     if let lastCellFrame = self.tableView.visibleCells.last?.frame {
                         let inputViewMinYInTable = self.tableView.contentOffset.y + self.tableView.frame.height - self.messageInputView.frame.height
                         let lastCellMaxYInTable = lastCellFrame.maxY
                         
                         if lastCellMaxYInTable > inputViewMinYInTable {
                             let offset = min(lastCellMaxYInTable - inputViewMinYInTable, self.messageInputView.frame.height - oldInputViewHeight)
-                            print(offset)
                             self.tableView.contentOffset.y += offset
                         }
                     }
@@ -339,6 +335,7 @@ extension ChatViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        tableView.reloadData()
         //DispatchQueue.main.async {
         //    // async it to fix keyboard transition animation bug
         //    if self.viewModel.shouldEnterEditModeAtAppear {
@@ -355,6 +352,12 @@ extension ChatViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? ChatMessageTableViewCell {
+            cell.delegate = self
+        }
+    }
 
 }
 
@@ -363,6 +366,12 @@ extension ChatViewController: MessageInputViewDelegate {
         
     func messageInputView(_ inputView: MessageInputView, submitButtonPressed button: UIButton) {
         os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+        guard let plaintext = inputView.inputTextView.text, !plaintext.isEmpty else {
+            return
+        }
+        
+        viewModel.sendMessage(plaintext: plaintext)
+        inputView.inputTextView.text = ""
     }
     
     func messageInputView(_ inputView: MessageInputView, boundsDidUpdate bounds: CGRect) {
@@ -371,3 +380,16 @@ extension ChatViewController: MessageInputViewDelegate {
     }
 }
 
+// MARK: - ChatMessageTableViewCellDelegate
+extension ChatViewController: ChatMessageTableViewCellDelegate {
+    func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, shareButtonPressed button: UIButton) {
+        guard let indexPath = tableView.indexPath(for: cell), indexPath.row < viewModel.items.value.count else {
+            return
+        }
+        let item = viewModel.items.value[indexPath.row]
+        switch item {
+        case .chatMessage(let chatMessage):
+            ShareService.shared.share(chatMessage: chatMessage, sender: self, sourceView: button)
+        }
+    }
+}

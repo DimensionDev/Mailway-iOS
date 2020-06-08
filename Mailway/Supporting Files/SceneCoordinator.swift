@@ -61,11 +61,17 @@ extension SceneCoordinator {
     }
     
     enum Scene {
+        // chats
+        case inbox
         case createChat
         case selectChatIdentity(delegate: SelectChatIdentityViewControllerDelegate)
-        case createIdentity
         case chatRoom(viewModel: ChatViewModel)
+        
+        // contacts
+        case createIdentity
         case identityList
+        
+        // settings
         case setting(viewModel: SettingListViewModel)
     }
 }
@@ -112,6 +118,8 @@ extension SceneCoordinator {
         let viewController: UIViewController
         
         switch scene {
+        case .inbox:
+            viewController = MessageInboxViewController()
         case .createChat:
             viewController = CreateChatViewController()
         case .selectChatIdentity(let delegate):

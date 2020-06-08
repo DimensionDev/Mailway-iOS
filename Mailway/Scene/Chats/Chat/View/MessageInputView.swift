@@ -25,7 +25,7 @@ final class MessageInputView: UIView {
     let inputTextView: GrowingTextView = {
         let textView = GrowingTextView()
         
-        textView.placeholder = "Message…"
+        (textView as UITextView).placeholder = "Message…"
         //textView.maxLength = 200
         textView.maxHeight = 200
         textView.minHeight = 34

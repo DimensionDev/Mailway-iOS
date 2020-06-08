@@ -159,15 +159,17 @@ extension CreateChatViewController: UITableViewDelegate {
 extension CreateChatViewController: SelectChatIdentityViewControllerDelegate {
     
     func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
+        
+        guard let recipent = viewModel.selectContact.value else {
+            return
+        }
+        let chatMembers = Set([recipent, identity])
         var chat = Chat()
         chat.identityKeyID = identity.keyID
-        chat.memberKeyIDs = {
-            let keyIDs = [viewModel.selectContact.value, identity]
-                .compactMap { $0 }
-                .map { $0.keyID }
-            
-            return Array(Set(keyIDs))
-        }()
+        chat.identityName = identity.name
+        chat.memberKeyIDs = chatMembers.map { $0.keyID }
+        chat.memberNames = chatMembers.map { $0.name }
+        chat.title = chat.memberNames.joined(separator: ", ")
         
         let targetChat = context.documentStore.queryExists(chat: chat) ?? chat
         let chatRoomViewModel = ChatViewModel(context: context, chat: targetChat)
