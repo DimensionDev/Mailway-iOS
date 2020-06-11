@@ -7,34 +7,54 @@
 //
 
 import UIKit
+import CoreData
 import SwiftUI
 import Combine
+import CoreDataStack
 
 final class ContactListViewModel: NSObject {
     
     var disposeBag = Set<AnyCancellable>()
     
+    let fetchedResultsController: NSFetchedResultsController<Contact>
+    
     // input
     let context: AppContext
-    let identities = CurrentValueSubject<[Contact], Never>([])
-    let contacts = CurrentValueSubject<[Contact], Never>([])
+    weak var tableView: UITableView?
+//    let identities = CurrentValueSubject<[Contact], Never>([])
+//    let contacts = CurrentValueSubject<[Contact], Never>([])
     
     // output
     let pushIdentityListPublisher = PassthroughSubject<Void, Never>()
     
     init(context: AppContext) {
+        self.fetchedResultsController = {
+            let fetchRequest = Contact.sortedFetchRequest
+            fetchRequest.fetchBatchSize = 20
+            fetchRequest.returnsObjectsAsFaults = false
+            let controller = NSFetchedResultsController(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context.managedObjectContext,
+                sectionNameKeyPath: #keyPath(Contact.nameFirstInitial),
+                cacheName: nil
+            )
+            
+            return controller
+        }()
         self.context = context
         super.init()
     
-        context.documentStore.$contacts
-            .map { $0.filter { $0.isIdentity }}
-            .assign(to: \.value, on: self.identities)
-            .store(in: &disposeBag)
+        fetchedResultsController.delegate = self
         
-        context.documentStore.$contacts
-            .map { $0.filter { !$0.isIdentity }}
-            .assign(to: \.value, on: self.contacts)
-            .store(in: &disposeBag)
+//        context.documentStore.$contacts
+//            .map { $0.filter { $0.isIdentity }}
+//            .assign(to: \.value, on: self.identities)
+//            .store(in: &disposeBag)
+//
+//        context.documentStore.$contacts
+//            .map { $0.filter { !$0.isIdentity }}
+//            .assign(to: \.value, on: self.contacts)
+//            .store(in: &disposeBag)
     }
     
 }
@@ -48,65 +68,174 @@ extension ContactListViewModel {
 
 extension ContactListViewModel {
     
-    static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
-        if identities.count == 0 {
-            cell.bannerView.personIconImageView.image = UIImage(systemName: "person.crop.circle.fill.badge.plus")
-            cell.bannerView.headerLabel.text = "No Identity"
-            cell.bannerView.captionLabel.text = "Tap to add identity"
-        } else if identities.count == 1 {
-            cell.bannerView.personIconImageView.image = UIImage(systemName: "person.crop.square.fill")
-            cell.bannerView.headerLabel.text = "My Identity"
-            cell.bannerView.captionLabel.text = "1 identity"
-        } else {
-            cell.bannerView.personIconImageView.image = UIImage(systemName: "rectangle.stack.person.crop.fill")
-            cell.bannerView.headerLabel.text = "My Identity"
-            cell.bannerView.captionLabel.text = "\(identities.count) identities"
+//    static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
+//        if identities.count == 0 {
+//            cell.bannerView.personIconImageView.image = UIImage(systemName: "person.crop.circle.fill.badge.plus")
+//            cell.bannerView.headerLabel.text = "No Identity"
+//            cell.bannerView.captionLabel.text = "Tap to add identity"
+//        } else if identities.count == 1 {
+//            cell.bannerView.personIconImageView.image = UIImage(systemName: "person.crop.square.fill")
+//            cell.bannerView.headerLabel.text = "My Identity"
+//            cell.bannerView.captionLabel.text = "1 identity"
+//        } else {
+//            cell.bannerView.personIconImageView.image = UIImage(systemName: "rectangle.stack.person.crop.fill")
+//            cell.bannerView.headerLabel.text = "My Identity"
+//            cell.bannerView.captionLabel.text = "\(identities.count) identities"
+//        }
+//    }
+    
+    static func configure(cell: ContactListContactTableViewCell, with contact: Contact) {
+        cell.nameLabel.text = contact.name
+    }
+    
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension ContactListViewModel: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        let identitySectionRange = 0..<identitySectionCount
+        let contactsSectionRange = identitySectionRange.upperBound..<identitySectionRange.upperBound+contactsSectionCount
+        
+        switch type {
+        case .insert:
+            tableView?.insertSections(IndexSet(integer: contactsSectionRange.lowerBound + sectionIndex), with: .fade)
+        case .update:
+            break
+        case .move:
+            break
+        case .delete:
+            tableView?.deleteSections(IndexSet(integer: contactsSectionRange.lowerBound + sectionIndex), with: .fade)
+        @unknown default:
+            assertionFailure()
         }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        let identitySectionRange = 0..<identitySectionCount
+        let contactsSectionRange = identitySectionRange.upperBound..<identitySectionRange.upperBound+contactsSectionCount
+        
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else { fatalError("Index Path should be not nil") }
+            let resultIndexPath = IndexPath(row: newIndexPath.row, section: contactsSectionRange.lowerBound + newIndexPath.section)
+            
+            tableView?.insertRows(at: [resultIndexPath], with: .fade)
+            
+        case .update:
+            guard let indexPath = indexPath else {
+                fatalError("Index Path should be not nil")
+            }
+            let resultIndexPath = IndexPath(row: indexPath.row, section: contactsSectionRange.lowerBound + indexPath.section)
+            let contact = fetchedResultsController.object(at: indexPath)
+            guard let cell = tableView?.cellForRow(at: resultIndexPath) as? ContactListContactTableViewCell else {
+                return
+            }
+            ContactListViewModel.configure(cell: cell, with: contact)
+            
+        case .move:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            let resultIndexPath = IndexPath(row: indexPath.row, section: contactsSectionRange.lowerBound + indexPath.section)
+            guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
+            let newResultIndexPath = IndexPath(row: newIndexPath.row, section: contactsSectionRange.lowerBound + newIndexPath.section)
+
+            tableView?.deleteRows(at: [resultIndexPath], with: .fade)
+            tableView?.insertRows(at: [newResultIndexPath], with: .fade)
+            
+        case .delete:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            let resultIndexPath = IndexPath(row: indexPath.row, section: contactsSectionRange.lowerBound + indexPath.section)
+
+            tableView?.deleteRows(at: [resultIndexPath], with: .fade)
+        
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.endUpdates()
     }
     
 }
 
 // MARK: - UITableViewDataSource
 extension ContactListViewModel: UITableViewDataSource {
+    
+    var identitySectionCount: Int {
+        return 1
+    }
+    
+    var contactsSectionCount: Int {
+        return fetchedResultsController.sections?.count ?? 0
+    }
         
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.allCases.count
+        Section.allCases.reduce(0) { (result, section) -> Int in
+            switch section {
+            case .identity:
+                return result + identitySectionCount
+            case .contacts:
+                return result + contactsSectionCount
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let section = Section.allCases[section]
+        let identitySectionRange = 0..<identitySectionCount
+        let contactsSectionRange = identitySectionRange.upperBound..<identitySectionRange.upperBound+contactsSectionCount
+        
         switch section {
-        case .identity:
+        case identitySectionRange:
             return 1
-        case .contacts:
-            return contacts.value.count
+        case contactsSectionRange:
+            let resultSection = section - identitySectionRange.upperBound
+            guard let sectionInfo = fetchedResultsController.sections?[resultSection] else {
+                return 0
+            }
+            return sectionInfo.numberOfObjects
+        default:
+            assertionFailure()
+            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let section = Section.allCases[indexPath.section]
+        let identitySectionRange = 0..<identitySectionCount
+        let contactsSectionRange = identitySectionRange.upperBound..<identitySectionRange.upperBound+contactsSectionCount
+        
         var cell: UITableViewCell
-        switch section {
-        case .identity:
+        
+        switch indexPath.section {
+        case identitySectionRange:
             let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
             cell = _cell
-            self.identities
-                .sink(receiveValue: { identities in
-                    ContactListViewModel.configure(cell: _cell, with: identities)
-                })
-                .store(in: &_cell.disposeBag)
-    
-        case .contacts:
+            
+            // TODO:
+
+        case contactsSectionRange:
             let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListContactTableViewCell.self), for: indexPath) as! ContactListContactTableViewCell
             cell = _cell
             
-            guard indexPath.row < contacts.value.count else { break }
-            let contact = contacts.value[indexPath.row]
-            _cell.nameLabel.text = contact.name
+            let resultSection = indexPath.section - identitySectionRange.upperBound
+            let resultIndexPath = IndexPath(row: indexPath.row, section: resultSection)
+            let contact = fetchedResultsController.object(at: resultIndexPath)
+            
+            ContactListViewModel.configure(cell: _cell, with: contact)
+            
+        default:
+            fatalError()
         }
         
         return cell
     }
+    
+    
+    
 }
 
 final class ContactListViewController: UIViewController, NeedsDependency {
@@ -143,15 +272,18 @@ extension ContactListViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        viewModel.tableView = tableView
         tableView.delegate = self
+        try! viewModel.fetchedResultsController.performFetch()
         tableView.dataSource = viewModel
+        tableView.reloadData()
         
-        Publishers.CombineLatest(viewModel.identities, viewModel.contacts)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _, _ in
-                self?.tableView.reloadData()
-            }
-            .store(in: &disposeBag)
+//        Publishers.CombineLatest(viewModel.identities, viewModel.contacts)
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] _, _ in
+//                self?.tableView.reloadData()
+//            }
+//            .store(in: &disposeBag)
     }
     
 }
@@ -165,13 +297,74 @@ extension ContactListViewController: UITableViewDelegate {
         }
         
         if tableView.cellForRow(at: indexPath) is ContactListIdentityBannerTableViewCell {
-            if viewModel.identities.value.isEmpty {
+//            if viewModel.identities.value.isEmpty {
                 // create identity
                 coordinator.present(scene: .createIdentity, from: self, transition: .modal(animated: true))
-            } else {
-                // open list
-                coordinator.present(scene: .identityList, from: self, transition: .show)
-            }
+//            } else {
+//                // open list
+//                coordinator.present(scene: .identityList, from: self, transition: .show)
+//            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let identitySectionRange = 0..<viewModel.identitySectionCount
+        let contactsSectionRange = identitySectionRange.upperBound..<identitySectionRange.upperBound + viewModel.contactsSectionCount
+        
+        switch section {
+        case contactsSectionRange:      return UITableView.automaticDimension
+        default:                        return CGFloat.leastNonzeroMagnitude
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let identitySectionRange = 0..<viewModel.identitySectionCount
+        let contactsSectionRange = identitySectionRange.upperBound..<identitySectionRange.upperBound + viewModel.contactsSectionCount
+        
+        switch section {
+        case contactsSectionRange:
+            let container = UIView()
+            container.preservesSuperviewLayoutMargins = true
+            
+            let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+            visualEffectView.translatesAutoresizingMaskIntoConstraints = false
+            
+            let titleLabel: UILabel = {
+                let label = UILabel()
+                label.font = .systemFont(ofSize: 14, weight: .semibold)
+                label.textColor = .label
+                return label
+            }()
+            
+            titleLabel.translatesAutoresizingMaskIntoConstraints = false
+            visualEffectView.contentView.addSubview(titleLabel)
+            NSLayoutConstraint.activate([
+                titleLabel.topAnchor.constraint(equalTo: visualEffectView.topAnchor, constant: 4),
+                titleLabel.leadingAnchor.constraint(equalTo: visualEffectView.readableContentGuide.leadingAnchor),
+                visualEffectView.readableContentGuide.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+                visualEffectView.bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            ])
+            
+            visualEffectView.translatesAutoresizingMaskIntoConstraints = false
+            visualEffectView.preservesSuperviewLayoutMargins = true
+            container.addSubview(visualEffectView)
+            NSLayoutConstraint.activate([
+                visualEffectView.topAnchor.constraint(equalTo: container.topAnchor),
+                visualEffectView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+                container.trailingAnchor.constraint(equalTo: visualEffectView.trailingAnchor),
+                container.bottomAnchor.constraint(equalTo: visualEffectView.bottomAnchor),
+            ])
+            
+            // configure title label
+            let indexPath = IndexPath(row: 0, section: section - contactsSectionRange.lowerBound)
+            let contact = viewModel.fetchedResultsController.object(at: indexPath)
+            let firstInitial = contact.nameFirstInitial
+            titleLabel.text = firstInitial
+                
+            return container
+            
+        default:
+            return UIView()
         }
     }
     

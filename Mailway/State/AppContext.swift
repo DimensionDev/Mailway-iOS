@@ -6,8 +6,11 @@
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
+import Foundation
+import CoreData
 import SwiftUI
 import Combine
+import CoreDataStack
 
 class AppContext: ObservableObject {
     
@@ -16,7 +19,14 @@ class AppContext: ObservableObject {
     let documentStore = DocumentStore()
     private var documentStoreSubscription: AnyCancellable!
     
+    let managedObjectContext: NSManagedObjectContext
+
     init() {
+        let coreDataStack = CoreDataStack.shared
+        managedObjectContext = coreDataStack.persistentContainer.viewContext
+        
+        coreDataStack.persistentContainer.observeAppExtensionDataChanges()
+
         documentStoreSubscription = documentStore.objectWillChange
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] in

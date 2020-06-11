@@ -14,11 +14,11 @@ struct Chat: Codable, Identifiable, Hashable {
     
     var title = "Chat Room"
     
-    var identityKeyID: KeyID = ""
-    var identityName = ""
-    
-    var memberKeyIDs: [KeyID] = []
-    var memberNames: [String] = []
+//    var identityKeyID: KeyID = ""
+//    var identityName = ""
+//
+//    var memberKeyIDs: [KeyID] = []
+//    var memberNames: [String] = []
 
 }
 
@@ -29,8 +29,8 @@ extension Chat {
 }
 
 extension Chat {
-    func contains(message: ChatMessage) -> Bool {
-        let isSame = Set(memberKeyIDs) == Set(message.recipientKeyIDs + [identityKeyID])
-        return isSame
-    }
+//    func contains(message: ChatMessage) -> Bool {
+//        let isSame = Set(memberKeyIDs) == Set(message.recipientKeyIDs + [identityKeyID])
+//        return isSame
+//    }
 }

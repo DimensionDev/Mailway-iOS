@@ -15,16 +15,16 @@ final class IdentityListViewModel: NSObject {
     var disposeBag = Set<AnyCancellable>()
     
     let context: AppContext
-    let identities = CurrentValueSubject<[Contact], Never>([])
+//    let identities = CurrentValueSubject<[Contact], Never>([])
     
     init(context: AppContext) {
         self.context = context
         super.init()
         
-        context.documentStore.$contacts
-            .map { $0.filter { $0.isIdentity }}
-            .assign(to: \.value, on: self.identities)
-            .store(in: &disposeBag)
+//        context.documentStore.$contacts
+//            .map { $0.filter { $0.isIdentity }}
+//            .assign(to: \.value, on: self.identities)
+//            .store(in: &disposeBag)
     }
     
 }
@@ -37,19 +37,19 @@ extension IdentityListViewModel {
 }
 
 extension IdentityListViewModel {
-    static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
-        // set to no identities style
-        ContactListViewModel.configure(cell: cell, with: [])
-        
-        // override header
-        if identities.count == 0 {
-            cell.bannerView.headerLabel.text = "No Identity"
-        } else if identities.count == 1 {
-            cell.bannerView.headerLabel.text = "1 Identity"
-        } else {
-            cell.bannerView.headerLabel.text = "\(identities.count) Identity"
-        }
-    }
+//    static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
+//        // set to no identities style
+//        ContactListViewModel.configure(cell: cell, with: [])
+//
+//        // override header
+//        if identities.count == 0 {
+//            cell.bannerView.headerLabel.text = "No Identity"
+//        } else if identities.count == 1 {
+//            cell.bannerView.headerLabel.text = "1 Identity"
+//        } else {
+//            cell.bannerView.headerLabel.text = "\(identities.count) Identity"
+//        }
+//    }
 }
 
 // MARK: - UITableViewDataSource
@@ -60,41 +60,43 @@ extension IdentityListViewModel: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let section = Section.allCases[section]
-        switch section {
-        case .createIdentityHeader:
-            return 1
-        case .identities:
-            return identities.value.count
-        }
+        return 0
+//        let section = Section.allCases[section]
+//        switch section {
+//        case .createIdentityHeader:
+//            return 1
+//        case .identities:
+//            return identities.value.count
+//        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let section = Section.allCases[indexPath.section]
-        var cell: UITableViewCell
-        
-        switch section {
-        case .createIdentityHeader:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
-            cell = _cell
-            
-            identities
-                .sink { identities in
-                    IdentityListViewModel.configure(cell: _cell, with: identities)
-            }
-            .store(in: &_cell.disposeBag)
-
-        case .identities:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListIdentityTableViewCell.self), for: indexPath) as! IdentityListIdentityTableViewCell
-            cell = _cell
-            
-            guard indexPath.row < identities.value.count else { break }
-            let identity = identities.value[indexPath.row]
-            
-            _cell.nameLabel.text = identity.name
-        }
-        
-        return cell
+        return UITableViewCell()
+//        let section = Section.allCases[indexPath.section]
+//        var cell: UITableViewCell
+//
+//        switch section {
+//        case .createIdentityHeader:
+//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
+//            cell = _cell
+//
+//            identities
+//                .sink { identities in
+//                    IdentityListViewModel.configure(cell: _cell, with: identities)
+//            }
+//            .store(in: &_cell.disposeBag)
+//
+//        case .identities:
+//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListIdentityTableViewCell.self), for: indexPath) as! IdentityListIdentityTableViewCell
+//            cell = _cell
+//
+//            guard indexPath.row < identities.value.count else { break }
+//            let identity = identities.value[indexPath.row]
+//
+//            _cell.nameLabel.text = identity.name
+//        }
+//
+//        return cell
     }
 }
 
@@ -140,12 +142,12 @@ extension IdentityListViewController {
         tableView.delegate = self
         tableView.dataSource = viewModel
 
-        viewModel.identities
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.tableView.reloadData()
-            }
-            .store(in: &disposeBag)
+//        viewModel.identities
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] _ in
+//                self?.tableView.reloadData()
+//            }
+//            .store(in: &disposeBag)
     }
     
 }

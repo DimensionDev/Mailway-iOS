@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Contact" representedClassName=".Contact" syncable="YES">
+        <attribute name="createAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="nameFirstInitial" optional="YES" transient="YES" attributeType="String"/>
+        <relationship name="keypair" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Keypair" inverseName="contact" inverseEntity="Keypair"/>
+    </entity>
+    <entity name="Keypair" representedClassName=".Keypair" syncable="YES">
+        <attribute name="createAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="contact" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="keypair" inverseEntity="Contact"/>
+    </entity>
+    <elements>
+        <element name="Contact" positionX="-63" positionY="0" width="128" height="118"/>
+        <element name="Keypair" positionX="-63" positionY="-18" width="128" height="88"/>
+    </elements>
+</model>

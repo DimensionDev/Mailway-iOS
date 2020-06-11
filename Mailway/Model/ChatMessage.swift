@@ -31,7 +31,7 @@ struct ChatMessage: Codable, Identifiable, Hashable {
     
     // extra
     var version = 1
-    var recipientKeyIDs: [KeyID] = []
+//    var recipientKeyIDs: [KeyID] = []
     
 }
 

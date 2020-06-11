@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 import Combine
+import CoreDataStack
 
 final class CreateIdentityViewController: UIViewController, NeedsDependency {
     
@@ -53,10 +54,10 @@ extension CreateIdentityViewController {
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
                 
-        createIdentityView.viewModel.contact
-            .map { $0 != nil }
-            .assign(to: \.isEnabled, on: doneBarButtonItem)
-            .store(in: &disposeBag)
+//        createIdentityView.viewModel.contact
+//            .map { $0 != nil }
+//            .assign(to: \.isEnabled, on: doneBarButtonItem)
+//            .store(in: &disposeBag)
     }
     
 }
@@ -68,12 +69,14 @@ extension CreateIdentityViewController {
     }
     
     @objc private func doneBarButtonItemPressed(_ sender: UIBarButtonItem) {
-        guard let contact = createIdentityView.viewModel.contact.value else {
+        guard let contactProperty = createIdentityView.viewModel.contactProperty.value else {
             // TODO: handler error
             return
         }
         
-        context.documentStore.create(identity: contact)
+        context.managedObjectContext.performChanges {
+            _ = Contact.insert(into: self.context.managedObjectContext, property: contactProperty)
+        }
         dismissModal()
     }
     

@@ -17,18 +17,18 @@ final class CreateChatViewModel: NSObject {
     
     // input
     let context: AppContext
-    let selectContact = CurrentValueSubject<Contact?, Never>(nil)
+//    let selectContact = CurrentValueSubject<Contact?, Never>(nil)
     
     // output
-    let contacts = CurrentValueSubject<[Contact], Never>([])
+//    let contacts = CurrentValueSubject<[Contact], Never>([])
     
     init(context: AppContext) {
         self.context = context
         super.init()
 
-        context.documentStore.$contacts
-            .assign(to: \.value, on: self.contacts)
-            .store(in: &disposeBag)
+//        context.documentStore.$contacts
+//            .assign(to: \.value, on: self.contacts)
+//            .store(in: &disposeBag)
     }
     
 }
@@ -48,35 +48,37 @@ extension CreateChatViewModel: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let section = CreateChatViewModel.Section.allCases[section]
-        switch section {
-        case .createChatGroup:
-            return 1
-        case .contacts:
-            return contacts.value.count
-        }
+        return 0
+//        let section = CreateChatViewModel.Section.allCases[section]
+//        switch section {
+//        case .createChatGroup:
+//            return 1
+//        case .contacts:
+//            return contacts.value.count
+//        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let section = Section.allCases[indexPath.section]
-        var cell: UITableViewCell
-        
-        switch section {
-        case .createChatGroup:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: CreateChatGroupTableViewCell.self), for: indexPath) as! CreateChatGroupTableViewCell
-            cell = _cell
-            
-            
-        case .contacts:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListContactTableViewCell.self), for: indexPath) as! ContactListContactTableViewCell
-            cell = _cell
-            
-            guard indexPath.row < contacts.value.count else { break }
-            let contact = contacts.value[indexPath.row]
-            _cell.nameLabel.text = contact.name
-        }
-        
-        return cell
+        return UITableViewCell()
+//        let section = Section.allCases[indexPath.section]
+//        var cell: UITableViewCell
+//
+//        switch section {
+//        case .createChatGroup:
+//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: CreateChatGroupTableViewCell.self), for: indexPath) as! CreateChatGroupTableViewCell
+//            cell = _cell
+//
+//
+//        case .contacts:
+//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListContactTableViewCell.self), for: indexPath) as! ContactListContactTableViewCell
+//            cell = _cell
+//
+//            guard indexPath.row < contacts.value.count else { break }
+//            let contact = contacts.value[indexPath.row]
+//            _cell.nameLabel.text = contact.name
+//        }
+//
+//        return cell
     }
     
 }
@@ -131,12 +133,12 @@ extension CreateChatViewController {
         tableView.delegate = self
         tableView.dataSource = viewModel
         
-        viewModel.contacts
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.tableView.reloadData()
-            }
-            .store(in: &disposeBag)
+//        viewModel.contacts
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] _ in
+//                self?.tableView.reloadData()
+//            }
+//            .store(in: &disposeBag)
     }
 
 }
@@ -145,39 +147,39 @@ extension CreateChatViewController {
 extension CreateChatViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell, indexPath.row < viewModel.contacts.value.count {
-            viewModel.selectContact.value = viewModel.contacts.value[indexPath.row]
-            coordinator.present(scene: .selectChatIdentity(delegate: self), from: self, transition: .show)
-        }
+//        tableView.deselectRow(at: indexPath, animated: true)
+//
+//        if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell, indexPath.row < viewModel.contacts.value.count {
+//            viewModel.selectContact.value = viewModel.contacts.value[indexPath.row]
+//            coordinator.present(scene: .selectChatIdentity(delegate: self), from: self, transition: .show)
+//        }
     }
     
 }
 
 // MARK: - SelectChatIdentityViewControllerDelegate
-extension CreateChatViewController: SelectChatIdentityViewControllerDelegate {
-    
-    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
-        
-        guard let recipent = viewModel.selectContact.value else {
-            return
-        }
-        let chatMembers = Set([recipent, identity])
-        var chat = Chat()
-        chat.identityKeyID = identity.keyID
-        chat.identityName = identity.name
-        chat.memberKeyIDs = chatMembers.map { $0.keyID }
-        chat.memberNames = chatMembers.map { $0.name }
-        chat.title = chat.memberNames.joined(separator: ", ")
-        
-        let targetChat = context.documentStore.queryExists(chat: chat) ?? chat
-        let chatRoomViewModel = ChatViewModel(context: context, chat: targetChat)
-        chatRoomViewModel.shouldEnterEditModeAtAppear = true
-        
-        dismiss(animated: true) { [weak self] in
-            self?.coordinator.present(scene: .chatRoom(viewModel: chatRoomViewModel), from: nil, transition: .showDetail)
-        }
-    }
-    
-}
+//extension CreateChatViewController: SelectChatIdentityViewControllerDelegate {
+//
+//    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
+//
+//        guard let recipent = viewModel.selectContact.value else {
+//            return
+//        }
+//        let chatMembers = Set([recipent, identity])
+//        var chat = Chat()
+//        chat.identityKeyID = identity.keyID
+//        chat.identityName = identity.name
+//        chat.memberKeyIDs = chatMembers.map { $0.keyID }
+//        chat.memberNames = chatMembers.map { $0.name }
+//        chat.title = chat.memberNames.joined(separator: ", ")
+//        
+//        let targetChat = context.documentStore.queryExists(chat: chat) ?? chat
+//        let chatRoomViewModel = ChatViewModel(context: context, chat: targetChat)
+//        chatRoomViewModel.shouldEnterEditModeAtAppear = true
+//        
+//        dismiss(animated: true) { [weak self] in
+//            self?.coordinator.present(scene: .chatRoom(viewModel: chatRoomViewModel), from: nil, transition: .showDetail)
+//        }
+//    }
+//
+//}

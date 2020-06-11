@@ -31,23 +31,23 @@ final class ChatViewModel: NSObject {
         self.chat = chat
         super.init()
         
-        chatMessages
-            .map { chatMessages -> [Item] in
-                let items = chatMessages
-                    .filter{ chat.contains(message: $0) }
-                    .map { Item.chatMessage($0) }
-                return items
-            }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] newItems in
-                guard let `self` = self else {
-                    assertionFailure()
-                    return
-                }
-                self.items.value = newItems
-                //print("sink: \(newItems.count)")
-            }
-            .store(in: &disposeBag)
+//        chatMessages
+//            .map { chatMessages -> [Item] in
+//                let items = chatMessages
+//                    .filter{ chat.contains(message: $0) }
+//                    .map { Item.chatMessage($0) }
+//                return items
+//            }
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] newItems in
+//                guard let `self` = self else {
+//                    assertionFailure()
+//                    return
+//                }
+//                self.items.value = newItems
+//                //print("sink: \(newItems.count)")
+//            }
+//            .store(in: &disposeBag)
     }
     
 }
@@ -55,56 +55,56 @@ final class ChatViewModel: NSObject {
 extension ChatViewModel {
     
     func sendMessage(plaintext: String) {
-        var recipients: [Contact] = []
-        var recipientKeys: [Key] = []
-        var recipientPublicKeys: [Ed25519.PublicKey] = []
-        
-        guard let identity = context.documentStore.contacts.first(where: { $0.keyID == chat.identityKeyID }),
-        let identityKey = context.documentStore.keys.first(where: { $0.keyID == chat.identityKeyID }),
-        let identityPrivateKey = Ed25519.PrivateKey.deserialize(from: identityKey.privateKey) else {
-            return
-        }
-        
-        for keyID in chat.memberKeyIDs {
-            guard let recipient = context.documentStore.contacts.first(where: { $0.keyID == keyID }),
-            let key = context.documentStore.keys.first(where: { $0.keyID == keyID }),
-            let publicKey = Ed25519.PublicKey.deserialize(serialized: key.publicKey) else {
-                continue
-            }
-            
-            recipients.append(recipient)
-            recipientKeys.append(key)
-            recipientPublicKeys.append(publicKey)
-        }
-        
-        guard !recipients.isEmpty else {
-            return
-        }
-    
-        let encryptor = Message.Encryptor(publicKeys: recipientPublicKeys.map { $0.x25519 })
-        let plaintextData = Data(plaintext.utf8)
-        
-        // TODO: extra
-        do {
-            let message = encryptor.encrypt(plaintext: plaintextData, extraPlaintext: nil, signatureKey: identityPrivateKey)
-            guard let armor = try? message.serialize() else {
-                return
-            }
-            
-            let chatMessage = ChatMessage(plaintextData: plaintextData,
-                                          composeTimestamp: Date(),
-                                          receiveTimestamp: Date(),
-                                          senderName: identity.name,
-                                          senderEmail: identity.email,
-                                          senderKeyID: identity.keyID,
-                                          message: armor,
-                                          createTimestamp: Date(),
-                                          version: 1,
-                                          recipientKeyIDs: recipientPublicKeys.map { $0.keyID })
-            context.documentStore.create(chatMessage: chatMessage, forChat: chat)
-        } catch {
-            
-        }
+//        var recipients: [Contact] = []
+//        var recipientKeys: [Key] = []
+//        var recipientPublicKeys: [Ed25519.PublicKey] = []
+//        
+//        guard let identity = context.documentStore.contacts.first(where: { $0.keyID == chat.identityKeyID }),
+//        let identityKey = context.documentStore.keys.first(where: { $0.keyID == chat.identityKeyID }),
+//        let identityPrivateKey = Ed25519.PrivateKey.deserialize(from: identityKey.privateKey) else {
+//            return
+//        }
+//        
+//        for keyID in chat.memberKeyIDs {
+//            guard let recipient = context.documentStore.contacts.first(where: { $0.keyID == keyID }),
+//            let key = context.documentStore.keys.first(where: { $0.keyID == keyID }),
+//            let publicKey = Ed25519.PublicKey.deserialize(serialized: key.publicKey) else {
+//                continue
+//            }
+//            
+//            recipients.append(recipient)
+//            recipientKeys.append(key)
+//            recipientPublicKeys.append(publicKey)
+//        }
+//        
+//        guard !recipients.isEmpty else {
+//            return
+//        }
+//    
+//        let encryptor = Message.Encryptor(publicKeys: recipientPublicKeys.map { $0.x25519 })
+//        let plaintextData = Data(plaintext.utf8)
+//        
+//        // TODO: extra
+//        do {
+//            let message = encryptor.encrypt(plaintext: plaintextData, extraPlaintext: nil, signatureKey: identityPrivateKey)
+//            guard let armor = try? message.serialize() else {
+//                return
+//            }
+//            
+//            let chatMessage = ChatMessage(plaintextData: plaintextData,
+//                                          composeTimestamp: Date(),
+//                                          receiveTimestamp: Date(),
+//                                          senderName: identity.name,
+//                                          senderEmail: identity.email,
+//                                          senderKeyID: identity.keyID,
+//                                          message: armor,
+//                                          createTimestamp: Date(),
+//                                          version: 1,
+//                                          recipientKeyIDs: recipientPublicKeys.map { $0.keyID })
+//            context.documentStore.create(chatMessage: chatMessage, forChat: chat)
+//        } catch {
+//            
+//        }
     }
     
 }
@@ -244,11 +244,11 @@ extension ChatViewController {
         viewModel.diffableDataSource.defaultRowAnimation = .none
         tableView.dataSource = viewModel.diffableDataSource
         
-        context.documentStore.$chatMessages
-            .sink { [weak self] chatMessages in
-                self?.viewModel.chatMessages.send(chatMessages)
-            }
-            .store(in: &disposeBag)
+//        context.documentStore.$chatMessages
+//            .sink { [weak self] chatMessages in
+//                self?.viewModel.chatMessages.send(chatMessages)
+//            }
+//            .store(in: &disposeBag)
         
         viewModel.items
             .receive(on: DispatchQueue.main)
