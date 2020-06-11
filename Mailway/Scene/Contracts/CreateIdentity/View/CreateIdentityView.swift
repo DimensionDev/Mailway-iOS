@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import CoreDataStack
 
-class CreateContractViewModel: ObservableObject {
+final class CreateContractViewModel: ObservableObject {
     
     var disposeBag = Set<AnyCancellable>()
     

@@ -305,6 +305,16 @@ extension ContactListViewController: UITableViewDelegate {
 //                coordinator.present(scene: .identityList, from: self, transition: .show)
 //            }
         }
+        
+        if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell {
+            let identitySectionRange = 0..<viewModel.identitySectionCount
+            let contactsSectionRange = identitySectionRange.upperBound..<identitySectionRange.upperBound + viewModel.contactsSectionCount
+            
+            let resultIndexPath = IndexPath(row: indexPath.row, section: indexPath.section - contactsSectionRange.lowerBound)
+            let contact = viewModel.fetchedResultsController.object(at: resultIndexPath)
+            let contactDetailViewModel = ContactDetailViewModel(contact: contact)
+            coordinator.present(scene: .contactDetail(viewModel: contactDetailViewModel), from: self, transition: .showDetail)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -331,7 +341,7 @@ extension ContactListViewController: UITableViewDelegate {
             
             let titleLabel: UILabel = {
                 let label = UILabel()
-                label.font = .systemFont(ofSize: 14, weight: .semibold)
+                label.font = .systemFont(ofSize: 17, weight: .semibold)
                 label.textColor = .label
                 return label
             }()

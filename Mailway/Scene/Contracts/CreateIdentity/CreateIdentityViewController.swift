@@ -41,7 +41,7 @@ extension CreateIdentityViewController {
         navigationItem.leftBarButtonItem = cancelBarButtonItem
         navigationItem.rightBarButtonItem = doneBarButtonItem
         
-        let hostingController = UIHostingController(rootView: createIdentityView.environmentObject(context))
+        let hostingController = UIHostingController(rootView: createIdentityView)
         addChild(hostingController)
         view.addSubview(hostingController.view)
         hostingController.didMove(toParent: self)

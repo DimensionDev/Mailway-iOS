@@ -64,6 +64,8 @@
 		DBB9811424863DAA00FB2FE8 /* ChatRootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */; };
 		DBB981162486452C00FB2FE8 /* RootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB981152486452C00FB2FE8 /* RootSplitViewController.swift */; };
 		DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */; };
+		DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040032492303000C5184D /* ContactDetailViewController.swift */; };
+		DBE040072492413600C5184D /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040062492413600C5184D /* ContactDetailView.swift */; };
 		DBE306A62474DF7B00EB7193 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306A52474DF7B00EB7193 /* AppDelegate.swift */; };
 		DBE306A82474DF7B00EB7193 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */; };
 		DBE306AC2474DF7C00EB7193 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBE306AB2474DF7C00EB7193 /* Assets.xcassets */; };
@@ -193,6 +195,8 @@
 		DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRootSplitViewController.swift; sourceTree = "<group>"; };
 		DBB981152486452C00FB2FE8 /* RootSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSplitViewController.swift; sourceTree = "<group>"; };
 		DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderDetailViewController.swift; sourceTree = "<group>"; };
+		DBE040032492303000C5184D /* ContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
+		DBE040062492413600C5184D /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		DBE306A22474DF7B00EB7193 /* Mailway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mailway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBE306A52474DF7B00EB7193 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -346,13 +350,6 @@
 				DB1EC2DF2488EB4C002379A1 /* ShareService.swift */,
 			);
 			path = Service;
-			sourceTree = "<group>";
-		};
-		DB1EC3172490EDD7002379A1 /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CoreData;
 			sourceTree = "<group>";
 		};
 		DB1EC3532491E305002379A1 /* CoreDataStack */ = {
@@ -547,6 +544,23 @@
 			path = Root;
 			sourceTree = "<group>";
 		};
+		DBE04005249233E700C5184D /* ContactDetail */ = {
+			isa = PBXGroup;
+			children = (
+				DBE040082492413A00C5184D /* View */,
+				DBE040032492303000C5184D /* ContactDetailViewController.swift */,
+			);
+			path = ContactDetail;
+			sourceTree = "<group>";
+		};
+		DBE040082492413A00C5184D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DBE040062492413600C5184D /* ContactDetailView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		DBE306992474DF7B00EB7193 = {
 			isa = PBXGroup;
 			children = (
@@ -584,7 +598,6 @@
 				DBE306C92474E11B00EB7193 /* Scene */,
 				DB60BF13247527DC0001F9C0 /* Vender */,
 				DB2813A12484F64D001CDD19 /* Extension */,
-				DB1EC3172490EDD7002379A1 /* CoreData */,
 				DBE306AD2474DF7C00EB7193 /* Preview Content */,
 				DB60BF14247527EC0001F9C0 /* Supporting Files */,
 			);
@@ -647,6 +660,7 @@
 			isa = PBXGroup;
 			children = (
 				DB008AA7247661D900CE6A7E /* ContactList */,
+				DBE04005249233E700C5184D /* ContactDetail */,
 				DB008AAC247666DC00CE6A7E /* CreateIdentity */,
 				DB19388F2477BD2100E24AFB /* IdentityList */,
 				DB1938922477E4E000E24AFB /* IdentityDetail */,
@@ -997,8 +1011,10 @@
 				DBE306D62474ED0700EB7193 /* AppCommand.swift in Sources */,
 				DB6DEC7F247F59E00040C817 /* Key.swift in Sources */,
 				DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */,
+				DBE040072492413600C5184D /* ContactDetailView.swift in Sources */,
 				DBE306CD2474E19200EB7193 /* SettingsView.swift in Sources */,
 				DB008AB22476750800CE6A7E /* CreateIdentityViewController.swift in Sources */,
+				DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */,
 				DB1EC2DB2488D8CE002379A1 /* MessageInboxViewController.swift in Sources */,
 				DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */,
 				DB7E1E43247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift in Sources */,
