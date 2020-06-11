@@ -15,7 +15,7 @@ final public class Contact: NSManagedObject {
     @NSManaged public private(set) var createAt: Date
     
     @objc public var nameFirstInitial: String {
-        willAccessValue(forKey: #keyPath(name))
+        willAccessValue(forKey: #keyPath(nameFirstInitial))
         let mutableString = NSMutableString(string: name.trimmingCharacters(in: .whitespacesAndNewlines)) as CFMutableString
         CFStringTransform(mutableString, nil, kCFStringTransformToLatin, false)                // to Latin
         CFStringTransform(mutableString, nil, kCFStringTransformStripCombiningMarks, false)    // remove accent
@@ -30,7 +30,7 @@ final public class Contact: NSManagedObject {
             
             return String(first.uppercased())
         }()
-        didAccessValue(forKey: #keyPath(name))
+        didAccessValue(forKey: #keyPath(nameFirstInitial))
         return firstInitial
     }
     
