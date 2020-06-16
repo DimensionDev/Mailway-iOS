@@ -85,6 +85,7 @@ extension IdentityBannerView {
     
 }
 
+#if DEBUG
 struct IdentityBannerView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
@@ -99,3 +100,4 @@ struct IdentityBannerView_Previews: PreviewProvider {
         }
     }
 }
+#endif

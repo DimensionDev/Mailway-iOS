@@ -253,6 +253,7 @@ extension ChatMessageTableViewCell {
     }
 }
 
+#if DEBUG
 struct ChatMessageTableViewCell_Previews: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
@@ -283,3 +284,4 @@ struct ChatMessageTableViewCell_Previews: PreviewProvider {
         .previewLayout(.fixed(width: 320, height: 500))
     }
 }
+#endif

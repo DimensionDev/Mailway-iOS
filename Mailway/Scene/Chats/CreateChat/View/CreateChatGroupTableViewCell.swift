@@ -68,6 +68,7 @@ extension CreateChatGroupTableViewCell {
     
 }
 
+#if DEBUG
 struct CreateChatGroupTableViewCell_Previews: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
@@ -76,3 +77,4 @@ struct CreateChatGroupTableViewCell_Previews: PreviewProvider {
         .previewLayout(.fixed(width: 320, height: 44))
     }
 }
+#endif

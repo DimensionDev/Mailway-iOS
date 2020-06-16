@@ -60,12 +60,12 @@ struct ContactDetailView: View {
     
 }
 
-struct ContactDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        let context = CoreDataStack.shared.persistentContainer.viewContext
-        let contact = Contact.insert(into: context, property: Contact.Property(name: "Alice"))
-        
-        let viewModel = ContactDetailViewModel(contact: contact)
-        return ContactDetailView(viewModel: viewModel)
-    }
-}
+//struct ContactDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let context = CoreDataStack.shared.persistentContainer.viewContext
+//        let contact = Contact.insert(into: context, property: Contact.Property(name: "Alice", note: ""))
+//        
+//        let viewModel = ContactDetailViewModel(contact: contact)
+//        return ContactDetailView(viewModel: viewModel)
+//    }
+//}

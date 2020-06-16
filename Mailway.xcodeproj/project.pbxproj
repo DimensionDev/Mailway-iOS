@@ -44,6 +44,9 @@
 		DB6DEC7F247F59E00040C817 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC7E247F59E00040C817 /* Key.swift */; };
 		DB6DEC81247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC80247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift */; };
 		DB6DEC84247F745F0040C817 /* ChatListChatRoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC83247F745F0040C817 /* ChatListChatRoomTableViewCell.swift */; };
+		DB6F9DA02498BE7700D39BAD /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9D9F2498BE7700D39BAD /* Chat.swift */; };
+		DB6F9DA22498BFC800D39BAD /* ChatMemberNameStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9DA12498BFC800D39BAD /* ChatMemberNameStub.swift */; };
+		DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9DA32498C22600D39BAD /* ChatMessage.swift */; };
 		DB7E1E3C247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */; };
 		DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */; };
 		DB7E1E40247BC73B002FC90E /* IdentityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3F247BC73B002FC90E /* IdentityListViewController.swift */; };
@@ -64,8 +67,12 @@
 		DBB9811424863DAA00FB2FE8 /* ChatRootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */; };
 		DBB981162486452C00FB2FE8 /* RootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB981152486452C00FB2FE8 /* RootSplitViewController.swift */; };
 		DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */; };
+		DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC9931A249788B9004C1264 /* ContactChannel.swift */; };
 		DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040032492303000C5184D /* ContactDetailViewController.swift */; };
 		DBE040072492413600C5184D /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040062492413600C5184D /* ContactDetailView.swift */; };
+		DBE04010249343B000C5184D /* MailwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0400F249343B000C5184D /* MailwayUITests.swift */; };
+		DBE0405824934A3400C5184D /* ManagedObjectObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0405724934A3400C5184D /* ManagedObjectObserver.swift */; };
+		DBE0405A24934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0405924934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift */; };
 		DBE306A62474DF7B00EB7193 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306A52474DF7B00EB7193 /* AppDelegate.swift */; };
 		DBE306A82474DF7B00EB7193 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */; };
 		DBE306AC2474DF7C00EB7193 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBE306AB2474DF7C00EB7193 /* Assets.xcassets */; };
@@ -108,6 +115,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = DB1EC3512491E305002379A1;
 			remoteInfo = CoreDataStack;
+		};
+		DBE04012249343B000C5184D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBE3069A2474DF7B00EB7193 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBE306A12474DF7B00EB7193;
+			remoteInfo = Mailway;
 		};
 		DBE306B92474DF7C00EB7193 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -175,6 +189,9 @@
 		DB6DEC7E247F59E00040C817 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		DB6DEC80247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListInboxBannerTableViewCell.swift; sourceTree = "<group>"; };
 		DB6DEC83247F745F0040C817 /* ChatListChatRoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListChatRoomTableViewCell.swift; sourceTree = "<group>"; };
+		DB6F9D9F2498BE7700D39BAD /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		DB6F9DA12498BFC800D39BAD /* ChatMemberNameStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMemberNameStub.swift; sourceTree = "<group>"; };
+		DB6F9DA32498C22600D39BAD /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListIdentityBannerTableViewCell.swift; sourceTree = "<group>"; };
 		DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListContactTableViewCell.swift; sourceTree = "<group>"; };
 		DB7E1E3F247BC73B002FC90E /* IdentityListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityListViewController.swift; sourceTree = "<group>"; };
@@ -195,8 +212,14 @@
 		DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRootSplitViewController.swift; sourceTree = "<group>"; };
 		DBB981152486452C00FB2FE8 /* RootSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSplitViewController.swift; sourceTree = "<group>"; };
 		DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderDetailViewController.swift; sourceTree = "<group>"; };
+		DBC9931A249788B9004C1264 /* ContactChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactChannel.swift; sourceTree = "<group>"; };
 		DBE040032492303000C5184D /* ContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
 		DBE040062492413600C5184D /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
+		DBE0400D249343B000C5184D /* MailwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MailwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBE0400F249343B000C5184D /* MailwayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailwayUITests.swift; sourceTree = "<group>"; };
+		DBE04011249343B000C5184D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DBE0405724934A3400C5184D /* ManagedObjectObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectObserver.swift; sourceTree = "<group>"; };
+		DBE0405924934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectContextObjectsDidChangeNotification.swift; sourceTree = "<group>"; };
 		DBE306A22474DF7B00EB7193 /* Mailway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mailway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBE306A52474DF7B00EB7193 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -238,6 +261,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB1EC35B2491E306002379A1 /* CoreDataStack.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBE0400A249343B000C5184D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,7 +388,7 @@
 				DB1EC3552491E306002379A1 /* Info.plist */,
 				DB1EC3542491E305002379A1 /* CoreDataStack.h */,
 				DB1EC3142490EDCA002379A1 /* CoreDataStack.xcdatamodeld */,
-				DB1EC31A2490F4DA002379A1 /* CoreDataStack.swift */,
+				DBE0405B249374A400C5184D /* Stack */,
 				DBB358722491F8B900803C98 /* Entity */,
 				DBB358712491F77000803C98 /* Protocol */,
 				DBB358652491EC9000803C98 /* Extension */,
@@ -505,6 +535,10 @@
 			children = (
 				DB1EC3182490F28A002379A1 /* Keypair.swift */,
 				DBB358732491FFBD00803C98 /* Contact.swift */,
+				DBC9931A249788B9004C1264 /* ContactChannel.swift */,
+				DB6F9D9F2498BE7700D39BAD /* Chat.swift */,
+				DB6F9DA12498BFC800D39BAD /* ChatMemberNameStub.swift */,
+				DB6F9DA32498C22600D39BAD /* ChatMessage.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -561,11 +595,31 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		DBE0400E249343B000C5184D /* MailwayUITests */ = {
+			isa = PBXGroup;
+			children = (
+				DBE0400F249343B000C5184D /* MailwayUITests.swift */,
+				DBE04011249343B000C5184D /* Info.plist */,
+			);
+			path = MailwayUITests;
+			sourceTree = "<group>";
+		};
+		DBE0405B249374A400C5184D /* Stack */ = {
+			isa = PBXGroup;
+			children = (
+				DB1EC31A2490F4DA002379A1 /* CoreDataStack.swift */,
+				DBE0405724934A3400C5184D /* ManagedObjectObserver.swift */,
+				DBE0405924934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift */,
+			);
+			path = Stack;
+			sourceTree = "<group>";
+		};
 		DBE306992474DF7B00EB7193 = {
 			isa = PBXGroup;
 			children = (
 				DBE306A42474DF7B00EB7193 /* Mailway */,
 				DBE306BB2474DF7C00EB7193 /* MailwayTests */,
+				DBE0400E249343B000C5184D /* MailwayUITests */,
 				DB1EC3532491E305002379A1 /* CoreDataStack */,
 				DB1EC3602491E306002379A1 /* CoreDataStackTests */,
 				DBE306A32474DF7B00EB7193 /* Products */,
@@ -581,6 +635,7 @@
 				DBE306B82474DF7C00EB7193 /* MailwayTests.xctest */,
 				DB1EC3522491E305002379A1 /* CoreDataStack.framework */,
 				DB1EC35A2491E306002379A1 /* CoreDataStackTests.xctest */,
+				DBE0400D249343B000C5184D /* MailwayUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -760,6 +815,24 @@
 			productReference = DB1EC35A2491E306002379A1 /* CoreDataStackTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		DBE0400C249343B000C5184D /* MailwayUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBE04014249343B000C5184D /* Build configuration list for PBXNativeTarget "MailwayUITests" */;
+			buildPhases = (
+				DBE04009249343B000C5184D /* Sources */,
+				DBE0400A249343B000C5184D /* Frameworks */,
+				DBE0400B249343B000C5184D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DBE04013249343B000C5184D /* PBXTargetDependency */,
+			);
+			name = MailwayUITests;
+			productName = MailwayUITests;
+			productReference = DBE0400D249343B000C5184D /* MailwayUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		DBE306A12474DF7B00EB7193 /* Mailway */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DBE306C12474DF7C00EB7193 /* Build configuration list for PBXNativeTarget "Mailway" */;
@@ -817,6 +890,10 @@
 						CreatedOnToolsVersion = 11.5;
 						TestTargetID = DBE306A12474DF7B00EB7193;
 					};
+					DBE0400C249343B000C5184D = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = DBE306A12474DF7B00EB7193;
+					};
 					DBE306A12474DF7B00EB7193 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
@@ -841,6 +918,7 @@
 			targets = (
 				DBE306A12474DF7B00EB7193 /* Mailway */,
 				DBE306B72474DF7C00EB7193 /* MailwayTests */,
+				DBE0400C249343B000C5184D /* MailwayUITests */,
 				DB1EC3512491E305002379A1 /* CoreDataStack */,
 				DB1EC3592491E306002379A1 /* CoreDataStackTests */,
 			);
@@ -856,6 +934,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		DB1EC3582491E306002379A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBE0400B249343B000C5184D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -951,15 +1036,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBB358742491FFBD00803C98 /* Contact.swift in Sources */,
+				DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */,
+				DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */,
 				DBB3586A2491ED9B00803C98 /* DarwinNotificationCenter.swift in Sources */,
+				DB6F9DA22498BFC800D39BAD /* ChatMemberNameStub.swift in Sources */,
 				DBB3586C2491EDE600803C98 /* DarwinNotification+Name.swift in Sources */,
 				DB1EC3732491E37D002379A1 /* Keypair.swift in Sources */,
 				DB1EC3722491E321002379A1 /* CoreDataStack.xcdatamodeld in Sources */,
 				DBB3586E2491EE8900803C98 /* NSPersistentContainer.swift in Sources */,
 				DBB358702491F76C00803C98 /* Managed.swift in Sources */,
+				DBE0405A24934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift in Sources */,
+				DB6F9DA02498BE7700D39BAD /* Chat.swift in Sources */,
 				DB1EC3712491E317002379A1 /* CoreDataStack.swift in Sources */,
 				DBB358642491EC8D00803C98 /* URL.swift in Sources */,
 				DBB358762492128300803C98 /* NSManagedObjectContext.swift in Sources */,
+				DBE0405824934A3400C5184D /* ManagedObjectObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,6 +1059,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB1EC3622491E306002379A1 /* CoreDataStackTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBE04009249343B000C5184D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBE04010249343B000C5184D /* MailwayUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1061,6 +1160,11 @@
 			target = DB1EC3512491E305002379A1 /* CoreDataStack */;
 			targetProxy = DB1EC3652491E306002379A1 /* PBXContainerItemProxy */;
 		};
+		DBE04013249343B000C5184D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DBE306A12474DF7B00EB7193 /* Mailway */;
+			targetProxy = DBE04012249343B000C5184D /* PBXContainerItemProxy */;
+		};
 		DBE306BA2474DF7C00EB7193 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DBE306A12474DF7B00EB7193 /* Mailway */;
@@ -1130,7 +1234,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1152,11 +1256,11 @@
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.Mailway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1173,7 +1277,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = MailwayTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1199,7 +1302,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CoreDataStack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1227,7 +1329,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CoreDataStack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1255,7 +1356,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CoreDataStack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1278,7 +1378,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = CoreDataStackTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1299,7 +1398,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = CoreDataStackTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1320,7 +1418,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = CoreDataStackTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1331,6 +1428,63 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mailway.app/Mailway";
+			};
+			name = Release;
+		};
+		DBE04015249343B000C5184D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = MailwayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.MailwayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mailway;
+			};
+			name = Debug;
+		};
+		DBE04016249343B000C5184D /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = MailwayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.MailwayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mailway;
+			};
+			name = Preview;
+		};
+		DBE04017249343B000C5184D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = MailwayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.MailwayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mailway;
 			};
 			name = Release;
 		};
@@ -1384,7 +1538,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1438,7 +1592,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1460,11 +1614,11 @@
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.Mailway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1484,11 +1638,11 @@
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.Mailway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1505,7 +1659,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = MailwayTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1528,7 +1681,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = MailwayTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1561,6 +1713,16 @@
 				DB1EC36E2491E306002379A1 /* Debug */,
 				DB1EC36F2491E306002379A1 /* Preview */,
 				DB1EC3702491E306002379A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBE04014249343B000C5184D /* Build configuration list for PBXNativeTarget "MailwayUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBE04015249343B000C5184D /* Debug */,
+				DBE04016249343B000C5184D /* Preview */,
+				DBE04017249343B000C5184D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

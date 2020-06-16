@@ -78,6 +78,7 @@ final class ContactInfoView: UIView {
     
 }
 
+#if DEBUG
 struct ContactInfoView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
@@ -104,3 +105,4 @@ struct ContactInfoView_Previews: PreviewProvider {
         }
     }
 }
+#endif

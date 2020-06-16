@@ -10,6 +10,7 @@ import UIKit
 import SwiftUI
 import Combine
 import CoreDataStack
+import NtgeCore
 
 final class CreateIdentityViewController: UIViewController, NeedsDependency {
     
@@ -74,9 +75,18 @@ extension CreateIdentityViewController {
             return
         }
         
-        context.managedObjectContext.performChanges {
-            _ = Contact.insert(into: self.context.managedObjectContext, property: contactProperty)
+        let ed25519Keypair = Ed25519.Keypair()
+        let privateKey = ed25519Keypair.privateKey.serialize()
+        let publicKey = ed25519Keypair.publicKey.serialize()
+        let keyID = ed25519Keypair.publicKey.keyID
+        let keypairProperty = Keypair.Property(privateKey: privateKey, publicKey: publicKey, keyID: keyID)
+        
+        let managedObjectContext = context.managedObjectContext
+        managedObjectContext.performChanges {
+            let keypair = Keypair.insert(into: managedObjectContext, property: keypairProperty)
+            _ = Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: [])
         }
+        
         dismissModal()
     }
     
@@ -95,6 +105,7 @@ extension CreateIdentityViewController: UIAdaptivePresentationControllerDelegate
     
 }
 
+#if DEBUG
 struct CreateIdentityViewController_Previews: PreviewProvider {
     static var previews: some View {
         UIViewControllerPreview {
@@ -104,3 +115,4 @@ struct CreateIdentityViewController_Previews: PreviewProvider {
         }
     }
 }
+#endif

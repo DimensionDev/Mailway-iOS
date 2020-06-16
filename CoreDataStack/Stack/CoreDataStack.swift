@@ -56,11 +56,3 @@ public final class CoreDataStack {
     }()
     
 }
-
-#if DEBUG
-extension CoreDataStack {
-    
-    
-    
-}
-#endif

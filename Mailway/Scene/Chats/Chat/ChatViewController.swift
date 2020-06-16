@@ -18,7 +18,7 @@ final class ChatViewModel: NSObject {
     // input
     let context: AppContext
     let chat: Chat
-    let chatMessages = PassthroughSubject<[ChatMessage], Never>()
+    //let chatMessages = PassthroughSubject<[ChatMessage], Never>()
     
     var shouldEnterEditModeAtAppear = false
     
@@ -115,48 +115,48 @@ extension ChatViewModel {
     }
     
     enum Item: Hashable {
-        case chatMessage(ChatMessage)
+//        case chatMessage(ChatMessage)
     }
 }
 
 extension ChatViewModel {
     
-    func configureDataSource(tableView: UITableView) {
-        let dataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView) { [weak self] tableView, indexPath, item -> UITableViewCell? in
-            guard let `self` = self else { return nil }
-            switch item {
-            case .chatMessage(let chatMessage):
-                let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatMessageTableViewCell.self), for: indexPath) as! ChatMessageTableViewCell
-                cell.senderContactInfoView.nameLabel.text = chatMessage.senderName
-                cell.senderContactInfoView.emailLabel.text = chatMessage.senderEmail
-                cell.senderContactInfoView.shortKeyIDLabel.text = String(chatMessage.senderKeyID.suffix(8)).uppercased()
-
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateStyle = .medium
-                dateFormatter.timeStyle = .none
-
-                if let composeTimestamp = chatMessage.composeTimestamp.flatMap({ dateFormatter.string(from: $0) }) {
-                    cell.composeTimestampLabel.text = composeTimestamp
-                } else {
-                    cell.composeTimestampLabel.text = "-"
-                }
-                cell.receiveTimestampLabel.text = dateFormatter.string(from: chatMessage.receiveTimestamp)
-                cell.messageContentTextView.text = {
-                    switch chatMessage.plaintextKind {
-                    case .text:
-                        return String(data: chatMessage.plaintextData, encoding: .utf8) ?? "<invalid message content>"
-                    case .image:
-                        return ""
-                    case .file:
-                        return "File: \(chatMessage.plaintextData.count)"
-                    }
-                }()
-                return cell
-            }
-        }   // end let dataSource = …
-        
-        diffableDataSource = dataSource
-    }   // end func configureDataSource(:) { … }
+//    func configureDataSource(tableView: UITableView) {
+//        let dataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView) { [weak self] tableView, indexPath, item -> UITableViewCell? in
+//            guard let `self` = self else { return nil }
+//            switch item {
+//            case .chatMessage(let chatMessage):
+//                let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatMessageTableViewCell.self), for: indexPath) as! ChatMessageTableViewCell
+//                cell.senderContactInfoView.nameLabel.text = chatMessage.senderName
+//                cell.senderContactInfoView.emailLabel.text = chatMessage.senderEmail
+//                cell.senderContactInfoView.shortKeyIDLabel.text = String(chatMessage.senderKeyID.suffix(8)).uppercased()
+//
+//                let dateFormatter = DateFormatter()
+//                dateFormatter.dateStyle = .medium
+//                dateFormatter.timeStyle = .none
+//
+//                if let composeTimestamp = chatMessage.composeTimestamp.flatMap({ dateFormatter.string(from: $0) }) {
+//                    cell.composeTimestampLabel.text = composeTimestamp
+//                } else {
+//                    cell.composeTimestampLabel.text = "-"
+//                }
+//                cell.receiveTimestampLabel.text = dateFormatter.string(from: chatMessage.receiveTimestamp)
+//                cell.messageContentTextView.text = {
+//                    switch chatMessage.plaintextKind {
+//                    case .text:
+//                        return String(data: chatMessage.plaintextData, encoding: .utf8) ?? "<invalid message content>"
+//                    case .image:
+//                        return ""
+//                    case .file:
+//                        return "File: \(chatMessage.plaintextData.count)"
+//                    }
+//                }()
+//                return cell
+//            }
+//        }   // end let dataSource = …
+//
+//        diffableDataSource = dataSource
+//    }   // end func configureDataSource(:) { … }
 
 }
 
@@ -240,9 +240,9 @@ extension ChatViewController {
         ])
                 
         tableView.delegate = self
-        viewModel.configureDataSource(tableView: tableView)
-        viewModel.diffableDataSource.defaultRowAnimation = .none
-        tableView.dataSource = viewModel.diffableDataSource
+//        viewModel.configureDataSource(tableView: tableView)
+//        viewModel.diffableDataSource.defaultRowAnimation = .none
+//        tableView.dataSource = viewModel.diffableDataSource
         
 //        context.documentStore.$chatMessages
 //            .sink { [weak self] chatMessages in
@@ -378,18 +378,19 @@ extension ChatViewController: MessageInputViewDelegate {
         tableView.contentInset.bottom = bounds.height - view.safeAreaInsets.bottom
         tableView.verticalScrollIndicatorInsets.bottom = bounds.height - view.safeAreaInsets.bottom
     }
+    
 }
 
 // MARK: - ChatMessageTableViewCellDelegate
 extension ChatViewController: ChatMessageTableViewCellDelegate {
     func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, shareButtonPressed button: UIButton) {
-        guard let indexPath = tableView.indexPath(for: cell), indexPath.row < viewModel.items.value.count else {
-            return
-        }
-        let item = viewModel.items.value[indexPath.row]
-        switch item {
-        case .chatMessage(let chatMessage):
-            ShareService.shared.share(chatMessage: chatMessage, sender: self, sourceView: button)
-        }
+//        guard let indexPath = tableView.indexPath(for: cell), indexPath.row < viewModel.items.value.count else {
+//            return
+//        }
+//        let item = viewModel.items.value[indexPath.row]
+//        switch item {
+//        case .chatMessage(let chatMessage):
+//            ShareService.shared.share(chatMessage: chatMessage, sender: self, sourceView: button)
+//        }
     }
 }

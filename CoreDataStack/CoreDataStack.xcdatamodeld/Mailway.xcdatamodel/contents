@@ -1,19 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Chat" representedClassName="Chat" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="identityPublicKey" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="chatMessages" toMany="YES" deletionRule="Nullify" destinationEntity="ChatMessage" inverseName="chat" inverseEntity="ChatMessage"/>
+        <relationship name="memberNameStubs" toMany="YES" deletionRule="Nullify" destinationEntity="ChatMemberNameStub" inverseName="chats" inverseEntity="ChatMemberNameStub"/>
+    </entity>
+    <entity name="ChatMemberNameStub" representedClassName="ChatMemberNameStub" syncable="YES">
+        <attribute name="cratedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="keyID" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="publicKey" attributeType="String"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="chats" toMany="YES" deletionRule="Nullify" destinationEntity="Chat" inverseName="memberNameStubs" inverseEntity="Chat"/>
+    </entity>
+    <entity name="ChatMessage" representedClassName="ChatMessage" syncable="YES">
+        <attribute name="armoredMessage" optional="YES" attributeType="String"/>
+        <attribute name="composeTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="messageTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="payload" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="payloadKind" transient="YES"/>
+        <attribute name="payloadKindRawValue" attributeType="String"/>
+        <attribute name="receiveTimestamp" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="recipientPublicKeys" attributeType="Transformable"/>
+        <attribute name="senderPublicKey" optional="YES" attributeType="String"/>
+        <attribute name="shareTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="version" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="chat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="chatMessages" inverseEntity="Chat"/>
+    </entity>
     <entity name="Contact" representedClassName=".Contact" syncable="YES">
-        <attribute name="createAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="avatar" optional="YES" transient="YES"/>
+        <attribute name="avatarData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="nameFirstInitial" optional="YES" transient="YES" attributeType="String"/>
-        <relationship name="keypair" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Keypair" inverseName="contact" inverseEntity="Keypair"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="channels" toMany="YES" deletionRule="Cascade" destinationEntity="ContactChannel" inverseName="contact" inverseEntity="ContactChannel"/>
+        <relationship name="keypair" maxCount="1" deletionRule="Cascade" destinationEntity="Keypair" inverseName="contact" inverseEntity="Keypair"/>
+    </entity>
+    <entity name="ContactChannel" representedClassName="ContactChannel" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="value" attributeType="String"/>
+        <relationship name="contact" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="channels" inverseEntity="Contact"/>
     </entity>
     <entity name="Keypair" representedClassName=".Keypair" syncable="YES">
-        <attribute name="createAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
-        <relationship name="contact" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="keypair" inverseEntity="Contact"/>
+        <attribute name="keyID" attributeType="String"/>
+        <attribute name="privateKey" optional="YES" attributeType="String"/>
+        <attribute name="publicKey" attributeType="String"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="contact" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="keypair" inverseEntity="Contact"/>
     </entity>
     <elements>
-        <element name="Contact" positionX="-63" positionY="0" width="128" height="118"/>
-        <element name="Keypair" positionX="-63" positionY="-18" width="128" height="88"/>
+        <element name="Contact" positionX="-63" positionY="0" width="128" height="193"/>
+        <element name="ContactChannel" positionX="-54" positionY="45" width="128" height="133"/>
+        <element name="Keypair" positionX="-63" positionY="-18" width="128" height="148"/>
+        <element name="Chat" positionX="-54" positionY="63" width="128" height="28"/>
+        <element name="ChatMessage" positionX="-45" positionY="72" width="128" height="28"/>
+        <element name="ChatMemberNameStub" positionX="-36" positionY="90" width="128" height="148"/>
     </elements>
 </model>

@@ -30,8 +30,8 @@ final class ContactListViewModel: NSObject {
     init(context: AppContext) {
         self.fetchedResultsController = {
             let fetchRequest = Contact.sortedFetchRequest
-            fetchRequest.fetchBatchSize = 20
             fetchRequest.returnsObjectsAsFaults = false
+            fetchRequest.fetchBatchSize = 20
             let controller = NSFetchedResultsController(
                 fetchRequest: fetchRequest,
                 managedObjectContext: context.managedObjectContext,
@@ -380,6 +380,7 @@ extension ContactListViewController: UITableViewDelegate {
     
 }
 
+#if DEBUG
 struct ContactListViewController_Previews: PreviewProvider {
     static var previews: some View {
         UIViewControllerPreview {
@@ -389,3 +390,4 @@ struct ContactListViewController_Previews: PreviewProvider {
         }
     }
 }
+#endif

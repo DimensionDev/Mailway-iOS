@@ -14,14 +14,39 @@ import CoreDataStack
 
 final class ContactDetailViewModel: ObservableObject {
     
+    var disposeBag = Set<AnyCancellable>()
+    
     // input
     let contact: Contact
     
     // output
     let removeButtonPressedPublisher = PassthroughSubject<Void, Never>()
+    let contactDidRemovedPublisher = PassthroughSubject<Void, Never>()
     
     init(contact: Contact) {
         self.contact = contact
+        
+        removeButtonPressedPublisher
+            .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: false)
+            .sink { [weak self] _ in
+                guard let `self` = self else { return }
+                self.contact.managedObjectContext?.performChanges {
+                    os_log("%{public}s[%{public}ld], %{public}s: remove contact %s", ((#file as NSString).lastPathComponent), #line, #function, self.contact.debugDescription)
+                    self.contact.managedObjectContext?.delete(self.contact)
+                }
+            }
+            .store(in: &disposeBag)
+        
+        ManagedObjectObserver.observe(object: contact)
+            .sink(receiveCompletion: { completion in
+                
+            }, receiveValue: { [weak self] value in
+                guard let changeType = value else { return }
+                if changeType == .delete {
+                    self?.contactDidRemovedPublisher.send()
+                }
+            })
+            .store(in: &disposeBag)
     }
     
 }
@@ -63,10 +88,9 @@ extension ContactDetailViewController {
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
-        viewModel.removeButtonPressedPublisher
-            .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: false)
-            .sink { _ in
-                
+        viewModel.contactDidRemovedPublisher
+            .sink { [weak self] _ in
+                self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &disposeBag)
     }
