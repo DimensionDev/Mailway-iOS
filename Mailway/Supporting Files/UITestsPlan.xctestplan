@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "7D551953-A70B-467E-8329-20DFD0DA839C",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Mailway.xcodeproj",
+        "identifier" : "DBE0400C249343B000C5184D",
+        "name" : "MailwayUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

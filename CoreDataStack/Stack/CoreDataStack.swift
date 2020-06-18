@@ -13,9 +13,18 @@ import CoreData
 public final class CoreDataStack {
     
     // MARK: - Singleton
-    public static let shared = CoreDataStack()
+    public static let shared: CoreDataStack = {
+        let storeURL = URL.storeURL(for: "group.im.dimension.Mailway", databaseName: "CoreDataStack")
+        let storeDescription = NSPersistentStoreDescription(url: storeURL)
+        return CoreDataStack(persistentStoreDescriptions: [storeDescription])
+    }()
     
-    private init() { }
+    private let storeDescriptions: [NSPersistentStoreDescription]
+    
+    
+    init(persistentStoreDescriptions storeDescriptions: [NSPersistentStoreDescription]) {
+        self.storeDescriptions = storeDescriptions
+    }
 
     public private(set) lazy var persistentContainer: NSPersistentCloudKitContainer = {
         /*
@@ -29,10 +38,8 @@ public final class CoreDataStack {
             fatalError("cannot locate bundles")
         }
         
-        let storeURL = URL.storeURL(for: "group.im.dimension.Mailway", databaseName: "CoreDataStack")
-        let storeDescription = NSPersistentStoreDescription(url: storeURL)
         let container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
-        container.persistentStoreDescriptions = [storeDescription]
+        container.persistentStoreDescriptions = storeDescriptions
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {

@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "FB75125B-24AD-4042-9221-7C3675004C9E",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Mailway.xcodeproj",
+        "identifier" : "DBE306B72474DF7C00EB7193",
+        "name" : "MailwayTests"
+      }
+    }
+  ],
+  "version" : 1
+}

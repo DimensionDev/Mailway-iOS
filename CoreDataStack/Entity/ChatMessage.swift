@@ -46,6 +46,9 @@ final public class ChatMessage: NSManagedObject {
     // many-to-one relationship
      @NSManaged public private(set) var chat: Chat?
     
+    // one-to-one relationship
+    @NSManaged public private(set) var quoteMessage: QuoteMessage?
+
 }
 
 extension ChatMessage {
@@ -73,9 +76,7 @@ extension ChatMessage {
     
     public static func insert(into context: NSManagedObjectContext, property: Property) -> ChatMessage {
         let chatMessage: ChatMessage = context.insertObject()
-        //chatMessage
-        //chatMessage
-        //chatMessage
+        // TODO:
         return chatMessage
     }
     

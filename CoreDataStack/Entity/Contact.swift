@@ -13,6 +13,7 @@ final public class Contact: NSManagedObject {
     
     @NSManaged public private(set) var id: UUID
     @NSManaged public private(set) var name: String
+    @NSManaged public private(set) var i18nNames: [String: String]
     @NSManaged public private(set) var note: String?
     @NSManaged public private(set) var avatarData: Data?
     
@@ -85,9 +86,11 @@ extension Contact {
         updatedAt = now
     }
     
+    @discardableResult
     public static func insert(into context: NSManagedObjectContext, property: Property, keypair: Keypair, channels: [ContactChannel]) -> Contact {
         let contact: Contact = context.insertObject()
         contact.name = property.name
+        contact.i18nNames = property.i18nNames
         contact.note = property.note
         contact.keypair = keypair
         contact.mutableSetValue(forKey: #keyPath(Contact.channels)).addObjects(from: channels)
@@ -99,10 +102,12 @@ extension Contact {
 extension Contact {
     public struct Property {
         public let name: String
+        public let i18nNames: [String:String]
         public let note: String?
         
-        public init(name: String, note: String? = nil) {
+        public init(name: String, i18nNames: [String: String] = [:], note: String? = nil) {
             self.name = name
+            self.i18nNames = i18nNames
             self.note = note
         }
     }

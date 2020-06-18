@@ -84,10 +84,20 @@ extension CreateIdentityViewController {
         let managedObjectContext = context.managedObjectContext
         managedObjectContext.performChanges {
             let keypair = Keypair.insert(into: managedObjectContext, property: keypairProperty)
-            _ = Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: [])
+            Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: [])
         }
+        .sink { [weak self] result in
+            switch result {
+            case .success:
+                self?.dismissModal()
+            case .failure(let error):
+                // TODO: handle error
+                assertionFailure(error.localizedDescription)
+                break
+            }
+        }
+        .store(in: &disposeBag)
         
-        dismissModal()
     }
     
     private func dismissModal() {

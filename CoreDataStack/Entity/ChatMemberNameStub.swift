@@ -13,6 +13,7 @@ final public class ChatMemberNameStub: NSManagedObject {
     
     @NSManaged public private(set) var id: UUID
     @NSManaged public private(set) var name: String?
+    @NSManaged public private(set) var i18nNames: [String:String]
     @NSManaged public private(set) var publicKey: String
     @NSManaged public private(set) var keyID: String
     
@@ -39,6 +40,7 @@ extension ChatMemberNameStub {
     public static func insert(into context: NSManagedObjectContext, property: Property) -> ChatMemberNameStub {
         let stub: ChatMemberNameStub = context.insertObject()
         stub.name = property.name
+        stub.i18nNames = property.i18nNames
         stub.publicKey = property.publicKey
         stub.keyID = property.keyID
         return stub
@@ -49,11 +51,13 @@ extension ChatMemberNameStub {
 extension ChatMemberNameStub {
     public struct Property {
         public let name: String?
+        public let i18nNames: [String: String]
         public let publicKey: String
         public let keyID: String
         
-        public init(name: String, publicKey: String, keyID: String) {
+        public init(name: String?, i18nNames: [String: String] = [:], publicKey: String, keyID: String) {
             self.name = name
+            self.i18nNames = i18nNames
             self.publicKey = publicKey
             self.keyID = keyID
         }

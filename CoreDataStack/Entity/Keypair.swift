@@ -35,6 +35,7 @@ extension Keypair {
         updatedAt = now
     }
     
+    @discardableResult
     public static func insert(into context: NSManagedObjectContext, property: Property) -> Keypair {
         let keypair: Keypair = context.insertObject()
         keypair.privateKey = property.privateKey

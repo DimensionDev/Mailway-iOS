@@ -8,6 +8,7 @@
 
 import os
 import Foundation
+import Combine
 import CoreData
 
 extension NSManagedObjectContext {
@@ -19,23 +20,28 @@ extension NSManagedObjectContext {
         return object
     }
     
-    public func saveOrRollback() -> Bool {
+    public func saveOrRollback() throws {
         do {
             try save()
         } catch {
-            os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, error.localizedDescription)
-
             rollback()
-            return false
+         
+            os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, error.localizedDescription)
+            throw error
         }
-        
-        return true
     }
     
-    public func performChanges(block: @escaping () -> Void) {
-        perform {
-            block()
-            _ = self.saveOrRollback()
+    public func performChanges(block: @escaping () -> Void) -> Future<Result<Void, Error>, Never> {
+        Future { promise in
+            self.perform {
+                block()
+                do {
+                    try self.saveOrRollback()
+                    promise(.success(Result.success(())))
+                } catch {
+                    promise(.success(Result.failure(error)))
+                }
+            }
         }
     }
 }

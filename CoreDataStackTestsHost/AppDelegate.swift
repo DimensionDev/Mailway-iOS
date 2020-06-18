@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  Mailway
+//  CoreDataStackTestsHost
 //
-//  Created by Cirno MainasuK on 2020-5-20.
+//  Created by Cirno MainasuK on 2020-6-18.
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
@@ -10,18 +10,11 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    let appContext = AppContext()
+
+
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let preferredLanguages = Locale.preferredLanguages
-
-        #if DEBUG
-        print("DEBUG mode")
-        print("Local.preferredLanguages: \(preferredLanguages)")
-        #endif
-        
         return true
     }
 
@@ -39,21 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+
 }
 
-extension AppDelegate {
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        #if DEBUG
-        return .all
-        #else
-        return UIDevice.current.userInterfaceIdiom == .pad ? .all : .portrait
-        #endif
-    }
-}
-
-extension AppContext {
-    static var shared: AppContext {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        return appDelegate.appContext
-    }
-}

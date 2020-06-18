@@ -37,7 +37,7 @@ extension ContactChannel {
     
     public static func insert(into context: NSManagedObjectContext, property: Property) -> ContactChannel {
         let channel: ContactChannel = context.insertObject()
-        channel.name = property.name
+        channel.name = property.name.text
         channel.value = property.value
         return channel
     }
@@ -46,12 +46,32 @@ extension ContactChannel {
 
 extension ContactChannel {
     public struct Property {
-        public let name: String
+        public let name: ChannelName
         public let value: String
         
-        public init(name: String, value: String) {
+        public init(name: ChannelName, value: String) {
             self.name = name
             self.value = value
+        }
+        
+        public enum ChannelName {
+            case email
+            case twitter
+            case facebook
+            case telegram
+            case discord
+            case custom(String)
+            
+            public var text: String {
+                switch self {
+                case .email:                return "email"
+                case .twitter:              return "twitter"
+                case .facebook:             return "facebook"
+                case .telegram:             return "telegram"
+                case .discord:              return "discord"
+                case .custom(let name):     return name.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+            }
         }
     }
 }

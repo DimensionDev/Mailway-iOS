@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB1EC3512491E305002379A1"
-               BuildableName = "CoreDataStack.framework"
-               BlueprintName = "CoreDataStack"
+               BlueprintIdentifier = "DB0A904C249B43B200FE0AFC"
+               BuildableName = "CoreDataStackTestsHost.app"
+               BlueprintName = "CoreDataStackTestsHost"
                ReferencedContainer = "container:Mailway.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:CoreDataStack/UnitTestsPlan.xctestplan"
+            reference = "container:CoreDataStackTestsHost/UnitTestsPlan.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -44,6 +44,22 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "DB0A904C249B43B200FE0AFC"
+            BuildableName = "CoreDataStackTestsHost.app"
+            BlueprintName = "CoreDataStackTestsHost"
+            ReferencedContainer = "container:Mailway.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-com.apple.CoreData.SQLDebug 1"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -51,15 +67,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB1EC3512491E305002379A1"
-            BuildableName = "CoreDataStack.framework"
-            BlueprintName = "CoreDataStack"
+            BlueprintIdentifier = "DB0A904C249B43B200FE0AFC"
+            BuildableName = "CoreDataStackTestsHost.app"
+            BlueprintName = "CoreDataStackTestsHost"
             ReferencedContainer = "container:Mailway.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
