@@ -22,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Local.preferredLanguages: \(preferredLanguages)")
         #endif
         
+        #if PREVIEW
+        print("PREVIEW mode")
+        appContext.documentStore.setupPreview(for: appContext.managedObjectContext)
+        #endif
+        
         return true
     }
 

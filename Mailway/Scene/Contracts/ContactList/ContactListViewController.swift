@@ -85,7 +85,7 @@ extension ContactListViewModel {
 //    }
     
     static func configure(cell: ContactListContactTableViewCell, with contact: Contact) {
-        cell.nameLabel.text = contact.name
+        cell.nameLabel.text = contact.i18nName ?? contact.name
     }
     
 }

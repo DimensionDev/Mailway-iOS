@@ -22,8 +22,9 @@ final public class Contact: NSManagedObject {
     
     // transient property
     @objc public var nameFirstInitial: String {
-        willAccessValue(forKey: #keyPath(name))
-        let mutableString = NSMutableString(string: name.trimmingCharacters(in: .whitespacesAndNewlines)) as CFMutableString
+        willAccessValue(forKey: #keyPath(nameFirstInitial))
+        let usingName = i18nName ?? name
+        let mutableString = NSMutableString(string: usingName.trimmingCharacters(in: .whitespacesAndNewlines)) as CFMutableString
         CFStringTransform(mutableString, nil, kCFStringTransformToLatin, false)                // to Latin
         CFStringTransform(mutableString, nil, kCFStringTransformStripCombiningMarks, false)    // remove accent
         let latin = mutableString as String
@@ -37,8 +38,26 @@ final public class Contact: NSManagedObject {
             
             return String(first.uppercased())
         }()
-        didAccessValue(forKey: #keyPath(name))
+        didAccessValue(forKey: #keyPath(nameFirstInitial))
         return firstInitial
+    }
+    
+    public var i18nName: String? {
+        var i18nName: String?
+        if !i18nNames.isEmpty {
+            let preferredLanguages = Locale.preferredLanguages
+            for language in preferredLanguages {
+                let locale = Locale(identifier: language)
+                guard let languageCode = locale.languageCode else {
+                    continue
+                }
+                
+                i18nName = i18nNames[languageCode]
+                break
+            }
+        }
+        
+        return i18nName
     }
     
     // primitive property
@@ -92,6 +111,8 @@ extension Contact {
         contact.name = property.name
         contact.i18nNames = property.i18nNames
         contact.note = property.note
+        contact.avatar = property.avatar
+        
         contact.keypair = keypair
         contact.mutableSetValue(forKey: #keyPath(Contact.channels)).addObjects(from: channels)
         return contact
@@ -104,11 +125,13 @@ extension Contact {
         public let name: String
         public let i18nNames: [String:String]
         public let note: String?
+        public let avatar: UIImage?
         
-        public init(name: String, i18nNames: [String: String] = [:], note: String? = nil) {
+        public init(name: String, i18nNames: [String: String] = [:], note: String? = nil, avatar: UIImage? = nil) {
             self.name = name
             self.i18nNames = i18nNames
             self.note = note
+            self.avatar = avatar
         }
     }
 }

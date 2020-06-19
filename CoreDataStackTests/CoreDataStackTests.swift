@@ -60,7 +60,7 @@ extension CoreDataStackTests {
         let Ed25519PrivateKey = Ed25519Keypair.privateKey
         let Ed25519PublicKey = Ed25519Keypair.publicKey
 
-        // insert keypair
+        // insert keypair & contact & contact channels
         let insertExpectation = expectation(description: "insert keypair")
         context.performChanges {
             let keypairProperty: Keypair.Property = {
@@ -121,6 +121,7 @@ extension CoreDataStackTests {
         } catch {
             XCTFail(error.localizedDescription)
         }
+        
     }
     
 }

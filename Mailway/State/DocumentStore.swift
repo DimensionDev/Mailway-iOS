@@ -6,7 +6,11 @@
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
+import os
+import Foundation
 import Combine
+import CoreData
+import CoreDataStack
 import NtgeCore
 
 class DocumentStore: ObservableObject {
@@ -70,14 +74,45 @@ extension DocumentStore {
 
 extension DocumentStore {
     
-//    func setupPreview() {
-//        let (contacts, keys) = DocumentStore.samples
-//        self.keys.append(contentsOf: keys)
-//        self.contacts.append(contentsOf: contacts)
-//
-//        setupChat()
-//    }
-//
+    func setupPreview(for context: NSManagedObjectContext) {
+        // let (contacts, keys) = DocumentStore.samples
+        // self.keys.append(contentsOf: keys)
+        // self.contacts.append(contentsOf: contacts)
+
+        // setupChat()
+        
+        setupAlice(for: context)
+    }
+    
+    private func setupAlice(for context: NSManagedObjectContext) {
+        do {
+            guard try context.count(for: Contact.sortedFetchRequest) == 0 else {
+                os_log("%{public}s[%{public}ld], %{public}s: skip setup alice", ((#file as NSString).lastPathComponent), #line, #function)
+                return
+            }
+            
+            // should setup alice
+        } catch {
+            assertionFailure()
+            return
+        }
+        
+        let (contactProperty, keypairProperty) = DocumentStore.alice
+        
+        var subscription: AnyCancellable?
+        subscription = context.performChanges {
+            let keypair = Keypair.insert(into: context, property: keypairProperty)
+            let twitterContactChannel = ContactChannel.insert(into: context, property: ContactChannel.Property(name: .twitter, value: "@alice"))
+            Contact.insert(into: context, property: contactProperty, keypair: keypair, channels: [twitterContactChannel])
+        }
+        .sink(receiveCompletion: { _ in
+            os_log("%{public}s[%{public}ld], %{public}s: finish subscription: %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+            subscription = nil
+        }, receiveValue: { result in
+            os_log("%{public}s[%{public}ld], %{public}s: setup alice: %s", ((#file as NSString).lastPathComponent), #line, #function, String(describing: result))
+        })
+    }
+
 //    // stub chat
 //    private func setupChat() {
 //        let (alice, aliceKey) = DocumentStore.alice
@@ -138,7 +173,7 @@ extension DocumentStore {
 #endif
 
 #if PREVIEW
-//extension DocumentStore {
+extension DocumentStore {
 //    static var samples: ([Contact], [Key]) {
 //        let names = zip(preview_TopFirstNames, preview_TopSurnames)
 //            .map { firstName, lastName -> String in
@@ -166,43 +201,41 @@ extension DocumentStore {
 //    
 //        return (contacts, keys)
 //    }
-//    
-//    static var alice: (Contact, Key) {
-//        var alice = Contact()
-//        alice.name = "Alice"
-//        alice.isIdentity = true
-//        
-//        let privateKey = Ed25519.PrivateKey.deserialize(from: "pri1jt4x2ch75q80gy32j7kuqzgrmjydy298460mthpc3gwcxp2vll9s4apzap-Ed25519")!
-//        let publicKey = privateKey.publicKey
-//        
-//        var key = Key()
-//        key.keyID = publicKey.keyID
-//        key.privateKey = privateKey.serialize()
-//        key.publicKey = publicKey.serialize()
-//        
-//        alice.keyID = key.keyID
-//        
-//        return (alice, key)
-//    }
-//    
+    
+    static var alice: (Contact.Property, Keypair.Property) {
+        let contactProperty = Contact.Property(name: "Alice",
+                                               i18nNames: ["en":"Alice", "jp": "アリス", "zh": "想成为爱丽丝"],
+                                               note: "Her is Alice.",
+                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"))
+
+        
+        let ed25519PrivateKey = Ed25519.PrivateKey.deserialize(from: "pri1jt4x2ch75q80gy32j7kuqzgrmjydy298460mthpc3gwcxp2vll9s4apzap-Ed25519")!
+        let ed25519PublicKey = ed25519PrivateKey.publicKey
+        let keypairProperty = Keypair.Property(privateKey: ed25519PrivateKey.serialize(),
+                                               publicKey: ed25519PublicKey.serialize(),
+                                               keyID: ed25519PublicKey.keyID)
+        
+        return (contactProperty, keypairProperty)
+    }
+    
 //    static var bob: (Contact, Key) {
 //        var contact = Contact()
 //        contact.name = "Bob"
 //        contact.isIdentity = true
-//        
+//
 //        let privateKey = Ed25519.PrivateKey.deserialize(from: "pri1pu3uaqqvdyne0q92g09ls5u64kcupqy6ha2q6av3dnfgq94k4qdq85048p-Ed25519")!
 //        let publicKey = privateKey.publicKey
-//        
+//
 //        var key = Key()
 //        key.keyID = publicKey.keyID
 //        key.privateKey = privateKey.serialize()
 //        key.publicKey = publicKey.serialize()
-//        
+//
 //        contact.keyID = key.keyID
-//        
+//
 //        return (contact, key)
 //    }
-//    
+//
 //    static var sampleMessages: [String] = [
 //        "Hi, Alice",
 //        "How do you do?",
@@ -255,6 +288,7 @@ extension DocumentStore {
 //        the happy genius of my household?
 //        """
 //    ]
-//}
+    
+}
 #endif
 
