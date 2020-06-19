@@ -18,7 +18,7 @@ final class ChatViewModel: NSObject {
     // input
     let context: AppContext
     let chat: Chat
-    let chatMessages = PassthroughSubject<[ChatMessage], Never>()
+    //let chatMessages = PassthroughSubject<[ChatMessage], Never>()
     
     var shouldEnterEditModeAtAppear = false
     
@@ -31,23 +31,23 @@ final class ChatViewModel: NSObject {
         self.chat = chat
         super.init()
         
-        chatMessages
-            .map { chatMessages -> [Item] in
-                let items = chatMessages
-                    .filter{ chat.contains(message: $0) }
-                    .map { Item.chatMessage($0) }
-                return items
-            }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] newItems in
-                guard let `self` = self else {
-                    assertionFailure()
-                    return
-                }
-                self.items.value = newItems
-                //print("sink: \(newItems.count)")
-            }
-            .store(in: &disposeBag)
+//        chatMessages
+//            .map { chatMessages -> [Item] in
+//                let items = chatMessages
+//                    .filter{ chat.contains(message: $0) }
+//                    .map { Item.chatMessage($0) }
+//                return items
+//            }
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] newItems in
+//                guard let `self` = self else {
+//                    assertionFailure()
+//                    return
+//                }
+//                self.items.value = newItems
+//                //print("sink: \(newItems.count)")
+//            }
+//            .store(in: &disposeBag)
     }
     
 }
@@ -55,56 +55,56 @@ final class ChatViewModel: NSObject {
 extension ChatViewModel {
     
     func sendMessage(plaintext: String) {
-        var recipients: [Contact] = []
-        var recipientKeys: [Key] = []
-        var recipientPublicKeys: [Ed25519.PublicKey] = []
-        
-        guard let identity = context.documentStore.contacts.first(where: { $0.keyID == chat.identityKeyID }),
-        let identityKey = context.documentStore.keys.first(where: { $0.keyID == chat.identityKeyID }),
-        let identityPrivateKey = Ed25519.PrivateKey.deserialize(from: identityKey.privateKey) else {
-            return
-        }
-        
-        for keyID in chat.memberKeyIDs {
-            guard let recipient = context.documentStore.contacts.first(where: { $0.keyID == keyID }),
-            let key = context.documentStore.keys.first(where: { $0.keyID == keyID }),
-            let publicKey = Ed25519.PublicKey.deserialize(serialized: key.publicKey) else {
-                continue
-            }
-            
-            recipients.append(recipient)
-            recipientKeys.append(key)
-            recipientPublicKeys.append(publicKey)
-        }
-        
-        guard !recipients.isEmpty else {
-            return
-        }
-    
-        let encryptor = Message.Encryptor(publicKeys: recipientPublicKeys.map { $0.x25519 })
-        let plaintextData = Data(plaintext.utf8)
-        
-        // TODO: extra
-        do {
-            let message = encryptor.encrypt(plaintext: plaintextData, extraPlaintext: nil, signatureKey: identityPrivateKey)
-            guard let armor = try? message.serialize() else {
-                return
-            }
-            
-            let chatMessage = ChatMessage(plaintextData: plaintextData,
-                                          composeTimestamp: Date(),
-                                          receiveTimestamp: Date(),
-                                          senderName: identity.name,
-                                          senderEmail: identity.email,
-                                          senderKeyID: identity.keyID,
-                                          message: armor,
-                                          createTimestamp: Date(),
-                                          version: 1,
-                                          recipientKeyIDs: recipientPublicKeys.map { $0.keyID })
-            context.documentStore.create(chatMessage: chatMessage, forChat: chat)
-        } catch {
-            
-        }
+//        var recipients: [Contact] = []
+//        var recipientKeys: [Key] = []
+//        var recipientPublicKeys: [Ed25519.PublicKey] = []
+//        
+//        guard let identity = context.documentStore.contacts.first(where: { $0.keyID == chat.identityKeyID }),
+//        let identityKey = context.documentStore.keys.first(where: { $0.keyID == chat.identityKeyID }),
+//        let identityPrivateKey = Ed25519.PrivateKey.deserialize(from: identityKey.privateKey) else {
+//            return
+//        }
+//        
+//        for keyID in chat.memberKeyIDs {
+//            guard let recipient = context.documentStore.contacts.first(where: { $0.keyID == keyID }),
+//            let key = context.documentStore.keys.first(where: { $0.keyID == keyID }),
+//            let publicKey = Ed25519.PublicKey.deserialize(serialized: key.publicKey) else {
+//                continue
+//            }
+//            
+//            recipients.append(recipient)
+//            recipientKeys.append(key)
+//            recipientPublicKeys.append(publicKey)
+//        }
+//        
+//        guard !recipients.isEmpty else {
+//            return
+//        }
+//    
+//        let encryptor = Message.Encryptor(publicKeys: recipientPublicKeys.map { $0.x25519 })
+//        let plaintextData = Data(plaintext.utf8)
+//        
+//        // TODO: extra
+//        do {
+//            let message = encryptor.encrypt(plaintext: plaintextData, extraPlaintext: nil, signatureKey: identityPrivateKey)
+//            guard let armor = try? message.serialize() else {
+//                return
+//            }
+//            
+//            let chatMessage = ChatMessage(plaintextData: plaintextData,
+//                                          composeTimestamp: Date(),
+//                                          receiveTimestamp: Date(),
+//                                          senderName: identity.name,
+//                                          senderEmail: identity.email,
+//                                          senderKeyID: identity.keyID,
+//                                          message: armor,
+//                                          createTimestamp: Date(),
+//                                          version: 1,
+//                                          recipientKeyIDs: recipientPublicKeys.map { $0.keyID })
+//            context.documentStore.create(chatMessage: chatMessage, forChat: chat)
+//        } catch {
+//            
+//        }
     }
     
 }
@@ -115,48 +115,48 @@ extension ChatViewModel {
     }
     
     enum Item: Hashable {
-        case chatMessage(ChatMessage)
+//        case chatMessage(ChatMessage)
     }
 }
 
 extension ChatViewModel {
     
-    func configureDataSource(tableView: UITableView) {
-        let dataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView) { [weak self] tableView, indexPath, item -> UITableViewCell? in
-            guard let `self` = self else { return nil }
-            switch item {
-            case .chatMessage(let chatMessage):
-                let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatMessageTableViewCell.self), for: indexPath) as! ChatMessageTableViewCell
-                cell.senderContactInfoView.nameLabel.text = chatMessage.senderName
-                cell.senderContactInfoView.emailLabel.text = chatMessage.senderEmail
-                cell.senderContactInfoView.shortKeyIDLabel.text = String(chatMessage.senderKeyID.suffix(8)).uppercased()
-
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateStyle = .medium
-                dateFormatter.timeStyle = .none
-
-                if let composeTimestamp = chatMessage.composeTimestamp.flatMap({ dateFormatter.string(from: $0) }) {
-                    cell.composeTimestampLabel.text = composeTimestamp
-                } else {
-                    cell.composeTimestampLabel.text = "-"
-                }
-                cell.receiveTimestampLabel.text = dateFormatter.string(from: chatMessage.receiveTimestamp)
-                cell.messageContentTextView.text = {
-                    switch chatMessage.plaintextKind {
-                    case .text:
-                        return String(data: chatMessage.plaintextData, encoding: .utf8) ?? "<invalid message content>"
-                    case .image:
-                        return ""
-                    case .file:
-                        return "File: \(chatMessage.plaintextData.count)"
-                    }
-                }()
-                return cell
-            }
-        }   // end let dataSource = …
-        
-        diffableDataSource = dataSource
-    }   // end func configureDataSource(:) { … }
+//    func configureDataSource(tableView: UITableView) {
+//        let dataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView) { [weak self] tableView, indexPath, item -> UITableViewCell? in
+//            guard let `self` = self else { return nil }
+//            switch item {
+//            case .chatMessage(let chatMessage):
+//                let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatMessageTableViewCell.self), for: indexPath) as! ChatMessageTableViewCell
+//                cell.senderContactInfoView.nameLabel.text = chatMessage.senderName
+//                cell.senderContactInfoView.emailLabel.text = chatMessage.senderEmail
+//                cell.senderContactInfoView.shortKeyIDLabel.text = String(chatMessage.senderKeyID.suffix(8)).uppercased()
+//
+//                let dateFormatter = DateFormatter()
+//                dateFormatter.dateStyle = .medium
+//                dateFormatter.timeStyle = .none
+//
+//                if let composeTimestamp = chatMessage.composeTimestamp.flatMap({ dateFormatter.string(from: $0) }) {
+//                    cell.composeTimestampLabel.text = composeTimestamp
+//                } else {
+//                    cell.composeTimestampLabel.text = "-"
+//                }
+//                cell.receiveTimestampLabel.text = dateFormatter.string(from: chatMessage.receiveTimestamp)
+//                cell.messageContentTextView.text = {
+//                    switch chatMessage.plaintextKind {
+//                    case .text:
+//                        return String(data: chatMessage.plaintextData, encoding: .utf8) ?? "<invalid message content>"
+//                    case .image:
+//                        return ""
+//                    case .file:
+//                        return "File: \(chatMessage.plaintextData.count)"
+//                    }
+//                }()
+//                return cell
+//            }
+//        }   // end let dataSource = …
+//
+//        diffableDataSource = dataSource
+//    }   // end func configureDataSource(:) { … }
 
 }
 
@@ -240,15 +240,15 @@ extension ChatViewController {
         ])
                 
         tableView.delegate = self
-        viewModel.configureDataSource(tableView: tableView)
-        viewModel.diffableDataSource.defaultRowAnimation = .none
-        tableView.dataSource = viewModel.diffableDataSource
+//        viewModel.configureDataSource(tableView: tableView)
+//        viewModel.diffableDataSource.defaultRowAnimation = .none
+//        tableView.dataSource = viewModel.diffableDataSource
         
-        context.documentStore.$chatMessages
-            .sink { [weak self] chatMessages in
-                self?.viewModel.chatMessages.send(chatMessages)
-            }
-            .store(in: &disposeBag)
+//        context.documentStore.$chatMessages
+//            .sink { [weak self] chatMessages in
+//                self?.viewModel.chatMessages.send(chatMessages)
+//            }
+//            .store(in: &disposeBag)
         
         viewModel.items
             .receive(on: DispatchQueue.main)
@@ -378,18 +378,19 @@ extension ChatViewController: MessageInputViewDelegate {
         tableView.contentInset.bottom = bounds.height - view.safeAreaInsets.bottom
         tableView.verticalScrollIndicatorInsets.bottom = bounds.height - view.safeAreaInsets.bottom
     }
+    
 }
 
 // MARK: - ChatMessageTableViewCellDelegate
 extension ChatViewController: ChatMessageTableViewCellDelegate {
     func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, shareButtonPressed button: UIButton) {
-        guard let indexPath = tableView.indexPath(for: cell), indexPath.row < viewModel.items.value.count else {
-            return
-        }
-        let item = viewModel.items.value[indexPath.row]
-        switch item {
-        case .chatMessage(let chatMessage):
-            ShareService.shared.share(chatMessage: chatMessage, sender: self, sourceView: button)
-        }
+//        guard let indexPath = tableView.indexPath(for: cell), indexPath.row < viewModel.items.value.count else {
+//            return
+//        }
+//        let item = viewModel.items.value[indexPath.row]
+//        switch item {
+//        case .chatMessage(let chatMessage):
+//            ShareService.shared.share(chatMessage: chatMessage, sender: self, sourceView: button)
+//        }
     }
 }

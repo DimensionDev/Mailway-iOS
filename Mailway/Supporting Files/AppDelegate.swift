@@ -10,13 +10,21 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     let appContext = AppContext()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let preferredLanguages = Locale.preferredLanguages
+
         #if DEBUG
         print("DEBUG mode")
+        print("Local.preferredLanguages: \(preferredLanguages)")
+        #endif
+        
+        #if PREVIEW
+        print("PREVIEW mode")
+        appContext.documentStore.setupPreview(for: appContext.managedObjectContext)
         #endif
         
         return true
@@ -35,7 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
 
 }
 

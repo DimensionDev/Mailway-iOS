@@ -106,47 +106,47 @@ extension MessageInboxViewController {
         
         let decryptor = Message.Decryptor(message: message)
         
-        var identityKeys: [Key] = []
+//        var identityKeys: [Key] = []
         var identityPrivateKeys: [Ed25519.PrivateKey] = []
         var identityFileKeys: [X25519.FileKey] = []
         
-        for key in context.documentStore.keys where !key.privateKey.isEmpty {
-            guard let privateKey = Ed25519.PrivateKey.deserialize(from: key.privateKey) else {
-                continue
-            }
-            
-            guard let fileKey = decryptor.decryptFileKey(privateKey: privateKey.x25519) else {
-                continue
-            }
-            
-            identityKeys.append(key)
-            identityPrivateKeys.append(privateKey)
-            identityFileKeys.append(fileKey)
-        }
-        
-        guard !identityKeys.isEmpty, let filekey = identityFileKeys.first else {
-            let alertController = UIAlertController(title: "Decrypt Fail", message: "Can not find available key", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(okAction)
-            present(alertController, animated: true, completion: nil)
-            
-            return
-        }
-        
-        guard let plaintextData = decryptor.decryptPayload(fileKey: filekey) else {
-            let alertController = UIAlertController(title: "Decrypt Fail", message: "Decrypt fail due to internal error", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(okAction)
-            present(alertController, animated: true, completion: nil)
-            return
-        }
-        
-        let plaintext = String(data: plaintextData, encoding: .utf8) ?? "<nil>"
-        
-        let alertController = UIAlertController(title: "Message Content", message: plaintext, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
+//        for key in context.documentStore.keys where !key.privateKey.isEmpty {
+//            guard let privateKey = Ed25519.PrivateKey.deserialize(from: key.privateKey) else {
+//                continue
+//            }
+//            
+//            guard let fileKey = decryptor.decryptFileKey(privateKey: privateKey.x25519) else {
+//                continue
+//            }
+//            
+//            identityKeys.append(key)
+//            identityPrivateKeys.append(privateKey)
+//            identityFileKeys.append(fileKey)
+//        }
+//        
+//        guard !identityKeys.isEmpty, let filekey = identityFileKeys.first else {
+//            let alertController = UIAlertController(title: "Decrypt Fail", message: "Can not find available key", preferredStyle: .alert)
+//            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+//            alertController.addAction(okAction)
+//            present(alertController, animated: true, completion: nil)
+//            
+//            return
+//        }
+//        
+//        guard let plaintextData = decryptor.decryptPayload(fileKey: filekey) else {
+//            let alertController = UIAlertController(title: "Decrypt Fail", message: "Decrypt fail due to internal error", preferredStyle: .alert)
+//            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+//            alertController.addAction(okAction)
+//            present(alertController, animated: true, completion: nil)
+//            return
+//        }
+//        
+//        let plaintext = String(data: plaintextData, encoding: .utf8) ?? "<nil>"
+//        
+//        let alertController = UIAlertController(title: "Message Content", message: plaintext, preferredStyle: .alert)
+//        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+//        alertController.addAction(okAction)
+//        present(alertController, animated: true, completion: nil)
     }
     
     @objc private func selectFileButtonPressed(_ sender: UIButton) {

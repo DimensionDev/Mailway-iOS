@@ -44,7 +44,7 @@ extension ContactListContactTableViewCell {
     
 }
 
-
+#if DEBUG
 struct ContactListContactTableViewCell_Previews: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
@@ -55,3 +55,4 @@ struct ContactListContactTableViewCell_Previews: PreviewProvider {
         .previewLayout(.fixed(width: 320, height: 44))
     }
 }
+#endif

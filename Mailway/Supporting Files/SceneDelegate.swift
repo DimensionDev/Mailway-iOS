@@ -25,10 +25,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
         sceneCoordinator.setup()
         window.makeKeyAndVisible()
-        
-        #if PREVIEW
-        AppContext.shared.documentStore.setupPreview()
-        #endif
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

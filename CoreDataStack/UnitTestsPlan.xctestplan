@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "383DC92A-B58C-4CFF-8706-5EFE68497514",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Mailway.xcodeproj",
+        "identifier" : "DB1EC3592491E306002379A1",
+        "name" : "CoreDataStackTests"
+      }
+    }
+  ],
+  "version" : 1
+}

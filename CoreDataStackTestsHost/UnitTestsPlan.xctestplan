@@ -1,0 +1,34 @@
+{
+  "configurations" : [
+    {
+      "id" : "BB41D140-CF34-4714-B734-9F0B2151D8FE",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "-com.apple.CoreData.SQLDebug 1"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Mailway.xcodeproj",
+      "identifier" : "DB0A904C249B43B200FE0AFC",
+      "name" : "CoreDataStackTestsHost"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Mailway.xcodeproj",
+        "identifier" : "DB1EC3592491E306002379A1",
+        "name" : "CoreDataStackTests"
+      }
+    }
+  ],
+  "version" : 1
+}

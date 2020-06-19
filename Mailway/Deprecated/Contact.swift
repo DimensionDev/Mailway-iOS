@@ -9,19 +9,19 @@
 import Foundation
 import NtgeCore
 
-struct Contact: Codable, Identifiable, Hashable {
-    let id: UUID = UUID()
-    
-    var name: String = ""
-    
-    // optional
-    var email: String = ""
-    var note: String = ""
-    
-    var isIdentity: Bool = false    // FIXME: to be remove
-    var keyID: KeyID = ""
-    
-}
+//struct Contact: Codable, Identifiable, Hashable {
+//    let id: UUID = UUID()
+//    
+//    var name: String = ""
+//    
+//    // optional
+//    var email: String = ""
+//    var note: String = ""
+//    
+//    var isIdentity: Bool = false    // FIXME: to be remove
+//    var keyID: KeyID = ""
+//    
+//}
 
 //import NtgeCore
 //

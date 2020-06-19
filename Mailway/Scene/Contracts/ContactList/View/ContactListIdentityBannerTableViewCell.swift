@@ -48,6 +48,7 @@ extension ContactListIdentityBannerTableViewCell {
     
 }
 
+#if DEBUG
 struct ContactListIdentityBannerTableViewCell_Previews: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
@@ -56,3 +57,4 @@ struct ContactListIdentityBannerTableViewCell_Previews: PreviewProvider {
         .previewLayout(.fixed(width: 320, height: 44 + 16 * 2))
     }
 }
+#endif

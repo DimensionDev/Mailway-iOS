@@ -8,10 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		0664205BD215931E3936ADA9 /* Pods_MailwayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C6BC58A0529C9279CF81BB /* Pods_MailwayTests.framework */; };
+		8CC372AA66B4027AB258A4F8 /* Pods_CoreDataStack_CoreDataStackTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5578B35AB482B3750C00BB57 /* Pods_CoreDataStack_CoreDataStackTests.framework */; };
 		DB008AA9247661E300CE6A7E /* ContractListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB008AA8247661E300CE6A7E /* ContractListHeaderView.swift */; };
 		DB008AAB247666D200CE6A7E /* CreateIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB008AAA247666D200CE6A7E /* CreateIdentityView.swift */; };
 		DB008AB02476737100CE6A7E /* ViewStata+Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB008AAF2476737100CE6A7E /* ViewStata+Contacts.swift */; };
 		DB008AB22476750800CE6A7E /* CreateIdentityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB008AB12476750800CE6A7E /* CreateIdentityViewController.swift */; };
+		DB0A9050249B43B200FE0AFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0A904F249B43B200FE0AFC /* AppDelegate.swift */; };
+		DB0A9052249B43B200FE0AFC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0A9051249B43B200FE0AFC /* SceneDelegate.swift */; };
+		DB0A9054249B43B200FE0AFC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0A9053249B43B200FE0AFC /* ViewController.swift */; };
+		DB0A9057249B43B200FE0AFC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB0A9055249B43B200FE0AFC /* Main.storyboard */; };
+		DB0A9059249B43B300FE0AFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB0A9058249B43B300FE0AFC /* Assets.xcassets */; };
+		DB0A905C249B43B300FE0AFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB0A905A249B43B300FE0AFC /* LaunchScreen.storyboard */; };
 		DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB193883247693D000E24AFB /* AutoFocusTextField.swift */; };
 		DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB193886247782F500E24AFB /* MainTabBarController.swift */; };
 		DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB19388824778D3E00E24AFB /* CommonNames.swift */; };
@@ -23,7 +30,16 @@
 		DB1EC2DB2488D8CE002379A1 /* MessageInboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2DA2488D8CE002379A1 /* MessageInboxViewController.swift */; };
 		DB1EC2DE2488E591002379A1 /* HitTestExpandedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */; };
 		DB1EC2E02488EB4C002379A1 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2DF2488EB4C002379A1 /* ShareService.swift */; };
+		DB1EC35B2491E306002379A1 /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB1EC3522491E305002379A1 /* CoreDataStack.framework */; };
+		DB1EC3622491E306002379A1 /* CoreDataStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC3612491E306002379A1 /* CoreDataStackTests.swift */; };
+		DB1EC3642491E306002379A1 /* CoreDataStack.h in Headers */ = {isa = PBXBuildFile; fileRef = DB1EC3542491E305002379A1 /* CoreDataStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DB1EC3672491E306002379A1 /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB1EC3522491E305002379A1 /* CoreDataStack.framework */; };
+		DB1EC3682491E306002379A1 /* CoreDataStack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB1EC3522491E305002379A1 /* CoreDataStack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DB1EC3712491E317002379A1 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC31A2490F4DA002379A1 /* CoreDataStack.swift */; };
+		DB1EC3722491E321002379A1 /* CoreDataStack.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC3142490EDCA002379A1 /* CoreDataStack.xcdatamodeld */; };
+		DB1EC3732491E37D002379A1 /* Keypair.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC3182490F28A002379A1 /* Keypair.swift */; };
 		DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB28139F2484F64A001CDD19 /* NSLayoutConstraint.swift */; };
+		DB3050E6249B6FC700F361FC /* QuoteMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB3050E5249B6FC700F361FC /* QuoteMessage.swift */; };
 		DB4B9CA82480C3B1009F06BE /* MessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B9CA72480C3B1009F06BE /* MessageInputView.swift */; };
 		DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */; };
 		DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF11247527D80001F9C0 /* FileStorage.swift */; };
@@ -36,6 +52,9 @@
 		DB6DEC7F247F59E00040C817 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC7E247F59E00040C817 /* Key.swift */; };
 		DB6DEC81247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC80247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift */; };
 		DB6DEC84247F745F0040C817 /* ChatListChatRoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC83247F745F0040C817 /* ChatListChatRoomTableViewCell.swift */; };
+		DB6F9DA02498BE7700D39BAD /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9D9F2498BE7700D39BAD /* Chat.swift */; };
+		DB6F9DA22498BFC800D39BAD /* ChatMemberNameStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9DA12498BFC800D39BAD /* ChatMemberNameStub.swift */; };
+		DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9DA32498C22600D39BAD /* ChatMessage.swift */; };
 		DB7E1E3C247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */; };
 		DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */; };
 		DB7E1E40247BC73B002FC90E /* IdentityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3F247BC73B002FC90E /* IdentityListViewController.swift */; };
@@ -43,12 +62,25 @@
 		DB8B48042484DA9F002D4912 /* ContactInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8B48032484DA9F002D4912 /* ContactInfoView.swift */; };
 		DBA5F9EA247F832900C9B552 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA5F9E9247F832900C9B552 /* ChatMessage.swift */; };
 		DBA5F9EC247F90B700C9B552 /* ChatMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA5F9EB247F90B700C9B552 /* ChatMessageTableViewCell.swift */; };
+		DBB358642491EC8D00803C98 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358632491EC8D00803C98 /* URL.swift */; };
+		DBB3586A2491ED9B00803C98 /* DarwinNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358692491ED8A00803C98 /* DarwinNotificationCenter.swift */; };
+		DBB3586C2491EDE600803C98 /* DarwinNotification+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB3586B2491EDE600803C98 /* DarwinNotification+Name.swift */; };
+		DBB3586E2491EE8900803C98 /* NSPersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB3586D2491EE8900803C98 /* NSPersistentContainer.swift */; };
+		DBB358702491F76C00803C98 /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB3586F2491F76C00803C98 /* Managed.swift */; };
+		DBB358742491FFBD00803C98 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358732491FFBD00803C98 /* Contact.swift */; };
+		DBB358762492128300803C98 /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358752492128300803C98 /* NSManagedObjectContext.swift */; };
 		DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */; };
 		DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498CC247D17A600EFBACD /* ChatListViewController.swift */; };
 		DBB498CF247D1AE900EFBACD /* CreateChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498CE247D1AE900EFBACD /* CreateChatViewController.swift */; };
 		DBB9811424863DAA00FB2FE8 /* ChatRootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */; };
 		DBB981162486452C00FB2FE8 /* RootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB981152486452C00FB2FE8 /* RootSplitViewController.swift */; };
 		DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */; };
+		DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC9931A249788B9004C1264 /* ContactChannel.swift */; };
+		DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040032492303000C5184D /* ContactDetailViewController.swift */; };
+		DBE040072492413600C5184D /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040062492413600C5184D /* ContactDetailView.swift */; };
+		DBE04010249343B000C5184D /* MailwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0400F249343B000C5184D /* MailwayUITests.swift */; };
+		DBE0405824934A3400C5184D /* ManagedObjectObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0405724934A3400C5184D /* ManagedObjectObserver.swift */; };
+		DBE0405A24934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0405924934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift */; };
 		DBE306A62474DF7B00EB7193 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306A52474DF7B00EB7193 /* AppDelegate.swift */; };
 		DBE306A82474DF7B00EB7193 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */; };
 		DBE306AC2474DF7C00EB7193 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBE306AB2474DF7C00EB7193 /* Assets.xcassets */; };
@@ -68,9 +100,46 @@
 		DBE306E524751AAD00EB7193 /* ViewState+ChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306E424751AAD00EB7193 /* ViewState+ChatsView.swift */; };
 		DBE306E724751AB700EB7193 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE306E624751AB700EB7193 /* ViewState.swift */; };
 		E2F95B66FB323FDBB69C2628 /* Pods_Mailway.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 120DBBDC3992A36DD79719FE /* Pods_Mailway.framework */; };
+		F3B1C646DFB9AD81B66E7554 /* Pods_Mailway_MailwayUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94DB2500F59B9188F77B2FB5 /* Pods_Mailway_MailwayUITests.framework */; };
+		FDCAB01ABB3F809BBCAB379B /* Pods_CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5C3BBBF30FADFD778EFFC27 /* Pods_CoreDataStack.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DB0A9062249B43BA00FE0AFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBE3069A2474DF7B00EB7193 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DB0A904C249B43B200FE0AFC;
+			remoteInfo = CoreDataStackTestsHost;
+		};
+		DB1EC35C2491E306002379A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBE3069A2474DF7B00EB7193 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DB1EC3512491E305002379A1;
+			remoteInfo = CoreDataStack;
+		};
+		DB1EC35E2491E306002379A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBE3069A2474DF7B00EB7193 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBE306A12474DF7B00EB7193;
+			remoteInfo = Mailway;
+		};
+		DB1EC3652491E306002379A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBE3069A2474DF7B00EB7193 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DB1EC3512491E305002379A1;
+			remoteInfo = CoreDataStack;
+		};
+		DBE04012249343B000C5184D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBE3069A2474DF7B00EB7193 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBE306A12474DF7B00EB7193;
+			remoteInfo = Mailway;
+		};
 		DBE306B92474DF7C00EB7193 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DBE3069A2474DF7B00EB7193 /* Project object */;
@@ -87,6 +156,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				DB1EC3682491E306002379A1 /* CoreDataStack.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,11 +167,29 @@
 		120DBBDC3992A36DD79719FE /* Pods_Mailway.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mailway.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		34FF50D9B1F3C370C5A1E602 /* Pods-MailwayTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MailwayTests.debug.xcconfig"; path = "Target Support Files/Pods-MailwayTests/Pods-MailwayTests.debug.xcconfig"; sourceTree = "<group>"; };
 		42C6BC58A0529C9279CF81BB /* Pods_MailwayTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MailwayTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5578B35AB482B3750C00BB57 /* Pods_CoreDataStack_CoreDataStackTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoreDataStack_CoreDataStackTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		594E7B83BA6531F29DE8CBA6 /* Pods-CoreDataStack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack.debug.xcconfig"; path = "Target Support Files/Pods-CoreDataStack/Pods-CoreDataStack.debug.xcconfig"; sourceTree = "<group>"; };
+		7E59C77ABD12EFBBA12F45D4 /* Pods-Mailway-MailwayUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mailway-MailwayUITests.debug.xcconfig"; path = "Target Support Files/Pods-Mailway-MailwayUITests/Pods-Mailway-MailwayUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		8CCB4CE81A6374375CBBA238 /* Pods-MailwayTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MailwayTests.release.xcconfig"; path = "Target Support Files/Pods-MailwayTests/Pods-MailwayTests.release.xcconfig"; sourceTree = "<group>"; };
+		9202EAB429AE26F11A087CDD /* Pods-CoreDataStack.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack.preview.xcconfig"; path = "Target Support Files/Pods-CoreDataStack/Pods-CoreDataStack.preview.xcconfig"; sourceTree = "<group>"; };
+		94DB2500F59B9188F77B2FB5 /* Pods_Mailway_MailwayUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mailway_MailwayUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		98AE88E236A24E1CA217D48B /* Pods-CoreDataStack-CoreDataStackTests.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack-CoreDataStackTests.preview.xcconfig"; path = "Target Support Files/Pods-CoreDataStack-CoreDataStackTests/Pods-CoreDataStack-CoreDataStackTests.preview.xcconfig"; sourceTree = "<group>"; };
+		998F7855A45F95A063DF945F /* Pods-Mailway-MailwayUITests.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mailway-MailwayUITests.preview.xcconfig"; path = "Target Support Files/Pods-Mailway-MailwayUITests/Pods-Mailway-MailwayUITests.preview.xcconfig"; sourceTree = "<group>"; };
+		9FEBF517E820C382AF6AD1E8 /* Pods-CoreDataStack-CoreDataStackTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack-CoreDataStackTests.release.xcconfig"; path = "Target Support Files/Pods-CoreDataStack-CoreDataStackTests/Pods-CoreDataStack-CoreDataStackTests.release.xcconfig"; sourceTree = "<group>"; };
 		DB008AA8247661E300CE6A7E /* ContractListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractListHeaderView.swift; sourceTree = "<group>"; };
 		DB008AAA247666D200CE6A7E /* CreateIdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateIdentityView.swift; sourceTree = "<group>"; };
 		DB008AAF2476737100CE6A7E /* ViewStata+Contacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewStata+Contacts.swift"; sourceTree = "<group>"; };
 		DB008AB12476750800CE6A7E /* CreateIdentityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateIdentityViewController.swift; sourceTree = "<group>"; };
+		DB0A904D249B43B200FE0AFC /* CoreDataStackTestsHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataStackTestsHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB0A904F249B43B200FE0AFC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DB0A9051249B43B200FE0AFC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		DB0A9053249B43B200FE0AFC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DB0A9056249B43B200FE0AFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DB0A9058249B43B300FE0AFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DB0A905B249B43B300FE0AFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		DB0A905D249B43B300FE0AFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DB0A9064249B446A00FE0AFC /* CoreDataStackTestsHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoreDataStackTestsHost.entitlements; sourceTree = "<group>"; };
+		DB0A9065249B45E800FE0AFC /* UnitTestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = UnitTestsPlan.xctestplan; path = /Users/MainasuK/Developer/Swift/SujiTech/Mailway/CoreDataStackTestsHost/UnitTestsPlan.xctestplan; sourceTree = "<absolute>"; };
 		DB193883247693D000E24AFB /* AutoFocusTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFocusTextField.swift; sourceTree = "<group>"; };
 		DB193886247782F500E24AFB /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		DB19388824778D3E00E24AFB /* CommonNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonNames.swift; sourceTree = "<group>"; };
@@ -113,7 +201,21 @@
 		DB1EC2DA2488D8CE002379A1 /* MessageInboxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInboxViewController.swift; sourceTree = "<group>"; };
 		DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HitTestExpandedButton.swift; sourceTree = "<group>"; };
 		DB1EC2DF2488EB4C002379A1 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
+		DB1EC3152490EDCA002379A1 /* Mailway.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mailway.xcdatamodel; sourceTree = "<group>"; };
+		DB1EC3182490F28A002379A1 /* Keypair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keypair.swift; sourceTree = "<group>"; };
+		DB1EC31A2490F4DA002379A1 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		DB1EC3522491E305002379A1 /* CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB1EC3542491E305002379A1 /* CoreDataStack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataStack.h; sourceTree = "<group>"; };
+		DB1EC3552491E306002379A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DB1EC35A2491E306002379A1 /* CoreDataStackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataStackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB1EC3612491E306002379A1 /* CoreDataStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackTests.swift; sourceTree = "<group>"; };
+		DB1EC3632491E306002379A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DB1EC3752491E945002379A1 /* Mailway.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mailway.entitlements; sourceTree = "<group>"; };
 		DB28139F2484F64A001CDD19 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
+		DB2ABEBD249B30AD00B9C6CA /* UnitTestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTestsPlan.xctestplan; sourceTree = "<group>"; };
+		DB2ABEBE249B30CE00B9C6CA /* UITestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITestsPlan.xctestplan; sourceTree = "<group>"; };
+		DB2ABEBF249B319100B9C6CA /* UnitTestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTestsPlan.xctestplan; sourceTree = "<group>"; };
+		DB3050E5249B6FC700F361FC /* QuoteMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteMessage.swift; sourceTree = "<group>"; };
 		DB4B9CA72480C3B1009F06BE /* MessageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputView.swift; sourceTree = "<group>"; };
 		DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatGroupTableViewCell.swift; sourceTree = "<group>"; };
 		DB60BF11247527D80001F9C0 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
@@ -126,6 +228,9 @@
 		DB6DEC7E247F59E00040C817 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		DB6DEC80247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListInboxBannerTableViewCell.swift; sourceTree = "<group>"; };
 		DB6DEC83247F745F0040C817 /* ChatListChatRoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListChatRoomTableViewCell.swift; sourceTree = "<group>"; };
+		DB6F9D9F2498BE7700D39BAD /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		DB6F9DA12498BFC800D39BAD /* ChatMemberNameStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMemberNameStub.swift; sourceTree = "<group>"; };
+		DB6F9DA32498C22600D39BAD /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListIdentityBannerTableViewCell.swift; sourceTree = "<group>"; };
 		DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListContactTableViewCell.swift; sourceTree = "<group>"; };
 		DB7E1E3F247BC73B002FC90E /* IdentityListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityListViewController.swift; sourceTree = "<group>"; };
@@ -133,12 +238,27 @@
 		DB8B48032484DA9F002D4912 /* ContactInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactInfoView.swift; sourceTree = "<group>"; };
 		DBA5F9E9247F832900C9B552 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		DBA5F9EB247F90B700C9B552 /* ChatMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageTableViewCell.swift; sourceTree = "<group>"; };
+		DBB358632491EC8D00803C98 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		DBB358692491ED8A00803C98 /* DarwinNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarwinNotificationCenter.swift; sourceTree = "<group>"; };
+		DBB3586B2491EDE600803C98 /* DarwinNotification+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DarwinNotification+Name.swift"; sourceTree = "<group>"; };
+		DBB3586D2491EE8900803C98 /* NSPersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSPersistentContainer.swift; sourceTree = "<group>"; };
+		DBB3586F2491F76C00803C98 /* Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
+		DBB358732491FFBD00803C98 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		DBB358752492128300803C98 /* NSManagedObjectContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContext.swift; sourceTree = "<group>"; };
 		DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityBannerView.swift; sourceTree = "<group>"; };
 		DBB498CC247D17A600EFBACD /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
 		DBB498CE247D1AE900EFBACD /* CreateChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatViewController.swift; sourceTree = "<group>"; };
 		DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRootSplitViewController.swift; sourceTree = "<group>"; };
 		DBB981152486452C00FB2FE8 /* RootSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSplitViewController.swift; sourceTree = "<group>"; };
 		DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderDetailViewController.swift; sourceTree = "<group>"; };
+		DBC9931A249788B9004C1264 /* ContactChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactChannel.swift; sourceTree = "<group>"; };
+		DBE040032492303000C5184D /* ContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
+		DBE040062492413600C5184D /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
+		DBE0400D249343B000C5184D /* MailwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MailwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBE0400F249343B000C5184D /* MailwayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailwayUITests.swift; sourceTree = "<group>"; };
+		DBE04011249343B000C5184D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DBE0405724934A3400C5184D /* ManagedObjectObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectObserver.swift; sourceTree = "<group>"; };
+		DBE0405924934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectContextObjectsDidChangeNotification.swift; sourceTree = "<group>"; };
 		DBE306A22474DF7B00EB7193 /* Mailway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mailway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBE306A52474DF7B00EB7193 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -162,16 +282,53 @@
 		DBE306E424751AAD00EB7193 /* ViewState+ChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewState+ChatsView.swift"; sourceTree = "<group>"; };
 		DBE306E624751AB700EB7193 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		E0A2D7AC41678E455B9A9D46 /* Pods-Mailway.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mailway.preview.xcconfig"; path = "Target Support Files/Pods-Mailway/Pods-Mailway.preview.xcconfig"; sourceTree = "<group>"; };
+		E59944970F08FAD6649D5F9D /* Pods-CoreDataStack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack.release.xcconfig"; path = "Target Support Files/Pods-CoreDataStack/Pods-CoreDataStack.release.xcconfig"; sourceTree = "<group>"; };
+		EBD2B0FD2CC72C48258443BA /* Pods-CoreDataStack-CoreDataStackTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack-CoreDataStackTests.debug.xcconfig"; path = "Target Support Files/Pods-CoreDataStack-CoreDataStackTests/Pods-CoreDataStack-CoreDataStackTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F5C3BBBF30FADFD778EFFC27 /* Pods_CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8A97BCC2D0524D65EC57A9D /* Pods-MailwayTests.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MailwayTests.preview.xcconfig"; path = "Target Support Files/Pods-MailwayTests/Pods-MailwayTests.preview.xcconfig"; sourceTree = "<group>"; };
 		F9848F702657E08BA88B933D /* Pods-Mailway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mailway.release.xcconfig"; path = "Target Support Files/Pods-Mailway/Pods-Mailway.release.xcconfig"; sourceTree = "<group>"; };
+		FF7B169EC2E11F0C3876537F /* Pods-Mailway-MailwayUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mailway-MailwayUITests.release.xcconfig"; path = "Target Support Files/Pods-Mailway-MailwayUITests/Pods-Mailway-MailwayUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FFCA6A7E6F4A285CF3F09EB0 /* Pods-Mailway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mailway.debug.xcconfig"; path = "Target Support Files/Pods-Mailway/Pods-Mailway.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DB0A904A249B43B200FE0AFC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB1EC34F2491E305002379A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDCAB01ABB3F809BBCAB379B /* Pods_CoreDataStack.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB1EC3572491E306002379A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB1EC35B2491E306002379A1 /* CoreDataStack.framework in Frameworks */,
+				8CC372AA66B4027AB258A4F8 /* Pods_CoreDataStack_CoreDataStackTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBE0400A249343B000C5184D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3B1C646DFB9AD81B66E7554 /* Pods_Mailway_MailwayUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DBE3069F2474DF7B00EB7193 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB1EC3672491E306002379A1 /* CoreDataStack.framework in Frameworks */,
 				E2F95B66FB323FDBB69C2628 /* Pods_Mailway.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,6 +353,15 @@
 				8CCB4CE81A6374375CBBA238 /* Pods-MailwayTests.release.xcconfig */,
 				E0A2D7AC41678E455B9A9D46 /* Pods-Mailway.preview.xcconfig */,
 				F8A97BCC2D0524D65EC57A9D /* Pods-MailwayTests.preview.xcconfig */,
+				594E7B83BA6531F29DE8CBA6 /* Pods-CoreDataStack.debug.xcconfig */,
+				9202EAB429AE26F11A087CDD /* Pods-CoreDataStack.preview.xcconfig */,
+				E59944970F08FAD6649D5F9D /* Pods-CoreDataStack.release.xcconfig */,
+				EBD2B0FD2CC72C48258443BA /* Pods-CoreDataStack-CoreDataStackTests.debug.xcconfig */,
+				98AE88E236A24E1CA217D48B /* Pods-CoreDataStack-CoreDataStackTests.preview.xcconfig */,
+				9FEBF517E820C382AF6AD1E8 /* Pods-CoreDataStack-CoreDataStackTests.release.xcconfig */,
+				7E59C77ABD12EFBBA12F45D4 /* Pods-Mailway-MailwayUITests.debug.xcconfig */,
+				998F7855A45F95A063DF945F /* Pods-Mailway-MailwayUITests.preview.xcconfig */,
+				FF7B169EC2E11F0C3876537F /* Pods-Mailway-MailwayUITests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -205,6 +371,9 @@
 			children = (
 				120DBBDC3992A36DD79719FE /* Pods_Mailway.framework */,
 				42C6BC58A0529C9279CF81BB /* Pods_MailwayTests.framework */,
+				F5C3BBBF30FADFD778EFFC27 /* Pods_CoreDataStack.framework */,
+				5578B35AB482B3750C00BB57 /* Pods_CoreDataStack_CoreDataStackTests.framework */,
+				94DB2500F59B9188F77B2FB5 /* Pods_Mailway_MailwayUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -218,13 +387,29 @@
 			path = ContactList;
 			sourceTree = "<group>";
 		};
-		DB008AAC247666DC00CE6A7E /* CreateContact */ = {
+		DB008AAC247666DC00CE6A7E /* CreateIdentity */ = {
 			isa = PBXGroup;
 			children = (
 				DBB498CB247D174100EFBACD /* View */,
 				DB008AB12476750800CE6A7E /* CreateIdentityViewController.swift */,
 			);
-			path = CreateContact;
+			path = CreateIdentity;
+			sourceTree = "<group>";
+		};
+		DB0A904E249B43B200FE0AFC /* CoreDataStackTestsHost */ = {
+			isa = PBXGroup;
+			children = (
+				DB0A9065249B45E800FE0AFC /* UnitTestsPlan.xctestplan */,
+				DB0A9064249B446A00FE0AFC /* CoreDataStackTestsHost.entitlements */,
+				DB0A904F249B43B200FE0AFC /* AppDelegate.swift */,
+				DB0A9051249B43B200FE0AFC /* SceneDelegate.swift */,
+				DB0A9053249B43B200FE0AFC /* ViewController.swift */,
+				DB0A9055249B43B200FE0AFC /* Main.storyboard */,
+				DB0A9058249B43B300FE0AFC /* Assets.xcassets */,
+				DB0A905A249B43B300FE0AFC /* LaunchScreen.storyboard */,
+				DB0A905D249B43B300FE0AFC /* Info.plist */,
+			);
+			path = CoreDataStackTestsHost;
 			sourceTree = "<group>";
 		};
 		DB193885247693D400E24AFB /* View */ = {
@@ -278,6 +463,31 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		DB1EC3532491E305002379A1 /* CoreDataStack */ = {
+			isa = PBXGroup;
+			children = (
+				DB1EC3552491E306002379A1 /* Info.plist */,
+				DB1EC3542491E305002379A1 /* CoreDataStack.h */,
+				DB2ABEBF249B319100B9C6CA /* UnitTestsPlan.xctestplan */,
+				DB1EC3142490EDCA002379A1 /* CoreDataStack.xcdatamodeld */,
+				DBE0405B249374A400C5184D /* Stack */,
+				DBB358722491F8B900803C98 /* Entity */,
+				DBB358712491F77000803C98 /* Protocol */,
+				DBB358652491EC9000803C98 /* Extension */,
+				DBB358682491ED8900803C98 /* Vendor */,
+			);
+			path = CoreDataStack;
+			sourceTree = "<group>";
+		};
+		DB1EC3602491E306002379A1 /* CoreDataStackTests */ = {
+			isa = PBXGroup;
+			children = (
+				DB1EC3612491E306002379A1 /* CoreDataStackTests.swift */,
+				DB1EC3632491E306002379A1 /* Info.plist */,
+			);
+			path = CoreDataStackTests;
+			sourceTree = "<group>";
+		};
 		DB2813A12484F64D001CDD19 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -312,6 +522,8 @@
 				DB6DEC78247E4E270040C817 /* SceneCoordinator.swift */,
 				DBE306AB2474DF7C00EB7193 /* Assets.xcassets */,
 				DBE306B02474DF7C00EB7193 /* LaunchScreen.storyboard */,
+				DB2ABEBD249B30AD00B9C6CA /* UnitTestsPlan.xctestplan */,
+				DB2ABEBE249B30CE00B9C6CA /* UITestsPlan.xctestplan */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -364,6 +576,7 @@
 		DB7E1E54247CF0E8002FC90E /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				DBE306E12475184200EB7193 /* Contact.swift */,
 				DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */,
 				DB60BF19247534C70001F9C0 /* CreateChatView.swift */,
 				DBE306CA2474E15800EB7193 /* ChatsView.swift */,
@@ -372,6 +585,47 @@
 				DB19388D2477BD1D00E24AFB /* IdentitiesListView.swift */,
 			);
 			path = Deprecated;
+			sourceTree = "<group>";
+		};
+		DBB358652491EC9000803C98 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				DBB358632491EC8D00803C98 /* URL.swift */,
+				DBB3586D2491EE8900803C98 /* NSPersistentContainer.swift */,
+				DBB358752492128300803C98 /* NSManagedObjectContext.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		DBB358682491ED8900803C98 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				DBB358692491ED8A00803C98 /* DarwinNotificationCenter.swift */,
+				DBB3586B2491EDE600803C98 /* DarwinNotification+Name.swift */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		DBB358712491F77000803C98 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				DBB3586F2491F76C00803C98 /* Managed.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		DBB358722491F8B900803C98 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				DB1EC3182490F28A002379A1 /* Keypair.swift */,
+				DBB358732491FFBD00803C98 /* Contact.swift */,
+				DBC9931A249788B9004C1264 /* ContactChannel.swift */,
+				DB6F9D9F2498BE7700D39BAD /* Chat.swift */,
+				DB6F9DA12498BFC800D39BAD /* ChatMemberNameStub.swift */,
+				DB6F9DA32498C22600D39BAD /* ChatMessage.swift */,
+				DB3050E5249B6FC700F361FC /* QuoteMessage.swift */,
+			);
+			path = Entity;
 			sourceTree = "<group>";
 		};
 		DBB498CB247D174100EFBACD /* View */ = {
@@ -409,11 +663,51 @@
 			path = Root;
 			sourceTree = "<group>";
 		};
+		DBE04005249233E700C5184D /* ContactDetail */ = {
+			isa = PBXGroup;
+			children = (
+				DBE040082492413A00C5184D /* View */,
+				DBE040032492303000C5184D /* ContactDetailViewController.swift */,
+			);
+			path = ContactDetail;
+			sourceTree = "<group>";
+		};
+		DBE040082492413A00C5184D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DBE040062492413600C5184D /* ContactDetailView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DBE0400E249343B000C5184D /* MailwayUITests */ = {
+			isa = PBXGroup;
+			children = (
+				DBE0400F249343B000C5184D /* MailwayUITests.swift */,
+				DBE04011249343B000C5184D /* Info.plist */,
+			);
+			path = MailwayUITests;
+			sourceTree = "<group>";
+		};
+		DBE0405B249374A400C5184D /* Stack */ = {
+			isa = PBXGroup;
+			children = (
+				DB1EC31A2490F4DA002379A1 /* CoreDataStack.swift */,
+				DBE0405724934A3400C5184D /* ManagedObjectObserver.swift */,
+				DBE0405924934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift */,
+			);
+			path = Stack;
+			sourceTree = "<group>";
+		};
 		DBE306992474DF7B00EB7193 = {
 			isa = PBXGroup;
 			children = (
 				DBE306A42474DF7B00EB7193 /* Mailway */,
 				DBE306BB2474DF7C00EB7193 /* MailwayTests */,
+				DBE0400E249343B000C5184D /* MailwayUITests */,
+				DB1EC3532491E305002379A1 /* CoreDataStack */,
+				DB1EC3602491E306002379A1 /* CoreDataStackTests */,
+				DB0A904E249B43B200FE0AFC /* CoreDataStackTestsHost */,
 				DBE306A32474DF7B00EB7193 /* Products */,
 				464108C72923D8784AB7D808 /* Pods */,
 				D1EDC695C4255F18187835FF /* Frameworks */,
@@ -425,6 +719,10 @@
 			children = (
 				DBE306A22474DF7B00EB7193 /* Mailway.app */,
 				DBE306B82474DF7C00EB7193 /* MailwayTests.xctest */,
+				DB1EC3522491E305002379A1 /* CoreDataStack.framework */,
+				DB1EC35A2491E306002379A1 /* CoreDataStackTests.xctest */,
+				DBE0400D249343B000C5184D /* MailwayUITests.xctest */,
+				DB0A904D249B43B200FE0AFC /* CoreDataStackTestsHost.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -432,6 +730,7 @@
 		DBE306A42474DF7B00EB7193 /* Mailway */ = {
 			isa = PBXGroup;
 			children = (
+				DB1EC3752491E945002379A1 /* Mailway.entitlements */,
 				DBE306B32474DF7C00EB7193 /* Info.plist */,
 				DB7E1E54247CF0E8002FC90E /* Deprecated */,
 				DB1EC2E12488EB4F002379A1 /* Service */,
@@ -503,7 +802,8 @@
 			isa = PBXGroup;
 			children = (
 				DB008AA7247661D900CE6A7E /* ContactList */,
-				DB008AAC247666DC00CE6A7E /* CreateContact */,
+				DBE04005249233E700C5184D /* ContactDetail */,
+				DB008AAC247666DC00CE6A7E /* CreateIdentity */,
 				DB19388F2477BD2100E24AFB /* IdentityList */,
 				DB1938922477E4E000E24AFB /* IdentityDetail */,
 			);
@@ -534,7 +834,6 @@
 		DBE306E32475184500EB7193 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DBE306E12475184200EB7193 /* Contact.swift */,
 				DB60BF17247529DB0001F9C0 /* Chat.swift */,
 				DB6DEC7E247F59E00040C817 /* Key.swift */,
 				DBA5F9E9247F832900C9B552 /* ChatMessage.swift */,
@@ -554,7 +853,95 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		DB1EC34D2491E305002379A1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB1EC3642491E306002379A1 /* CoreDataStack.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		DB0A904C249B43B200FE0AFC /* CoreDataStackTestsHost */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DB0A9061249B43B300FE0AFC /* Build configuration list for PBXNativeTarget "CoreDataStackTestsHost" */;
+			buildPhases = (
+				DB0A9049249B43B200FE0AFC /* Sources */,
+				DB0A904A249B43B200FE0AFC /* Frameworks */,
+				DB0A904B249B43B200FE0AFC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoreDataStackTestsHost;
+			productName = CoreDataStackTestsHost;
+			productReference = DB0A904D249B43B200FE0AFC /* CoreDataStackTestsHost.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DB1EC3512491E305002379A1 /* CoreDataStack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DB1EC3692491E306002379A1 /* Build configuration list for PBXNativeTarget "CoreDataStack" */;
+			buildPhases = (
+				6557FB577591564B681822FA /* [CP] Check Pods Manifest.lock */,
+				DB1EC34D2491E305002379A1 /* Headers */,
+				DB1EC34E2491E305002379A1 /* Sources */,
+				DB1EC34F2491E305002379A1 /* Frameworks */,
+				DB1EC3502491E305002379A1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoreDataStack;
+			productName = CoreDataStack;
+			productReference = DB1EC3522491E305002379A1 /* CoreDataStack.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DB1EC3592491E306002379A1 /* CoreDataStackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DB1EC36D2491E306002379A1 /* Build configuration list for PBXNativeTarget "CoreDataStackTests" */;
+			buildPhases = (
+				1C756820B4C738C00A0BAB0C /* [CP] Check Pods Manifest.lock */,
+				DB1EC3562491E306002379A1 /* Sources */,
+				DB1EC3572491E306002379A1 /* Frameworks */,
+				DB1EC3582491E306002379A1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DB1EC35D2491E306002379A1 /* PBXTargetDependency */,
+				DB1EC35F2491E306002379A1 /* PBXTargetDependency */,
+				DB0A9063249B43BA00FE0AFC /* PBXTargetDependency */,
+			);
+			name = CoreDataStackTests;
+			productName = CoreDataStackTests;
+			productReference = DB1EC35A2491E306002379A1 /* CoreDataStackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DBE0400C249343B000C5184D /* MailwayUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBE04014249343B000C5184D /* Build configuration list for PBXNativeTarget "MailwayUITests" */;
+			buildPhases = (
+				3BDCB2A2CB5663FA9A2A2B53 /* [CP] Check Pods Manifest.lock */,
+				DBE04009249343B000C5184D /* Sources */,
+				DBE0400A249343B000C5184D /* Frameworks */,
+				DBE0400B249343B000C5184D /* Resources */,
+				59448E77BFCF5D434FC321F1 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DBE04013249343B000C5184D /* PBXTargetDependency */,
+			);
+			name = MailwayUITests;
+			productName = MailwayUITests;
+			productReference = DBE0400D249343B000C5184D /* MailwayUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		DBE306A12474DF7B00EB7193 /* Mailway */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DBE306C12474DF7C00EB7193 /* Build configuration list for PBXNativeTarget "Mailway" */;
@@ -569,6 +956,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DB1EC3662491E306002379A1 /* PBXTargetDependency */,
 			);
 			name = Mailway;
 			productName = Mailway;
@@ -600,10 +988,24 @@
 		DBE3069A2474DF7B00EB7193 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1140;
+				LastSwiftUpdateCheck = 1150;
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = Dimension;
 				TargetAttributes = {
+					DB0A904C249B43B200FE0AFC = {
+						CreatedOnToolsVersion = 11.5;
+					};
+					DB1EC3512491E305002379A1 = {
+						CreatedOnToolsVersion = 11.5;
+					};
+					DB1EC3592491E306002379A1 = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = DB0A904C249B43B200FE0AFC;
+					};
+					DBE0400C249343B000C5184D = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = DBE306A12474DF7B00EB7193;
+					};
 					DBE306A12474DF7B00EB7193 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
@@ -628,11 +1030,46 @@
 			targets = (
 				DBE306A12474DF7B00EB7193 /* Mailway */,
 				DBE306B72474DF7C00EB7193 /* MailwayTests */,
+				DBE0400C249343B000C5184D /* MailwayUITests */,
+				DB1EC3512491E305002379A1 /* CoreDataStack */,
+				DB1EC3592491E306002379A1 /* CoreDataStackTests */,
+				DB0A904C249B43B200FE0AFC /* CoreDataStackTestsHost */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		DB0A904B249B43B200FE0AFC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB0A905C249B43B300FE0AFC /* LaunchScreen.storyboard in Resources */,
+				DB0A9059249B43B300FE0AFC /* Assets.xcassets in Resources */,
+				DB0A9057249B43B200FE0AFC /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB1EC3502491E305002379A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB1EC3582491E306002379A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBE0400B249343B000C5184D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DBE306A02474DF7B00EB7193 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -653,6 +1090,89 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1C756820B4C738C00A0BAB0C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CoreDataStack-CoreDataStackTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3BDCB2A2CB5663FA9A2A2B53 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Mailway-MailwayUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		59448E77BFCF5D434FC321F1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mailway-MailwayUITests/Pods-Mailway-MailwayUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mailway-MailwayUITests/Pods-Mailway-MailwayUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mailway-MailwayUITests/Pods-Mailway-MailwayUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6557FB577591564B681822FA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CoreDataStack-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		820F9D35C187C31A0BC305D8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -717,6 +1237,56 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DB0A9049249B43B200FE0AFC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB0A9054249B43B200FE0AFC /* ViewController.swift in Sources */,
+				DB0A9050249B43B200FE0AFC /* AppDelegate.swift in Sources */,
+				DB0A9052249B43B200FE0AFC /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB1EC34E2491E305002379A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB3050E6249B6FC700F361FC /* QuoteMessage.swift in Sources */,
+				DBB358742491FFBD00803C98 /* Contact.swift in Sources */,
+				DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */,
+				DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */,
+				DBB3586A2491ED9B00803C98 /* DarwinNotificationCenter.swift in Sources */,
+				DB6F9DA22498BFC800D39BAD /* ChatMemberNameStub.swift in Sources */,
+				DBB3586C2491EDE600803C98 /* DarwinNotification+Name.swift in Sources */,
+				DB1EC3732491E37D002379A1 /* Keypair.swift in Sources */,
+				DB1EC3722491E321002379A1 /* CoreDataStack.xcdatamodeld in Sources */,
+				DBB3586E2491EE8900803C98 /* NSPersistentContainer.swift in Sources */,
+				DBB358702491F76C00803C98 /* Managed.swift in Sources */,
+				DBE0405A24934E2800C5184D /* ManagedObjectContextObjectsDidChangeNotification.swift in Sources */,
+				DB6F9DA02498BE7700D39BAD /* Chat.swift in Sources */,
+				DB1EC3712491E317002379A1 /* CoreDataStack.swift in Sources */,
+				DBB358642491EC8D00803C98 /* URL.swift in Sources */,
+				DBB358762492128300803C98 /* NSManagedObjectContext.swift in Sources */,
+				DBE0405824934A3400C5184D /* ManagedObjectObserver.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB1EC3562491E306002379A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB1EC3622491E306002379A1 /* CoreDataStackTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBE04009249343B000C5184D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBE04010249343B000C5184D /* MailwayUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DBE3069E2474DF7B00EB7193 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -757,8 +1327,10 @@
 				DBE306D62474ED0700EB7193 /* AppCommand.swift in Sources */,
 				DB6DEC7F247F59E00040C817 /* Key.swift in Sources */,
 				DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */,
+				DBE040072492413600C5184D /* ContactDetailView.swift in Sources */,
 				DBE306CD2474E19200EB7193 /* SettingsView.swift in Sources */,
 				DB008AB22476750800CE6A7E /* CreateIdentityViewController.swift in Sources */,
+				DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */,
 				DB1EC2DB2488D8CE002379A1 /* MessageInboxViewController.swift in Sources */,
 				DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */,
 				DB7E1E43247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift in Sources */,
@@ -790,6 +1362,31 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DB0A9063249B43BA00FE0AFC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DB0A904C249B43B200FE0AFC /* CoreDataStackTestsHost */;
+			targetProxy = DB0A9062249B43BA00FE0AFC /* PBXContainerItemProxy */;
+		};
+		DB1EC35D2491E306002379A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DB1EC3512491E305002379A1 /* CoreDataStack */;
+			targetProxy = DB1EC35C2491E306002379A1 /* PBXContainerItemProxy */;
+		};
+		DB1EC35F2491E306002379A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DBE306A12474DF7B00EB7193 /* Mailway */;
+			targetProxy = DB1EC35E2491E306002379A1 /* PBXContainerItemProxy */;
+		};
+		DB1EC3662491E306002379A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DB1EC3512491E305002379A1 /* CoreDataStack */;
+			targetProxy = DB1EC3652491E306002379A1 /* PBXContainerItemProxy */;
+		};
+		DBE04013249343B000C5184D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DBE306A12474DF7B00EB7193 /* Mailway */;
+			targetProxy = DBE04012249343B000C5184D /* PBXContainerItemProxy */;
+		};
 		DBE306BA2474DF7C00EB7193 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DBE306A12474DF7B00EB7193 /* Mailway */;
@@ -798,6 +1395,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		DB0A9055249B43B200FE0AFC /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DB0A9056249B43B200FE0AFC /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		DB0A905A249B43B300FE0AFC /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DB0A905B249B43B300FE0AFC /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		DBE306B02474DF7C00EB7193 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -809,6 +1422,66 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		DB0A905E249B43B300FE0AFC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CoreDataStackTestsHost/CoreDataStackTestsHost.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = CoreDataStackTestsHost/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStackTestsHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DB0A905F249B43B300FE0AFC /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CoreDataStackTestsHost/CoreDataStackTestsHost.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = CoreDataStackTestsHost/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStackTestsHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Preview;
+		};
+		DB0A9060249B43B300FE0AFC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CoreDataStackTestsHost/CoreDataStackTestsHost.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = CoreDataStackTestsHost/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStackTestsHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		DB19388A2477901600E24AFB /* Preview */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -859,7 +1532,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -874,16 +1547,17 @@
 			baseConfigurationReference = E0A2D7AC41678E455B9A9D46 /* Pods-Mailway.preview.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mailway/Mailway.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
-				DEVELOPMENT_TEAM = A8K92XFF77;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.Mailway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -898,9 +1572,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A8K92XFF77;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = MailwayTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -913,6 +1586,210 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mailway.app/Mailway";
 			};
 			name = Preview;
+		};
+		DB1EC36A2491E306002379A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 594E7B83BA6531F29DE8CBA6 /* Pods-CoreDataStack.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CoreDataStack/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStack;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DB1EC36B2491E306002379A1 /* Preview */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9202EAB429AE26F11A087CDD /* Pods-CoreDataStack.preview.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CoreDataStack/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStack;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Preview;
+		};
+		DB1EC36C2491E306002379A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E59944970F08FAD6649D5F9D /* Pods-CoreDataStack.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CoreDataStack/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStack;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DB1EC36E2491E306002379A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBD2B0FD2CC72C48258443BA /* Pods-CoreDataStack-CoreDataStackTests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = CoreDataStackTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CoreDataStackTestsHost.app/CoreDataStackTestsHost";
+			};
+			name = Debug;
+		};
+		DB1EC36F2491E306002379A1 /* Preview */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98AE88E236A24E1CA217D48B /* Pods-CoreDataStack-CoreDataStackTests.preview.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = CoreDataStackTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CoreDataStackTestsHost.app/CoreDataStackTestsHost";
+			};
+			name = Preview;
+		};
+		DB1EC3702491E306002379A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9FEBF517E820C382AF6AD1E8 /* Pods-CoreDataStack-CoreDataStackTests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = CoreDataStackTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.CoreDataStackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CoreDataStackTestsHost.app/CoreDataStackTestsHost";
+			};
+			name = Release;
+		};
+		DBE04015249343B000C5184D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7E59C77ABD12EFBBA12F45D4 /* Pods-Mailway-MailwayUITests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = MailwayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.MailwayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mailway;
+			};
+			name = Debug;
+		};
+		DBE04016249343B000C5184D /* Preview */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 998F7855A45F95A063DF945F /* Pods-Mailway-MailwayUITests.preview.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = MailwayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.MailwayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mailway;
+			};
+			name = Preview;
+		};
+		DBE04017249343B000C5184D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF7B169EC2E11F0C3876537F /* Pods-Mailway-MailwayUITests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
+				INFOPLIST_FILE = MailwayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.MailwayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mailway;
+			};
+			name = Release;
 		};
 		DBE306BF2474DF7C00EB7193 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -964,7 +1841,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1018,7 +1895,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1033,16 +1910,17 @@
 			baseConfigurationReference = FFCA6A7E6F4A285CF3F09EB0 /* Pods-Mailway.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mailway/Mailway.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
-				DEVELOPMENT_TEAM = A8K92XFF77;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.Mailway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1055,16 +1933,17 @@
 			baseConfigurationReference = F9848F702657E08BA88B933D /* Pods-Mailway.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mailway/Mailway.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
-				DEVELOPMENT_TEAM = A8K92XFF77;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = im.dimension.Mailway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1079,9 +1958,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A8K92XFF77;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = MailwayTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1102,9 +1980,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A8K92XFF77;
+				DEVELOPMENT_TEAM = 7LFDZ96332;
 				INFOPLIST_FILE = MailwayTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1121,6 +1998,46 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DB0A9061249B43B300FE0AFC /* Build configuration list for PBXNativeTarget "CoreDataStackTestsHost" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB0A905E249B43B300FE0AFC /* Debug */,
+				DB0A905F249B43B300FE0AFC /* Preview */,
+				DB0A9060249B43B300FE0AFC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DB1EC3692491E306002379A1 /* Build configuration list for PBXNativeTarget "CoreDataStack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB1EC36A2491E306002379A1 /* Debug */,
+				DB1EC36B2491E306002379A1 /* Preview */,
+				DB1EC36C2491E306002379A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DB1EC36D2491E306002379A1 /* Build configuration list for PBXNativeTarget "CoreDataStackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB1EC36E2491E306002379A1 /* Debug */,
+				DB1EC36F2491E306002379A1 /* Preview */,
+				DB1EC3702491E306002379A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBE04014249343B000C5184D /* Build configuration list for PBXNativeTarget "MailwayUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBE04015249343B000C5184D /* Debug */,
+				DBE04016249343B000C5184D /* Preview */,
+				DBE04017249343B000C5184D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		DBE3069D2474DF7B00EB7193 /* Build configuration list for PBXProject "Mailway" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1152,6 +2069,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DB1EC3142490EDCA002379A1 /* CoreDataStack.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DB1EC3152490EDCA002379A1 /* Mailway.xcdatamodel */,
+			);
+			currentVersion = DB1EC3152490EDCA002379A1 /* Mailway.xcdatamodel */;
+			path = CoreDataStack.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = DBE3069A2474DF7B00EB7193 /* Project object */;
 }

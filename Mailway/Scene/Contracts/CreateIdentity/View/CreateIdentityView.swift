@@ -8,8 +8,9 @@
 
 import SwiftUI
 import Combine
+import CoreDataStack
 
-class CreateContractViewModel: ObservableObject {
+final class CreateContractViewModel: ObservableObject {
     
     var disposeBag = Set<AnyCancellable>()
     
@@ -19,7 +20,7 @@ class CreateContractViewModel: ObservableObject {
     @Published var note = ""    // optional
     
     // output
-    let contact = CurrentValueSubject<Contact?, Never>(nil)
+    let contactProperty = CurrentValueSubject<Contact.Property?, Never>(nil)
     
     init() {
         Publishers.CombineLatest3($name, $email, $note)
@@ -29,17 +30,18 @@ class CreateContractViewModel: ObservableObject {
                 
                 let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !name.isEmpty else {
-                    self.contact.value = nil
+                    self.contactProperty.value = nil
                     return
                 }
                 
-                var contact = Contact()
-                contact.name = name
-                contact.email = email.trimmingCharacters(in: .whitespacesAndNewlines)
-                contact.note = note.trimmingCharacters(in: .whitespacesAndNewlines)
-                contact.isIdentity = true
+                let contactProperty = Contact.Property(name: name)
+                //var contact = Contact()
+                //contact.name = name
+                //contact.email = email.trimmingCharacters(in: .whitespacesAndNewlines)
+                //contact.note = note.trimmingCharacters(in: .whitespacesAndNewlines)
+                //contact.isIdentity = true
                 
-                self.contact.value = contact
+                self.contactProperty.value = contactProperty
             }
             .store(in: &disposeBag)
     }

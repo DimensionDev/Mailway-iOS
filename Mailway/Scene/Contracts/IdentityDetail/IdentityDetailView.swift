@@ -10,7 +10,7 @@ import SwiftUI
 
 struct IdentityDetailView: View {
     
-    let identity: Contact
+//    let identity: Contact
     
     var body: some View {
         Text("Identity")

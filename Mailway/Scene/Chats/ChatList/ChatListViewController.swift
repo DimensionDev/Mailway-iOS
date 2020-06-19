@@ -24,9 +24,9 @@ final class ChatListViewModel: NSObject {
         self.context = context
         super.init()
 
-        context.documentStore.$chats
-            .assign(to: \.value, on: self.chats)
-            .store(in: &disposeBag)
+//        context.documentStore.$chats
+//            .assign(to: \.value, on: self.chats)
+//            .store(in: &disposeBag)
     }
     
 }
@@ -145,21 +145,21 @@ extension ChatListViewController {
 extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        guard let cell = tableView.cellForRow(at: indexPath) else  { return }
-        
-        if cell is ChatListInboxBannerTableViewCell {
-            coordinator.present(scene: .inbox, from: self, transition: .modal(animated: true, completion: nil))
-        }
-    
-        if cell is ChatListChatRoomTableViewCell, indexPath.row < viewModel.chats.value.count {
-            let chat = viewModel.chats.value[indexPath.row]
-            let chatViewModel = ChatViewModel(context: context, chat: chat)
-            chatViewModel.items.value = context.documentStore.chatMessages
-                .filter { chat.contains(message: $0) }
-                .map { ChatViewModel.Item.chatMessage($0) }
-            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
-        }
+//        tableView.deselectRow(at: indexPath, animated: true)
+//        guard let cell = tableView.cellForRow(at: indexPath) else  { return }
+//        
+//        if cell is ChatListInboxBannerTableViewCell {
+//            coordinator.present(scene: .inbox, from: self, transition: .modal(animated: true, completion: nil))
+//        }
+//    
+//        if cell is ChatListChatRoomTableViewCell, indexPath.row < viewModel.chats.value.count {
+//            let chat = viewModel.chats.value[indexPath.row]
+//            let chatViewModel = ChatViewModel(context: context, chat: chat)
+//            chatViewModel.items.value = context.documentStore.chatMessages
+//                .filter { chat.contains(message: $0) }
+//                .map { ChatViewModel.Item.chatMessage($0) }
+//            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
+//        }
     }
     
 }

@@ -6,16 +6,16 @@
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
-import Foundation
-
-typealias KeyID = String
-
-struct Key: Codable, Identifiable, Hashable {
-    
-    let id: UUID = UUID()
-    
-    var keyID: KeyID = ""
-    var privateKey: String = ""
-    var publicKey: String = ""
-    
-}
+//import Foundation
+//
+//typealias KeyID = String
+//
+//struct Key: Codable, Identifiable, Hashable {
+//    
+//    let id: UUID = UUID()
+//    
+//    var keyID: KeyID = ""
+//    var privateKey: String = ""
+//    var publicKey: String = ""
+//    
+//}
