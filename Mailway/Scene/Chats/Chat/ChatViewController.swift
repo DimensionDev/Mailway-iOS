@@ -10,6 +10,7 @@ import os
 import UIKit
 import Combine
 import NtgeCore
+import CoreDataStack
 
 final class ChatViewModel: NSObject {
     

@@ -59,7 +59,7 @@ extension Chat {
 
 extension Chat: Managed {
     public static var defaultSortDescriptors: [NSSortDescriptor] {
-        return [NSSortDescriptor(keyPath: \Chat.createdAt, ascending: true)]
+        return [NSSortDescriptor(keyPath: \Chat.updatedAt, ascending: true)]
     }
 }
 
