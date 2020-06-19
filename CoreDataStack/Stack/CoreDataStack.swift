@@ -57,6 +57,8 @@ public final class CoreDataStack {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
             
+            container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+
             os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, storeDescription.debugDescription)
         })
         return container

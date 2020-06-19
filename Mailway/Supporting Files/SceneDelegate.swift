@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
         
         #if PREVIEW
-        AppContext.shared.documentStore.setupPreview()
+        // AppContext.shared.documentStore.setupPreview()
         #endif
     }
 

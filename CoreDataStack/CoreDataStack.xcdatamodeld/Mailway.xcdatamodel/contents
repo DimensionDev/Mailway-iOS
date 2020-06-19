@@ -59,7 +59,6 @@
         <relationship name="contact" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="channels" inverseEntity="Contact"/>
     </entity>
     <entity name="Keypair" representedClassName=".Keypair" syncable="YES">
-        <attribute name="attribute" optional="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="keyID" attributeType="String"/>
@@ -68,7 +67,7 @@
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="contact" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="keypair" inverseEntity="Contact"/>
     </entity>
-    <entity name="QuoteMessage" representedClassName=".QuoteMessage" syncable="YES" codeGenerationType="class">
+    <entity name="QuoteMessage" representedClassName=".QuoteMessage" syncable="YES">
         <attribute name="digest" optional="YES" attributeType="Binary"/>
         <attribute name="digestDescription" optional="YES" attributeType="String"/>
         <attribute name="digestKind" transient="YES"/>
@@ -85,7 +84,7 @@
         <element name="ChatMessage" positionX="-45" positionY="72" width="128" height="283"/>
         <element name="Contact" positionX="-63" positionY="0" width="128" height="208"/>
         <element name="ContactChannel" positionX="-54" positionY="45" width="128" height="133"/>
-        <element name="Keypair" positionX="-63" positionY="-18" width="128" height="163"/>
-        <element name="QuoteMessage" positionX="-54" positionY="135" width="128" height="178"/>
+        <element name="Keypair" positionX="-63" positionY="-18" width="128" height="28"/>
+        <element name="QuoteMessage" positionX="-54" positionY="135" width="128" height="28"/>
     </elements>
 </model>

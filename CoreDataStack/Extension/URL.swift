@@ -15,7 +15,9 @@ public extension URL {
             fatalError("Shared file container could not be created.")
         }
         
-        return fileContainer.appendingPathComponent("\(databaseName).sqlite")
+        return fileContainer
+            .appendingPathComponent("Databases", isDirectory: true)
+            .appendingPathComponent("\(databaseName).sqlite")
     }
     
 }
