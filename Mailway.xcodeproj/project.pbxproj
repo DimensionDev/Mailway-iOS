@@ -44,7 +44,6 @@
 		DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */; };
 		DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF11247527D80001F9C0 /* FileStorage.swift */; };
 		DB60BF16247528E20001F9C0 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF15247528E10001F9C0 /* FileHelper.swift */; };
-		DB60BF18247529DB0001F9C0 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF17247529DB0001F9C0 /* Chat.swift */; };
 		DB60BF1A247534C70001F9C0 /* CreateChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF19247534C70001F9C0 /* CreateChatView.swift */; };
 		DB6DEC77247E4AA90040C817 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC76247E4AA90040C817 /* ChatViewController.swift */; };
 		DB6DEC79247E4E270040C817 /* SceneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC78247E4E270040C817 /* SceneCoordinator.swift */; };
@@ -576,6 +575,7 @@
 		DB7E1E54247CF0E8002FC90E /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				DB60BF17247529DB0001F9C0 /* Chat.swift */,
 				DBE306E12475184200EB7193 /* Contact.swift */,
 				DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */,
 				DB60BF19247534C70001F9C0 /* CreateChatView.swift */,
@@ -834,7 +834,6 @@
 		DBE306E32475184500EB7193 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DB60BF17247529DB0001F9C0 /* Chat.swift */,
 				DB6DEC7E247F59E00040C817 /* Key.swift */,
 				DBA5F9E9247F832900C9B552 /* ChatMessage.swift */,
 			);
@@ -1337,7 +1336,6 @@
 				DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */,
 				DB008AA9247661E300CE6A7E /* ContractListHeaderView.swift in Sources */,
 				DB6DEC84247F745F0040C817 /* ChatListChatRoomTableViewCell.swift in Sources */,
-				DB60BF18247529DB0001F9C0 /* Chat.swift in Sources */,
 				DB6DEC81247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift in Sources */,
 				DB1EC2E02488EB4C002379A1 /* ShareService.swift in Sources */,
 				DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */,

@@ -9,20 +9,40 @@
 import UIKit
 import SwiftUI
 import Combine
+import CoreData
+import CoreDataStack
 
 final class ChatListViewModel: NSObject {
     
     var disposeBag = Set<AnyCancellable>()
+    
+    let fetchedResultsController: NSFetchedResultsController<Chat>
 
     // input
     let context: AppContext
+    weak var tableView: UITableView?
     
     // output
-    let chats = CurrentValueSubject<[Chat], Never>([])
+    // let chats = CurrentValueSubject<[Chat], Never>([])
     
     init(context: AppContext) {
+        self.fetchedResultsController = {
+            let fetchRequest = Chat.sortedFetchRequest
+            fetchRequest.returnsObjectsAsFaults = false
+            fetchRequest.fetchBatchSize = 20
+            let controller = NSFetchedResultsController(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context.managedObjectContext,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            
+            return controller
+        }()
         self.context = context
         super.init()
+
+        fetchedResultsController.delegate = self
 
 //        context.documentStore.$chats
 //            .assign(to: \.value, on: self.chats)
@@ -32,9 +52,78 @@ final class ChatListViewModel: NSObject {
 }
 
 extension ChatListViewModel {
-    enum Section: CaseIterable {
-        case inboxBanner
-        case chats
+//    enum Section: CaseIterable {
+//        case inboxBanner
+//        case chats
+//    }
+}
+
+
+extension ChatListViewModel {
+    
+    static func configure(cell: ChatListChatRoomTableViewCell, with chat: Chat) {
+        cell.titleLabel.text = chat.title
+    }
+    
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension ChatListViewModel: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView?.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .update:
+            break
+        case .move:
+            break
+        case .delete:
+            tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else { fatalError("Index Path should be not nil") }
+            tableView?.insertRows(at: [newIndexPath], with: .fade)
+            
+        case .update:
+            guard let indexPath = indexPath else {
+                fatalError("Index Path should be not nil")
+            }
+            let chat = fetchedResultsController.object(at: indexPath)
+            guard let cell = tableView?.cellForRow(at: indexPath) as? ChatListChatRoomTableViewCell else {
+                return
+            }
+            
+            ChatListViewModel.configure(cell: cell, with: chat)
+            
+        case .move:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
+            
+            tableView?.deleteRows(at: [indexPath], with: .fade)
+            tableView?.insertRows(at: [newIndexPath], with: .fade)
+            
+        case .delete:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            tableView?.deleteRows(at: [indexPath], with: .fade)
+            
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.endUpdates()
     }
 }
 
@@ -42,40 +131,25 @@ extension ChatListViewModel {
 extension ChatListViewModel: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.allCases.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let section = Section.allCases[section]
-        switch section {
-        case .inboxBanner:
-            return 1
-        case .chats:
-            return chats.value.count
-        }
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let section = Section.allCases[indexPath.section]
-        let cell: UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatListChatRoomTableViewCell.self), for: indexPath) as! ChatListChatRoomTableViewCell
         
-        switch section {
-        case .inboxBanner:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatListInboxBannerTableViewCell.self), for: indexPath) as! ChatListInboxBannerTableViewCell
-            cell = _cell
-            
-        case .chats:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatListChatRoomTableViewCell.self), for: indexPath) as! ChatListChatRoomTableViewCell
-            cell = _cell
-            
-            let chat = chats.value[indexPath.row]
-            _cell.titleLabel.text = chat.title
-        }
+        let chat = fetchedResultsController.object(at: indexPath)
+        
+        ChatListViewModel.configure(cell: cell, with: chat)
         
         return cell
     }
     
 }
+
 
 final class ChatListViewController: UIViewController, NeedsDependency {
     
@@ -120,15 +194,18 @@ extension ChatListViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        viewModel.tableView = tableView
         tableView.delegate = self
+        try! viewModel.fetchedResultsController.performFetch()
         tableView.dataSource = viewModel
+        tableView.reloadData()
         
-        viewModel.chats
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.tableView.reloadData()
-            }
-            .store(in: &disposeBag)
+//        viewModel.chats
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] _ in
+//                self?.tableView.reloadData()
+//            }
+//            .store(in: &disposeBag)
     }
     
 }
