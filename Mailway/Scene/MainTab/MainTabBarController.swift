@@ -37,25 +37,26 @@ final class MainTabBarController: UITabBarController {
         }
         
         func viewController(context: AppContext, coordinator: SceneCoordinator) -> UIViewController {
+            let navigationController: UINavigationController
             switch self {
             case .chats:
                 let viewController = ChatListViewController()
                 viewController.context = context
                 viewController.coordinator = coordinator
-                return UINavigationController(rootViewController: viewController)
+                navigationController = UINavigationController(rootViewController: viewController)
             case .contacts:
                 let viewController = ContactListViewController()
                 viewController.context = context
                 viewController.coordinator = coordinator
-                return UINavigationController(rootViewController: viewController)
+                navigationController = UINavigationController(rootViewController: viewController)
             case .settings:
                 let viewController = SettingListViewController()
                 viewController.context = context
                 viewController.coordinator = coordinator
                 viewController.viewModel = SettingListViewModel()
-                return UINavigationController(rootViewController: viewController)
-                //return UIHostingController(rootView: SettingsView().environmentObject(context))
+                navigationController = UINavigationController(rootViewController: viewController)
             }
+            return navigationController
         }
     }
     
@@ -89,7 +90,7 @@ extension MainTabBarController {
         }
         setViewControllers(viewControllers, animated: false)
         selectedIndex = 0
-
+        tabBar.isHidden = true
     }
     
 }
