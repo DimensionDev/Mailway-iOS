@@ -151,10 +151,12 @@ extension ChatListViewModel: UITableViewDataSource {
 }
 
 
-final class ChatListViewController: UIViewController, NeedsDependency {
+final class ChatListViewController: UIViewController, NeedsDependency, MainTabTransitionableViewController {
     
-     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
-     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
+    private(set) var transitionController: MainTabTransitionController?
+    
+    weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
+    weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     var disposeBag = Set<AnyCancellable>()
     private(set) lazy var viewModel = ChatListViewModel(context: context)
@@ -183,6 +185,10 @@ extension ChatListViewController {
         super.viewDidLoad()
         
         title = "Chats"
+        navigationController.flatMap {
+            transitionController = MainTabTransitionController(navigationController: $0)
+            $0.delegate = transitionController
+        }
         navigationItem.rightBarButtonItem = composeBarButtonItem
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
