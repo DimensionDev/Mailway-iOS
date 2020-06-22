@@ -35,9 +35,9 @@ extension SidebarAnimatedTransitioning {
     }
     
     private func pushTransition(using transitionContext: UIViewControllerContextTransitioning, curve: UIView.AnimationCurve = .easeInOut) -> UIViewPropertyAnimator {
-        guard let fromVC = transitionContext.viewController(forKey: .from) as? MainTabTransitionableViewController,
+        guard let fromVC = transitionContext.viewController(forKey: .from) as? UISplitViewController,
         let toVC = transitionContext.viewController(forKey: .to) as? SidebarTransitionableViewController,
-        let fromView = transitionContext.view(forKey: .from),
+        let fromView = fromVC.viewControllers[0].view,
         let toView = transitionContext.view(forKey: .to) else {
             fatalError()
         }
@@ -63,7 +63,7 @@ extension SidebarAnimatedTransitioning {
         
         animator.addAnimations {
             toView.frame = toViewEndFrame
-            fromView.frame = fromViewEndFrame
+            // fromView.frame = fromViewEndFrame
         }
         
         animator.addCompletion { position in
