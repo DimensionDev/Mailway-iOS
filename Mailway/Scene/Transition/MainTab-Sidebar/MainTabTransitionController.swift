@@ -70,7 +70,7 @@ extension MainTabTransitionController: UIViewControllerTransitioningDelegate {
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return nil
+        return SidebarAnimatedTransitioning(operation: .pop, panGestureRecognizer: panGestureRecognizer)
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
@@ -89,6 +89,19 @@ final class SidebarPresentationController: UIPresentationController {
         view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         return view
     }()
+    
+    let tapGestureRecognizer: UITapGestureRecognizer = {
+        let gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.numberOfTouchesRequired = 1
+        return gestureRecognizer
+    }()
+    
+    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
+        
+        tapGestureRecognizer.addTarget(self, action: #selector(SidebarPresentationController.tap(_:)))
+        dimmingView.addGestureRecognizer(tapGestureRecognizer)
+    }
     
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let splitViewController = presentingViewController as? UISplitViewController,
@@ -123,6 +136,17 @@ final class SidebarPresentationController: UIPresentationController {
     override func containerViewWillLayoutSubviews() {
         dimmingView.frame = containerView!.bounds
         presentedView?.frame = frameOfPresentedViewInContainerView
+    }
+    
+}
+
+extension SidebarPresentationController {
+    @objc private func tap(_ sender: UITapGestureRecognizer) {
+        guard sender === tapGestureRecognizer, sender.state == .ended else {
+            return
+        }
+        
+        presentedViewController.dismiss(animated: true, completion: nil)
     }
 }
 

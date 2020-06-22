@@ -35,9 +35,8 @@ extension SidebarAnimatedTransitioning {
     }
     
     private func pushTransition(using transitionContext: UIViewControllerContextTransitioning, curve: UIView.AnimationCurve = .easeInOut) -> UIViewPropertyAnimator {
-        guard let fromVC = transitionContext.viewController(forKey: .from) as? UISplitViewController,
-        let toVC = transitionContext.viewController(forKey: .to) as? SidebarTransitionableViewController,
-        let fromView = fromVC.viewControllers[0].view,
+        // fromVC is split view controller
+        guard let toVC = transitionContext.viewController(forKey: .to) as? SidebarTransitionableViewController,
         let toView = transitionContext.view(forKey: .to) else {
             fatalError()
         }
@@ -48,22 +47,13 @@ extension SidebarAnimatedTransitioning {
                                       width: toView.bounds.width,
                                       height: toView.bounds.height)
         
-        let fromViewStartFrame = fromView.frame
-        let fromViewEndFrame = CGRect(x: fromViewStartFrame.origin.x + fromView.bounds.width,
-                                      y: 0,
-                                      width: fromView.bounds.width,
-                                      height: fromView.bounds.height)
-        
         transitionContext.containerView.addSubview(toView)
         toView.frame = toViewStartFrame
-        
-        // toView.layoutIfNeeded()
-        
+                
         let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext), curve: curve)
         
         animator.addAnimations {
             toView.frame = toViewEndFrame
-            // fromView.frame = fromViewEndFrame
         }
         
         animator.addCompletion { position in
@@ -74,11 +64,10 @@ extension SidebarAnimatedTransitioning {
     }
     
     private func popTransition(using transitionContext: UIViewControllerContextTransitioning, curve: UIView.AnimationCurve = .easeInOut) -> UIViewPropertyAnimator {
-        guard let fromVC = transitionContext.viewController(forKey: .from) as? SidebarTransitionableViewController,
-            let toVC = transitionContext.viewController(forKey: .to) as? MainTabTransitionableViewController,
-            let fromView = transitionContext.view(forKey: .from),
-            let toView = transitionContext.view(forKey: .to) else {
-                fatalError()
+        // toVC is split view controller
+        guard transitionContext.viewController(forKey: .from) is SidebarTransitionableViewController,
+        let fromView = transitionContext.view(forKey: .from) else {
+            fatalError()
         }
         
         let fromViewStartFrame = fromView.frame
@@ -87,19 +76,10 @@ extension SidebarAnimatedTransitioning {
                                       width: fromView.bounds.width,
                                       height: fromView.bounds.height)
         
-        let toViewEndFrame = transitionContext.finalFrame(for: toVC)
-        let toViewStartFrame = CGRect(x: toViewEndFrame.origin.x + toView.bounds.width,
-                                      y: toViewEndFrame.origin.y,
-                                      width: toView.bounds.width,
-                                      height: toView.bounds.height)
-        
-        transitionContext.containerView.insertSubview(toView, at: 0)
-        toView.frame = toViewStartFrame
         
         let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext), curve: curve)
         
         animator.addAnimations {
-            toView.frame = toViewEndFrame
             fromView.frame = fromViewEndFrame
         }
         
