@@ -110,6 +110,12 @@ extension CoreDataStackTests {
             XCTAssertEqual(contact.i18nNames["jp"], "アリス")
             XCTAssertNotNil(contact.keypair)
             XCTAssertEqual(contact.channels.count, 2)
+            let channel1 = contact.channels.object(at: 0) as? ContactChannel
+            let channel2 = contact.channels.object(at: 1) as? ContactChannel
+            XCTAssertEqual(channel1?.name, ContactChannel.Property.ChannelName.email.text)
+            XCTAssertEqual(channel1?.value, "alice@gmail.com")
+            XCTAssertEqual(channel2?.name, ContactChannel.Property.ChannelName.twitter.text)
+            XCTAssertEqual(channel2?.value, "@alice")
         } catch {
             XCTFail(error.localizedDescription)
         }

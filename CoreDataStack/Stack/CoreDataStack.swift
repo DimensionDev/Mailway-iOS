@@ -48,20 +48,11 @@ public final class CoreDataStack {
             let cloudDBId = "iCloud.com.Sujitech.MailWay"
             let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudDBId)
             container.persistentStoreDescriptions.first?.cloudKitContainerOptions = options
+            container.persistentStoreDescriptions.first?.setOption(true as NSNumber,
+            forKey: NSPersistentHistoryTrackingKey)
         }
         
-//        let container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
         container.persistentStoreDescriptions = storeDescriptions
-        
-        // get the store description
-        guard let description = container.persistentStoreDescriptions.first else {
-            fatalError("Could not retrieve a persistent store description.")
-        }
-        
-        description.setOption(true as NSNumber,
-        forKey: NSPersistentHistoryTrackingKey)
-
-        
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
