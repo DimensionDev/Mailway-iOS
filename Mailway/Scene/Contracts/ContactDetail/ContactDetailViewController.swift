@@ -62,6 +62,7 @@ final class ContactDetailViewController: UIViewController, NeedsDependency {
     var viewModel: ContactDetailViewModel!
     
     deinit {
+        try? context.managedObjectContext.setQueryGenerationFrom(nil)
         os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
     }
 
@@ -71,6 +72,8 @@ extension ContactDetailViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        try? context.managedObjectContext.setQueryGenerationFrom(.current)
         
         title = viewModel.contact.name
         view.backgroundColor = .systemBackground

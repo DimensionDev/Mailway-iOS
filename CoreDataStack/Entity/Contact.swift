@@ -114,7 +114,8 @@ extension Contact {
         contact.avatar = property.avatar
         
         contact.keypair = keypair
-        contact.mutableSetValue(forKey: #keyPath(Contact.channels)).addObjects(from: channels)
+        contact.channels = Set(channels)
+//        contact.mutableSetValue(forKey: #keyPath(Contact.channels)).addObjects(from: channels)
         return contact
     }
 }

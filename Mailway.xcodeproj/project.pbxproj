@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0664205BD215931E3936ADA9 /* Pods_MailwayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C6BC58A0529C9279CF81BB /* Pods_MailwayTests.framework */; };
+		83A3F11624A18FB0003C2F6B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83A3F11524A18FB0003C2F6B /* CloudKit.framework */; };
+		83A3F11C24A19D1A003C2F6B /* i18NameTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A3F11824A19932003C2F6B /* i18NameTransformer.swift */; };
+		83A3F11E24A19E52003C2F6B /* KeysTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A3F11D24A19E52003C2F6B /* KeysTransformer.swift */; };
 		8CC372AA66B4027AB258A4F8 /* Pods_CoreDataStack_CoreDataStackTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5578B35AB482B3750C00BB57 /* Pods_CoreDataStack_CoreDataStackTests.framework */; };
 		DB008AA9247661E300CE6A7E /* ContractListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB008AA8247661E300CE6A7E /* ContractListHeaderView.swift */; };
 		DB008AAB247666D200CE6A7E /* CreateIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB008AAA247666D200CE6A7E /* CreateIdentityView.swift */; };
@@ -169,6 +172,9 @@
 		5578B35AB482B3750C00BB57 /* Pods_CoreDataStack_CoreDataStackTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoreDataStack_CoreDataStackTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		594E7B83BA6531F29DE8CBA6 /* Pods-CoreDataStack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack.debug.xcconfig"; path = "Target Support Files/Pods-CoreDataStack/Pods-CoreDataStack.debug.xcconfig"; sourceTree = "<group>"; };
 		7E59C77ABD12EFBBA12F45D4 /* Pods-Mailway-MailwayUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mailway-MailwayUITests.debug.xcconfig"; path = "Target Support Files/Pods-Mailway-MailwayUITests/Pods-Mailway-MailwayUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		83A3F11524A18FB0003C2F6B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		83A3F11824A19932003C2F6B /* i18NameTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = i18NameTransformer.swift; sourceTree = "<group>"; };
+		83A3F11D24A19E52003C2F6B /* KeysTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysTransformer.swift; sourceTree = "<group>"; };
 		8CCB4CE81A6374375CBBA238 /* Pods-MailwayTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MailwayTests.release.xcconfig"; path = "Target Support Files/Pods-MailwayTests/Pods-MailwayTests.release.xcconfig"; sourceTree = "<group>"; };
 		9202EAB429AE26F11A087CDD /* Pods-CoreDataStack.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack.preview.xcconfig"; path = "Target Support Files/Pods-CoreDataStack/Pods-CoreDataStack.preview.xcconfig"; sourceTree = "<group>"; };
 		94DB2500F59B9188F77B2FB5 /* Pods_Mailway_MailwayUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mailway_MailwayUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -327,6 +333,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A3F11624A18FB0003C2F6B /* CloudKit.framework in Frameworks */,
 				DB1EC3672491E306002379A1 /* CoreDataStack.framework in Frameworks */,
 				E2F95B66FB323FDBB69C2628 /* Pods_Mailway.framework in Frameworks */,
 			);
@@ -365,9 +372,19 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		83A3F11724A1990B003C2F6B /* Transformer */ = {
+			isa = PBXGroup;
+			children = (
+				83A3F11824A19932003C2F6B /* i18NameTransformer.swift */,
+				83A3F11D24A19E52003C2F6B /* KeysTransformer.swift */,
+			);
+			path = Transformer;
+			sourceTree = "<group>";
+		};
 		D1EDC695C4255F18187835FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83A3F11524A18FB0003C2F6B /* CloudKit.framework */,
 				120DBBDC3992A36DD79719FE /* Pods_Mailway.framework */,
 				42C6BC58A0529C9279CF81BB /* Pods_MailwayTests.framework */,
 				F5C3BBBF30FADFD778EFFC27 /* Pods_CoreDataStack.framework */,
@@ -465,6 +482,7 @@
 		DB1EC3532491E305002379A1 /* CoreDataStack */ = {
 			isa = PBXGroup;
 			children = (
+				83A3F11724A1990B003C2F6B /* Transformer */,
 				DB1EC3552491E306002379A1 /* Info.plist */,
 				DB1EC3542491E305002379A1 /* CoreDataStack.h */,
 				DB2ABEBF249B319100B9C6CA /* UnitTestsPlan.xctestplan */,
@@ -1251,11 +1269,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB3050E6249B6FC700F361FC /* QuoteMessage.swift in Sources */,
+				83A3F11C24A19D1A003C2F6B /* i18NameTransformer.swift in Sources */,
 				DBB358742491FFBD00803C98 /* Contact.swift in Sources */,
 				DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */,
 				DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */,
 				DBB3586A2491ED9B00803C98 /* DarwinNotificationCenter.swift in Sources */,
 				DB6F9DA22498BFC800D39BAD /* ChatMemberNameStub.swift in Sources */,
+				83A3F11E24A19E52003C2F6B /* KeysTransformer.swift in Sources */,
 				DBB3586C2491EDE600803C98 /* DarwinNotification+Name.swift in Sources */,
 				DB1EC3732491E37D002379A1 /* Keypair.swift in Sources */,
 				DB1EC3722491E321002379A1 /* CoreDataStack.xcdatamodeld in Sources */,
@@ -1549,6 +1569,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
 				DEVELOPMENT_TEAM = 7LFDZ96332;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1912,6 +1933,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
 				DEVELOPMENT_TEAM = 7LFDZ96332;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1935,6 +1957,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
 				DEVELOPMENT_TEAM = 7LFDZ96332;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
