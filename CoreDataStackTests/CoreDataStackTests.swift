@@ -42,18 +42,10 @@ class CoreDataStackTests: XCTestCase {
 
 }
 
-extension CoreDataStackTests {
- 
-    func testCoreDataStackReset() {
-        coreDataStack.reset()
-    }
-    
-}
 
 extension CoreDataStackTests {
     
     func testCURDForContact() {
-        coreDataStack.reset()
 
         // init keypair
         let Ed25519Keypair = Ed25519.Keypair()
@@ -129,27 +121,12 @@ extension CoreDataStackTests {
 extension CoreDataStack {
     
     static let testable: CoreDataStack = {
-        let storeURL = URL.storeURL(for: "group.im.dimension.Mailway", databaseName: "CoreDataStack-Testable")
-        let storeDescription = NSPersistentStoreDescription(url: storeURL)
+        let storeDescription = NSPersistentStoreDescription()
+        
+        // Use in-memory store for test
+        storeDescription.type = NSInMemoryStoreType
         return CoreDataStack(persistentStoreDescriptions: [storeDescription])
     }()
     
-    func reset() {
-        let stores = persistentContainer.persistentStoreCoordinator.persistentStores
-        
-        for store in stores {
-            let storeURL = store.url!
-            
-            do {
-                try persistentContainer.persistentStoreCoordinator.remove(store)
-                try FileManager.default.removeItem(at: storeURL)
-                try persistentContainer.persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
-                os_log("%{public}s[%{public}ld], %{public}s: did reset database", ((#file as NSString).lastPathComponent), #line, #function)
-
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
-        }
-    }
     
 }
