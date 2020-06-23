@@ -151,14 +151,24 @@ extension ChatListViewModel: UITableViewDataSource {
 }
 
 
-final class ChatListViewController: UIViewController, NeedsDependency {
+final class ChatListViewController: UIViewController, NeedsDependency, MainTabTransitionableViewController {
     
-     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
-     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
+    private(set) var transitionController: MainTabTransitionController!
+    
+    weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
+    weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     var disposeBag = Set<AnyCancellable>()
     private(set) lazy var viewModel = ChatListViewModel(context: context)
 
+    private lazy var sidebarBarButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem()
+        item.image = UIImage(systemName: "list.dash")
+        item.target = self
+        item.action = #selector(ChatListViewController.sidebarBarButtonItemPressed(_:))
+        return item
+    }()
+    
     private lazy var composeBarButtonItem: UIBarButtonItem = {
         let item = UIBarButtonItem()
         item.image = UIImage(systemName: "square.and.pencil")
@@ -183,7 +193,9 @@ extension ChatListViewController {
         super.viewDidLoad()
         
         title = "Chats"
+        navigationItem.leftBarButtonItem = sidebarBarButtonItem
         navigationItem.rightBarButtonItem = composeBarButtonItem
+        transitionController = MainTabTransitionController(viewController: self)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -211,6 +223,10 @@ extension ChatListViewController {
 }
 
 extension ChatListViewController {
+    
+    @objc private func sidebarBarButtonItemPressed(_ sender: UIBarButtonItem) {
+        coordinator.present(scene: .sidebar, from: self, transition: .custom(transitioningDelegate: transitionController))
+    }
     
     @objc private func composeBarButtonItemPressed(_ sender: UIBarButtonItem) {
         coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
