@@ -50,9 +50,9 @@ public final class CoreDataStack {
         forKey: NSPersistentHistoryTrackingKey)
 
         // initialize the CloudKit schema
-//        let cloudDBId = "iCloud.com.Sujitech.MailWay"
-//        let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudDBId)
-//        description.cloudKitContainerOptions = options
+        let cloudDBId = "iCloud.com.Sujitech.MailWay"
+        let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudDBId)
+        description.cloudKitContainerOptions = options
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -71,6 +71,7 @@ public final class CoreDataStack {
             }
             
             container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+            container.viewContext.automaticallyMergesChangesFromParent = true
 
             os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, storeDescription.debugDescription)
         })
