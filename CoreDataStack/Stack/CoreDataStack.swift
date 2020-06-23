@@ -26,7 +26,7 @@ public final class CoreDataStack {
         self.storeDescriptions = storeDescriptions
     }
 
-    public private(set) lazy var persistentContainer: NSPersistentCloudKitContainer = {
+    public private(set) lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
@@ -38,7 +38,19 @@ public final class CoreDataStack {
             fatalError("cannot locate bundles")
         }
         
-        let container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
+        let container: NSPersistentContainer
+        
+        if storeDescriptions.first?.type == NSInMemoryStoreType {
+            container = NSPersistentContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
+        } else {
+            container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
+            // initialize the CloudKit schema
+            let cloudDBId = "iCloud.com.Sujitech.MailWay"
+            let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudDBId)
+            container.persistentStoreDescriptions.first?.cloudKitContainerOptions = options
+        }
+        
+//        let container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
         container.persistentStoreDescriptions = storeDescriptions
         
         // get the store description
@@ -49,10 +61,7 @@ public final class CoreDataStack {
         description.setOption(true as NSNumber,
         forKey: NSPersistentHistoryTrackingKey)
 
-        // initialize the CloudKit schema
-        let cloudDBId = "iCloud.com.Sujitech.MailWay"
-        let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudDBId)
-        description.cloudKitContainerOptions = options
+        
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
