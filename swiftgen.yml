@@ -1,0 +1,15 @@
+strings:
+  inputs: Mailway/Resources/en.lproj/Localizable.strings
+  outputs:
+    - templateName: structured-swift5
+      output: Mailway/Generated/strings.swift
+xcassets:
+  inputs: Mailway/Resources/Assets.xcassets
+  outputs:
+    templateName: swift5
+    output: Mailway/Generated/Assets.swift
+# fonts:
+#   inputs: Mailway/Resources/Fonts
+#   outputs:
+#     - templateName: swift5
+#       output: Mailway/Generated/Fonts.swift

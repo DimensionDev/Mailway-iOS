@@ -21,7 +21,6 @@ public final class CoreDataStack {
     
     private let storeDescriptions: [NSPersistentStoreDescription]
     
-    
     init(persistentStoreDescriptions storeDescriptions: [NSPersistentStoreDescription]) {
         self.storeDescriptions = storeDescriptions
     }

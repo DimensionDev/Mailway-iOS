@@ -238,11 +238,21 @@ extension ContactListViewModel: UITableViewDataSource {
     
 }
 
-final class ContactListViewController: UIViewController, NeedsDependency {
-    
+final class ContactListViewController: UIViewController, NeedsDependency, MainTabTransitionableViewController {
+
+    private(set) var transitionController: MainTabTransitionController!
+
     var disposeBag = Set<AnyCancellable>()
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
+    
+    private lazy var sidebarBarButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem()
+        item.image = UIImage(systemName: "list.dash")
+        item.target = self
+        item.action = #selector(ContactListViewController.sidebarBarButtonItemPressed(_:))
+        return item
+    }()
     
     private(set) lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -262,6 +272,8 @@ extension ContactListViewController {
         super.viewDidLoad()
         
         title = "Contacts"
+        transitionController = MainTabTransitionController(viewController: self)
+        navigationItem.leftBarButtonItem = sidebarBarButtonItem
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -284,6 +296,14 @@ extension ContactListViewController {
 //                self?.tableView.reloadData()
 //            }
 //            .store(in: &disposeBag)
+    }
+    
+}
+
+extension ContactListViewController {
+    
+    @objc private func sidebarBarButtonItemPressed(_ sender: UIBarButtonItem) {
+        coordinator.present(scene: .sidebar, from: self, transition: .custom(transitioningDelegate: transitionController))
     }
     
 }

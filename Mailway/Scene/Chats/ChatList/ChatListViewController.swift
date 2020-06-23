@@ -193,9 +193,9 @@ extension ChatListViewController {
         super.viewDidLoad()
         
         title = "Chats"
+        transitionController = MainTabTransitionController(viewController: self)
         navigationItem.leftBarButtonItem = sidebarBarButtonItem
         navigationItem.rightBarButtonItem = composeBarButtonItem
-        transitionController = MainTabTransitionController(viewController: self)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)

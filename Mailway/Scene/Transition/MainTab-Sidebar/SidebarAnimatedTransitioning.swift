@@ -44,11 +44,17 @@ extension SidebarAnimatedTransitioning {
         let toViewEndFrame = transitionContext.finalFrame(for: toVC)
         let toViewStartFrame = CGRect(x: toViewEndFrame.origin.x - toView.bounds.width,
                                       y: toViewEndFrame.origin.y,
-                                      width: toView.bounds.width,
-                                      height: toView.bounds.height)
+                                      width: toViewEndFrame.width,
+                                      height: toViewEndFrame.height)
         
         transitionContext.containerView.addSubview(toView)
         toView.frame = toViewStartFrame
+        
+        // fix custom presention container cause layout along with animation issue
+        UIView.performWithoutAnimation {
+            toView.setNeedsLayout()
+            toView.layoutIfNeeded()
+        }
                 
         let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext), curve: curve)
         

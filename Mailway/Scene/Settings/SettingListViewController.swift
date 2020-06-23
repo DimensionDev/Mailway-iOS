@@ -14,10 +14,20 @@ final class SettingListViewModel {
     var message = "root"
 }
 
-final class SettingListViewController: UIViewController, NeedsDependency {
+final class SettingListViewController: UIViewController, NeedsDependency, MainTabTransitionableViewController {
     
+    private(set) var transitionController: MainTabTransitionController!
+
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
+    
+    private lazy var sidebarBarButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem()
+        item.image = UIImage(systemName: "list.dash")
+        item.target = self
+        item.action = #selector(SettingListViewController.sidebarBarButtonItemPressed(_:))
+        return item
+    }()
     
     var viewModel: SettingListViewModel!
     
@@ -41,6 +51,9 @@ extension SettingListViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        title = "Settings"
+        transitionController = MainTabTransitionController(viewController: self)
+        navigationItem.leftBarButtonItem = sidebarBarButtonItem
         
         let count = viewModel.count
         let message = viewModel.message
@@ -81,7 +94,14 @@ extension SettingListViewController {
         detailButton.addTarget(self, action: #selector(SettingListViewController.detailButtonPressed(_:)), for: .touchUpInside)
     }
     
+}
+
+extension SettingListViewController {
     
+    @objc private func sidebarBarButtonItemPressed(_ sender: UIBarButtonItem) {
+        coordinator.present(scene: .sidebar, from: self, transition: .custom(transitioningDelegate: transitionController))
+    }
+
     @objc private func buttonPressed(_ sender: UIButton) {
         let vm = SettingListViewModel()
         vm.count = viewModel.count + 1
@@ -96,3 +116,4 @@ extension SettingListViewController {
         coordinator.present(scene: .setting(viewModel: vm), from: self, transition: .show)
     }
 }
+
