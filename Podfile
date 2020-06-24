@@ -23,6 +23,7 @@ target 'Mailway' do
   common_ntge
 
   pod 'GrowingTextView', '~> 0.7.2'
+  pod 'SwiftGen', '~> 6.2.0'
   pod 'UITextView+Placeholder', '~> 1.4.0'
 
   target 'MailwayTests' do

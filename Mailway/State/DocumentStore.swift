@@ -79,24 +79,26 @@ extension DocumentStore {
         // self.keys.append(contentsOf: keys)
         // self.contacts.append(contentsOf: contacts)
 
-        // setupChat()
-        
-        setupAlice(for: context)
-    }
-    
-    private func setupAlice(for context: NSManagedObjectContext) {
         do {
-            guard try context.count(for: Contact.sortedFetchRequest) == 0 else {
-                os_log("%{public}s[%{public}ld], %{public}s: skip setup alice", ((#file as NSString).lastPathComponent), #line, #function)
-                return
+            if try context.count(for: Contact.sortedFetchRequest) == 0 {
+                setupAlice(for: context)
+                setupBob(for: context)
+            } else {
+                os_log("%{public}s[%{public}ld], %{public}s: skip alice & bob setup", ((#file as NSString).lastPathComponent), #line, #function)
             }
             
-            // should setup alice
+            if try context.count(for: Chat.sortedFetchRequest) == 0 {
+                setupChat(for: context)
+            } else {
+                os_log("%{public}s[%{public}ld], %{public}s: skip chat setup", ((#file as NSString).lastPathComponent), #line, #function)
+            }
         } catch {
             assertionFailure()
             return
         }
-        
+    }
+    
+    private func setupAlice(for context: NSManagedObjectContext) {
         let (contactProperty, keypairProperty) = DocumentStore.alice
         
         var subscription: AnyCancellable?
@@ -112,9 +114,25 @@ extension DocumentStore {
             os_log("%{public}s[%{public}ld], %{public}s: setup alice: %s", ((#file as NSString).lastPathComponent), #line, #function, String(describing: result))
         })
     }
+    
+    private func setupBob(for context: NSManagedObjectContext) {
+        let (contactProperty, keypairProperty) = DocumentStore.bob
+        
+        var subscription: AnyCancellable?
+        subscription = context.performChanges {
+            let keypair = Keypair.insert(into: context, property: keypairProperty)
+            let twitterContactChannel = ContactChannel.insert(into: context, property: ContactChannel.Property(name: .twitter, value: "@bob"))
+            Contact.insert(into: context, property: contactProperty, keypair: keypair, channels: [twitterContactChannel])
+        }
+        .sink(receiveCompletion: { _ in
+            os_log("%{public}s[%{public}ld], %{public}s: finish subscription: %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+            subscription = nil
+        }, receiveValue: { result in
+            os_log("%{public}s[%{public}ld], %{public}s: setup bob: %s", ((#file as NSString).lastPathComponent), #line, #function, String(describing: result))
+        })
+    }
 
-//    // stub chat
-//    private func setupChat() {
+    private func setupChat(for context: NSManagedObjectContext) {
 //        let (alice, aliceKey) = DocumentStore.alice
 //        var (bob, bobKey) = DocumentStore.bob
 //
@@ -167,7 +185,7 @@ extension DocumentStore {
 //        self.keys.append(contentsOf: [aliceKey, bobKey])
 //        self.chats.append(chat)
 //        self.chatMessages.append(contentsOf: chatMessages)
-//    }
+    }
     
 }
 #endif
@@ -218,24 +236,22 @@ extension DocumentStore {
         return (contactProperty, keypairProperty)
     }
     
-//    static var bob: (Contact, Key) {
-//        var contact = Contact()
-//        contact.name = "Bob"
-//        contact.isIdentity = true
-//
-//        let privateKey = Ed25519.PrivateKey.deserialize(from: "pri1pu3uaqqvdyne0q92g09ls5u64kcupqy6ha2q6av3dnfgq94k4qdq85048p-Ed25519")!
-//        let publicKey = privateKey.publicKey
-//
-//        var key = Key()
-//        key.keyID = publicKey.keyID
-//        key.privateKey = privateKey.serialize()
-//        key.publicKey = publicKey.serialize()
-//
-//        contact.keyID = key.keyID
-//
-//        return (contact, key)
-//    }
-//
+    static var bob: (Contact.Property, Keypair.Property) {
+        let contactProperty = Contact.Property(name: "Bob",
+                                               i18nNames: ["en":"Bob", "zh": "不想成为鲍勃"],
+                                               note: "He is Bob.",
+                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"))
+        
+        
+        let ed25519PrivateKey = Ed25519.PrivateKey.deserialize(from: "pri1pu3uaqqvdyne0q92g09ls5u64kcupqy6ha2q6av3dnfgq94k4qdq85048p-Ed25519")!
+        let ed25519PublicKey = ed25519PrivateKey.publicKey
+        let keypairProperty = Keypair.Property(privateKey: nil,
+                                               publicKey: ed25519PublicKey.serialize(),
+                                               keyID: ed25519PublicKey.keyID)
+        
+        return (contactProperty, keypairProperty)
+    }
+
 //    static var sampleMessages: [String] = [
 //        "Hi, Alice",
 //        "How do you do?",

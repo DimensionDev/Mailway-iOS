@@ -57,7 +57,7 @@ extension SceneCoordinator {
         case showDetail                     // replace
         case modal(animated: Bool, completion: (() -> Void)? = nil)
         // case alert
-        // case custom
+        case custom(transitioningDelegate: UIViewControllerTransitioningDelegate)
     }
     
     enum Scene {
@@ -74,6 +74,9 @@ extension SceneCoordinator {
         
         // settings
         case setting(viewModel: SettingListViewModel)
+        
+        // sidebar
+        case sidebar
     }
 }
 
@@ -86,10 +89,11 @@ extension SceneCoordinator {
         sceneDelegate.window?.rootViewController = viewController
     }
     
-    func present(scene: Scene, from sender: UIViewController?, transition: Transition) {
+    @discardableResult
+    func present(scene: Scene, from sender: UIViewController?, transition: Transition) -> UIViewController? {
         let viewController = get(scene: scene)
         guard let presentingViewController = sender ?? sceneDelegate.window?.rootViewController else {
-            return
+            return nil
         }
         
         switch transition {
@@ -110,7 +114,14 @@ extension SceneCoordinator {
                 modalNavigationController.presentationController?.delegate = adaptivePresentationControllerDelegate
             }
             presentingViewController.present(modalNavigationController, animated: animated, completion: completion)
+            
+        case .custom(let transitioningDelegate):
+            viewController.modalPresentationStyle = .custom
+            viewController.transitioningDelegate = transitioningDelegate
+            sender?.present(viewController, animated: true, completion: nil)
         }
+        
+        return viewController
     }
 }
 
@@ -146,6 +157,8 @@ extension SceneCoordinator {
             let _viewController = SettingListViewController()
             _viewController.viewModel = viewModel
             viewController = _viewController
+        case .sidebar:
+            viewController = SidebarViewController()
         }
         
         setupDependency(for: viewController as? NeedsDependency)

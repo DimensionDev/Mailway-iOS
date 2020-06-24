@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0664205BD215931E3936ADA9 /* Pods_MailwayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C6BC58A0529C9279CF81BB /* Pods_MailwayTests.framework */; };
+		83A3F11624A18FB0003C2F6B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83A3F11524A18FB0003C2F6B /* CloudKit.framework */; };
+		83A3F11C24A19D1A003C2F6B /* i18NameTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A3F11824A19932003C2F6B /* i18NameTransformer.swift */; };
+		83A3F11E24A19E52003C2F6B /* KeysTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A3F11D24A19E52003C2F6B /* KeysTransformer.swift */; };
 		8CC372AA66B4027AB258A4F8 /* Pods_CoreDataStack_CoreDataStackTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5578B35AB482B3750C00BB57 /* Pods_CoreDataStack_CoreDataStackTests.framework */; };
 		DB008AA9247661E300CE6A7E /* ContractListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB008AA8247661E300CE6A7E /* ContractListHeaderView.swift */; };
 		DB008AAB247666D200CE6A7E /* CreateIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB008AAA247666D200CE6A7E /* CreateIdentityView.swift */; };
@@ -26,6 +29,18 @@
 		DB1938912477E4CD00E24AFB /* IdentityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1938902477E4CD00E24AFB /* IdentityDetailView.swift */; };
 		DB1938952477E8BA00E24AFB /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1938942477E8BA00E24AFB /* ContactListViewController.swift */; };
 		DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1B0135247D09E700098254 /* UIViewPreview.swift */; };
+		DB1E85D924A079A500B1558B /* MainTabTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85D824A079A500B1558B /* MainTabTransitionController.swift */; };
+		DB1E85DD24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85DB24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift */; };
+		DB1E85DE24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85DC24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift */; };
+		DB1E85E024A081A900B1558B /* SidebarAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85DF24A081A900B1558B /* SidebarAnimatedTransitioning.swift */; };
+		DB1E85E324A0858600B1558B /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85E224A0858600B1558B /* CGPoint.swift */; };
+		DB1E85E524A085A200B1558B /* CGVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85E424A085A200B1558B /* CGVector.swift */; };
+		DB1E85E724A092D200B1558B /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85E624A092D200B1558B /* SidebarViewController.swift */; };
+		DB1E85F824A1F24D00B1558B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DB1E85FA24A1F24D00B1558B /* Localizable.strings */; };
+		DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85FB24A1F67C00B1558B /* SidebarEntryTableViewCell.swift */; };
+		DB1E860124A1FB2B00B1558B /* strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85FF24A1FB2B00B1558B /* strings.swift */; };
+		DB1E860224A1FB2B00B1558B /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E860024A1FB2B00B1558B /* Assets.swift */; };
+		DB1E860424A2189200B1558B /* SidebarPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E860324A2189200B1558B /* SidebarPresentationController.swift */; };
 		DB1EC2D924879936002379A1 /* SettingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2D824879936002379A1 /* SettingListViewController.swift */; };
 		DB1EC2DB2488D8CE002379A1 /* MessageInboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2DA2488D8CE002379A1 /* MessageInboxViewController.swift */; };
 		DB1EC2DE2488E591002379A1 /* HitTestExpandedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */; };
@@ -44,7 +59,6 @@
 		DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */; };
 		DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF11247527D80001F9C0 /* FileStorage.swift */; };
 		DB60BF16247528E20001F9C0 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF15247528E10001F9C0 /* FileHelper.swift */; };
-		DB60BF18247529DB0001F9C0 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF17247529DB0001F9C0 /* Chat.swift */; };
 		DB60BF1A247534C70001F9C0 /* CreateChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF19247534C70001F9C0 /* CreateChatView.swift */; };
 		DB6DEC77247E4AA90040C817 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC76247E4AA90040C817 /* ChatViewController.swift */; };
 		DB6DEC79247E4E270040C817 /* SceneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC78247E4E270040C817 /* SceneCoordinator.swift */; };
@@ -170,6 +184,9 @@
 		5578B35AB482B3750C00BB57 /* Pods_CoreDataStack_CoreDataStackTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoreDataStack_CoreDataStackTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		594E7B83BA6531F29DE8CBA6 /* Pods-CoreDataStack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack.debug.xcconfig"; path = "Target Support Files/Pods-CoreDataStack/Pods-CoreDataStack.debug.xcconfig"; sourceTree = "<group>"; };
 		7E59C77ABD12EFBBA12F45D4 /* Pods-Mailway-MailwayUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mailway-MailwayUITests.debug.xcconfig"; path = "Target Support Files/Pods-Mailway-MailwayUITests/Pods-Mailway-MailwayUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		83A3F11524A18FB0003C2F6B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		83A3F11824A19932003C2F6B /* i18NameTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = i18NameTransformer.swift; sourceTree = "<group>"; };
+		83A3F11D24A19E52003C2F6B /* KeysTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysTransformer.swift; sourceTree = "<group>"; };
 		8CCB4CE81A6374375CBBA238 /* Pods-MailwayTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MailwayTests.release.xcconfig"; path = "Target Support Files/Pods-MailwayTests/Pods-MailwayTests.release.xcconfig"; sourceTree = "<group>"; };
 		9202EAB429AE26F11A087CDD /* Pods-CoreDataStack.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreDataStack.preview.xcconfig"; path = "Target Support Files/Pods-CoreDataStack/Pods-CoreDataStack.preview.xcconfig"; sourceTree = "<group>"; };
 		94DB2500F59B9188F77B2FB5 /* Pods_Mailway_MailwayUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mailway_MailwayUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,6 +214,18 @@
 		DB1938902477E4CD00E24AFB /* IdentityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityDetailView.swift; sourceTree = "<group>"; };
 		DB1938942477E8BA00E24AFB /* ContactListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
 		DB1B0135247D09E700098254 /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
+		DB1E85D824A079A500B1558B /* MainTabTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabTransitionController.swift; sourceTree = "<group>"; };
+		DB1E85DB24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		DB1E85DC24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerAnimatedTransitioningDelegate.swift; sourceTree = "<group>"; };
+		DB1E85DF24A081A900B1558B /* SidebarAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		DB1E85E224A0858600B1558B /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
+		DB1E85E424A085A200B1558B /* CGVector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGVector.swift; sourceTree = "<group>"; };
+		DB1E85E624A092D200B1558B /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
+		DB1E85F924A1F24D00B1558B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DB1E85FB24A1F67C00B1558B /* SidebarEntryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarEntryTableViewCell.swift; sourceTree = "<group>"; };
+		DB1E85FF24A1FB2B00B1558B /* strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = strings.swift; sourceTree = "<group>"; };
+		DB1E860024A1FB2B00B1558B /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		DB1E860324A2189200B1558B /* SidebarPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarPresentationController.swift; sourceTree = "<group>"; };
 		DB1EC2D824879936002379A1 /* SettingListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListViewController.swift; sourceTree = "<group>"; };
 		DB1EC2DA2488D8CE002379A1 /* MessageInboxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInboxViewController.swift; sourceTree = "<group>"; };
 		DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HitTestExpandedButton.swift; sourceTree = "<group>"; };
@@ -328,6 +357,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A3F11624A18FB0003C2F6B /* CloudKit.framework in Frameworks */,
 				DB1EC3672491E306002379A1 /* CoreDataStack.framework in Frameworks */,
 				E2F95B66FB323FDBB69C2628 /* Pods_Mailway.framework in Frameworks */,
 			);
@@ -366,9 +396,19 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		83A3F11724A1990B003C2F6B /* Transformer */ = {
+			isa = PBXGroup;
+			children = (
+				83A3F11824A19932003C2F6B /* i18NameTransformer.swift */,
+				83A3F11D24A19E52003C2F6B /* KeysTransformer.swift */,
+			);
+			path = Transformer;
+			sourceTree = "<group>";
+		};
 		D1EDC695C4255F18187835FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83A3F11524A18FB0003C2F6B /* CloudKit.framework */,
 				120DBBDC3992A36DD79719FE /* Pods_Mailway.framework */,
 				42C6BC58A0529C9279CF81BB /* Pods_MailwayTests.framework */,
 				F5C3BBBF30FADFD778EFFC27 /* Pods_CoreDataStack.framework */,
@@ -447,6 +487,62 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		DB1E85DA24A079B300B1558B /* Transition */ = {
+			isa = PBXGroup;
+			children = (
+				DB1E85DB24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift */,
+				DB1E85DC24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift */,
+				DB1E85E124A082BD00B1558B /* MainTab-Sidebar */,
+			);
+			path = Transition;
+			sourceTree = "<group>";
+		};
+		DB1E85E124A082BD00B1558B /* MainTab-Sidebar */ = {
+			isa = PBXGroup;
+			children = (
+				DB1E85D824A079A500B1558B /* MainTabTransitionController.swift */,
+				DB1E85DF24A081A900B1558B /* SidebarAnimatedTransitioning.swift */,
+				DB1E860324A2189200B1558B /* SidebarPresentationController.swift */,
+			);
+			path = "MainTab-Sidebar";
+			sourceTree = "<group>";
+		};
+		DB1E85E824A092D600B1558B /* Sidebar */ = {
+			isa = PBXGroup;
+			children = (
+				DB1E85FD24A1F69C00B1558B /* View */,
+				DB1E85E624A092D200B1558B /* SidebarViewController.swift */,
+			);
+			path = Sidebar;
+			sourceTree = "<group>";
+		};
+		DB1E85F624A1EBFE00B1558B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DBE306AB2474DF7C00EB7193 /* Assets.xcassets */,
+				DBE306B02474DF7C00EB7193 /* LaunchScreen.storyboard */,
+				DB1E85FA24A1F24D00B1558B /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DB1E85FD24A1F69C00B1558B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DB1E85FB24A1F67C00B1558B /* SidebarEntryTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DB1E85FE24A1FB2B00B1558B /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				DB1E85FF24A1FB2B00B1558B /* strings.swift */,
+				DB1E860024A1FB2B00B1558B /* Assets.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
 		DB1EC2DC2488D8D2002379A1 /* MessageInbox */ = {
 			isa = PBXGroup;
 			children = (
@@ -466,6 +562,7 @@
 		DB1EC3532491E305002379A1 /* CoreDataStack */ = {
 			isa = PBXGroup;
 			children = (
+				83A3F11724A1990B003C2F6B /* Transformer */,
 				DB1EC3552491E306002379A1 /* Info.plist */,
 				DB1EC3542491E305002379A1 /* CoreDataStack.h */,
 				DB2ABEBF249B319100B9C6CA /* UnitTestsPlan.xctestplan */,
@@ -492,6 +589,8 @@
 			isa = PBXGroup;
 			children = (
 				DB28139F2484F64A001CDD19 /* NSLayoutConstraint.swift */,
+				DB1E85E224A0858600B1558B /* CGPoint.swift */,
+				DB1E85E424A085A200B1558B /* CGVector.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -520,8 +619,6 @@
 				DBE306A52474DF7B00EB7193 /* AppDelegate.swift */,
 				DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */,
 				DB6DEC78247E4E270040C817 /* SceneCoordinator.swift */,
-				DBE306AB2474DF7C00EB7193 /* Assets.xcassets */,
-				DBE306B02474DF7C00EB7193 /* LaunchScreen.storyboard */,
 				DB2ABEBD249B30AD00B9C6CA /* UnitTestsPlan.xctestplan */,
 				DB2ABEBE249B30CE00B9C6CA /* UITestsPlan.xctestplan */,
 			);
@@ -576,6 +673,7 @@
 		DB7E1E54247CF0E8002FC90E /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				DB60BF17247529DB0001F9C0 /* Chat.swift */,
 				DBE306E12475184200EB7193 /* Contact.swift */,
 				DBB9811324863DAA00FB2FE8 /* ChatRootSplitViewController.swift */,
 				DB60BF19247534C70001F9C0 /* CreateChatView.swift */,
@@ -741,6 +839,8 @@
 				DB60BF13247527DC0001F9C0 /* Vender */,
 				DB2813A12484F64D001CDD19 /* Extension */,
 				DBE306AD2474DF7C00EB7193 /* Preview Content */,
+				DB1E85FE24A1FB2B00B1558B /* Generated */,
+				DB1E85F624A1EBFE00B1558B /* Resources */,
 				DB60BF14247527EC0001F9C0 /* Supporting Files */,
 			);
 			path = Mailway;
@@ -767,8 +867,10 @@
 		DBE306C92474E11B00EB7193 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				DB1E85DA24A079B300B1558B /* Transition */,
 				DBB981172486452F00FB2FE8 /* Root */,
 				DBE306DB2474EDC800EB7193 /* MainTab */,
+				DB1E85E824A092D600B1558B /* Sidebar */,
 				DBE306DD2474EDD700EB7193 /* Chats */,
 				DBE306DC2474EDD000EB7193 /* Contracts */,
 				DBE306DE2474EDDD00EB7193 /* Settings */,
@@ -834,7 +936,6 @@
 		DBE306E32475184500EB7193 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DB60BF17247529DB0001F9C0 /* Chat.swift */,
 				DB6DEC7E247F59E00040C817 /* Key.swift */,
 				DBA5F9E9247F832900C9B552 /* ChatMessage.swift */,
 			);
@@ -952,6 +1053,7 @@
 				DBE306A02474DF7B00EB7193 /* Resources */,
 				DB7E1E48247BCA55002FC90E /* Embed Frameworks */,
 				9EDCBC75796D7AC5B0DE67A9 /* [CP] Embed Pods Frameworks */,
+				DB1E85F724A1ED1500B1558B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1075,6 +1177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBE306B22474DF7C00EB7193 /* LaunchScreen.storyboard in Resources */,
+				DB1E85F824A1F24D00B1558B /* Localizable.strings in Resources */,
 				DBE306AF2474DF7C00EB7193 /* Preview Assets.xcassets in Resources */,
 				DBE306AC2474DF7C00EB7193 /* Assets.xcassets in Resources */,
 			);
@@ -1212,6 +1315,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mailway/Pods-Mailway-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DB1E85F724A1ED1500B1558B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ -f \"${PODS_ROOT}/SwiftGen/bin/swiftgen\" ]]; then\n  \"${PODS_ROOT}/SwiftGen/bin/swiftgen\"\nelse\n  echo \"warning: SwiftGen is not installed. Run 'pod install --repo-update' to install it.\"\nfi\n";
+		};
 		EB18CC82DA7099E7C709396A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1252,11 +1372,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB3050E6249B6FC700F361FC /* QuoteMessage.swift in Sources */,
+				83A3F11C24A19D1A003C2F6B /* i18NameTransformer.swift in Sources */,
 				DBB358742491FFBD00803C98 /* Contact.swift in Sources */,
 				DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */,
 				DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */,
 				DBB3586A2491ED9B00803C98 /* DarwinNotificationCenter.swift in Sources */,
 				DB6F9DA22498BFC800D39BAD /* ChatMemberNameStub.swift in Sources */,
+				83A3F11E24A19E52003C2F6B /* KeysTransformer.swift in Sources */,
 				DBB3586C2491EDE600803C98 /* DarwinNotification+Name.swift in Sources */,
 				DB1EC3732491E37D002379A1 /* Keypair.swift in Sources */,
 				DB1EC3722491E321002379A1 /* CoreDataStack.xcdatamodeld in Sources */,
@@ -1300,6 +1422,7 @@
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
 				DB19388E2477BD1D00E24AFB /* IdentitiesListView.swift in Sources */,
 				DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */,
+				DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */,
 				DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */,
 				DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */,
 				DB008AB02476737100CE6A7E /* ViewStata+Contacts.swift in Sources */,
@@ -1311,9 +1434,12 @@
 				DB60BF1A247534C70001F9C0 /* CreateChatView.swift in Sources */,
 				DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */,
 				DB7E1E3C247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift in Sources */,
+				DB1E860424A2189200B1558B /* SidebarPresentationController.swift in Sources */,
 				DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */,
 				DBE306D72474ED0700EB7193 /* AppError.swift in Sources */,
+				DB1E860124A1FB2B00B1558B /* strings.swift in Sources */,
 				DB8B48042484DA9F002D4912 /* ContactInfoView.swift in Sources */,
+				DB1E85E324A0858600B1558B /* CGPoint.swift in Sources */,
 				DBE306E22475184200EB7193 /* Contact.swift in Sources */,
 				DBA5F9EC247F90B700C9B552 /* ChatMessageTableViewCell.swift in Sources */,
 				DBA5F9EA247F832900C9B552 /* ChatMessage.swift in Sources */,
@@ -1324,8 +1450,10 @@
 				DBE306E524751AAD00EB7193 /* ViewState+ChatsView.swift in Sources */,
 				DBE306D12474ECE100EB7193 /* ViewStateStore.swift in Sources */,
 				DB6DEC77247E4AA90040C817 /* ChatViewController.swift in Sources */,
+				DB1E85E724A092D200B1558B /* SidebarViewController.swift in Sources */,
 				DBE306D62474ED0700EB7193 /* AppCommand.swift in Sources */,
 				DB6DEC7F247F59E00040C817 /* Key.swift in Sources */,
+				DB1E85D924A079A500B1558B /* MainTabTransitionController.swift in Sources */,
 				DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */,
 				DBE040072492413600C5184D /* ContactDetailView.swift in Sources */,
 				DBE306CD2474E19200EB7193 /* SettingsView.swift in Sources */,
@@ -1333,17 +1461,21 @@
 				DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */,
 				DB1EC2DB2488D8CE002379A1 /* MessageInboxViewController.swift in Sources */,
 				DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */,
+				DB1E85E524A085A200B1558B /* CGVector.swift in Sources */,
 				DB7E1E43247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift in Sources */,
 				DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */,
 				DB008AA9247661E300CE6A7E /* ContractListHeaderView.swift in Sources */,
 				DB6DEC84247F745F0040C817 /* ChatListChatRoomTableViewCell.swift in Sources */,
-				DB60BF18247529DB0001F9C0 /* Chat.swift in Sources */,
 				DB6DEC81247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift in Sources */,
+				DB1E85DE24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift in Sources */,
 				DB1EC2E02488EB4C002379A1 /* ShareService.swift in Sources */,
 				DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */,
+				DB1E860224A1FB2B00B1558B /* Assets.swift in Sources */,
 				DB60BF16247528E20001F9C0 /* FileHelper.swift in Sources */,
+				DB1E85DD24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift in Sources */,
 				DB1938912477E4CD00E24AFB /* IdentityDetailView.swift in Sources */,
 				DB4B9CA82480C3B1009F06BE /* MessageInputView.swift in Sources */,
+				DB1E85E024A081A900B1558B /* SidebarAnimatedTransitioning.swift in Sources */,
 				DBE306C82474E11500EB7193 /* ContactsView.swift in Sources */,
 				DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */,
 				DBE306CF2474EA7500EB7193 /* AppContext.swift in Sources */,
@@ -1409,6 +1541,14 @@
 				DB0A905B249B43B300FE0AFC /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		DB1E85FA24A1F24D00B1558B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DB1E85F924A1F24D00B1558B /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		DBE306B02474DF7C00EB7193 /* LaunchScreen.storyboard */ = {
@@ -1551,6 +1691,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
 				DEVELOPMENT_TEAM = 7LFDZ96332;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1914,6 +2055,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
 				DEVELOPMENT_TEAM = 7LFDZ96332;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1937,6 +2079,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mailway/Preview Content\"";
 				DEVELOPMENT_TEAM = 7LFDZ96332;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mailway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

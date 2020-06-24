@@ -8,14 +8,17 @@
 
 import UIKit
 import SwiftUI
-
-// Use UIKit TabBarController to avoid SwiftUI.TabView deinit the tab when switching issue
+import Combine
+    
+// Use UIKit UITabBarController to avoid the SwiftUI TabView deinit the tab when switching tab issue
 final class MainTabBarController: UITabBarController {
+    
+    var disposeBag = Set<AnyCancellable>()
         
     weak var context: AppContext!
     weak var coordinator: SceneCoordinator!
     
-    enum Tabs: CaseIterable {
+    enum Tabs: Int, CaseIterable {
         case chats
         case contacts
         case settings
@@ -37,25 +40,26 @@ final class MainTabBarController: UITabBarController {
         }
         
         func viewController(context: AppContext, coordinator: SceneCoordinator) -> UIViewController {
+            let navigationController: UINavigationController
             switch self {
             case .chats:
                 let viewController = ChatListViewController()
                 viewController.context = context
                 viewController.coordinator = coordinator
-                return UINavigationController(rootViewController: viewController)
+                navigationController = UINavigationController(rootViewController: viewController)
             case .contacts:
                 let viewController = ContactListViewController()
                 viewController.context = context
                 viewController.coordinator = coordinator
-                return UINavigationController(rootViewController: viewController)
+                navigationController = UINavigationController(rootViewController: viewController)
             case .settings:
                 let viewController = SettingListViewController()
                 viewController.context = context
                 viewController.coordinator = coordinator
                 viewController.viewModel = SettingListViewModel()
-                return UINavigationController(rootViewController: viewController)
-                //return UIHostingController(rootView: SettingsView().environmentObject(context))
+                navigationController = UINavigationController(rootViewController: viewController)
             }
+            return navigationController
         }
     }
     
@@ -64,6 +68,26 @@ final class MainTabBarController: UITabBarController {
         self.context = context
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
+        
+        NotificationCenter.default.publisher(for: SidebarViewController.didSelectEntry)
+            .sink { [weak self] notification in
+                guard let `self` = self else { return }
+                guard let entry = notification.object as? SidebarViewController.Entry else {
+                    return
+                }
+                
+                switch entry {
+                case .inbox:
+                    self.selectedIndex = Tabs.chats.rawValue
+                case .contacts:
+                    self.selectedIndex = Tabs.contacts.rawValue
+                case .settings:
+                    self.selectedIndex = Tabs.settings.rawValue
+                default:
+                    break   // TODO:
+                }
+            }
+            .store(in: &disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -89,7 +113,7 @@ extension MainTabBarController {
         }
         setViewControllers(viewControllers, animated: false)
         selectedIndex = 0
-
+        tabBar.isHidden = true
     }
     
 }

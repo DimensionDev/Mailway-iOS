@@ -42,18 +42,10 @@ class CoreDataStackTests: XCTestCase {
 
 }
 
-extension CoreDataStackTests {
- 
-    func testCoreDataStackReset() {
-        coreDataStack.reset()
-    }
-    
-}
 
 extension CoreDataStackTests {
     
     func testCURDForContact() {
-        coreDataStack.reset()
 
         // init keypair
         let Ed25519Keypair = Ed25519.Keypair()
@@ -118,6 +110,12 @@ extension CoreDataStackTests {
             XCTAssertEqual(contact.i18nNames["jp"], "アリス")
             XCTAssertNotNil(contact.keypair)
             XCTAssertEqual(contact.channels.count, 2)
+            let channel1 = contact.channels.object(at: 0) as? ContactChannel
+            let channel2 = contact.channels.object(at: 1) as? ContactChannel
+            XCTAssertEqual(channel1?.name, ContactChannel.Property.ChannelName.email.text)
+            XCTAssertEqual(channel1?.value, "alice@gmail.com")
+            XCTAssertEqual(channel2?.name, ContactChannel.Property.ChannelName.twitter.text)
+            XCTAssertEqual(channel2?.value, "@alice")
         } catch {
             XCTFail(error.localizedDescription)
         }
@@ -129,27 +127,12 @@ extension CoreDataStackTests {
 extension CoreDataStack {
     
     static let testable: CoreDataStack = {
-        let storeURL = URL.storeURL(for: "group.im.dimension.Mailway", databaseName: "CoreDataStack-Testable")
-        let storeDescription = NSPersistentStoreDescription(url: storeURL)
+        let storeDescription = NSPersistentStoreDescription()
+        
+        // Use in-memory store for test
+        storeDescription.type = NSInMemoryStoreType
         return CoreDataStack(persistentStoreDescriptions: [storeDescription])
     }()
     
-    func reset() {
-        let stores = persistentContainer.persistentStoreCoordinator.persistentStores
-        
-        for store in stores {
-            let storeURL = store.url!
-            
-            do {
-                try persistentContainer.persistentStoreCoordinator.remove(store)
-                try FileManager.default.removeItem(at: storeURL)
-                try persistentContainer.persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
-                os_log("%{public}s[%{public}ld], %{public}s: did reset database", ((#file as NSString).lastPathComponent), #line, #function)
-
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
-        }
-    }
     
 }

@@ -10,6 +10,7 @@ import os
 import UIKit
 import Combine
 import NtgeCore
+import CoreDataStack
 
 final class ChatViewModel: NSObject {
     
@@ -276,7 +277,6 @@ extension ChatViewController {
         
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification, object: nil)
             .sink { notification in
-                // os_log("%{public}s[%{public}ld], %{public}s: keyboardWillShowNotification %s", ((#file as NSString).lastPathComponent), #line, #function, notification.debugDescription)
 
                 guard let beginFrame = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect,
                 let endFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {

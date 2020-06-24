@@ -89,7 +89,7 @@ final public class Contact: NSManagedObject {
     // one-to-one keypair
     @NSManaged public private(set) var keypair: Keypair
     // one-to-many relationship
-    @NSManaged public private(set) var channels: Set<ContactChannel>
+    @NSManaged public private(set) var channels: NSOrderedSet
     
 }
 
@@ -114,7 +114,8 @@ extension Contact {
         contact.avatar = property.avatar
         
         contact.keypair = keypair
-        contact.mutableSetValue(forKey: #keyPath(Contact.channels)).addObjects(from: channels)
+        contact.channels = NSOrderedSet(array: channels)
+//        contact.mutableSetValue(forKey: #keyPath(Contact.channels)).addObjects(from: channels)
         return contact
     }
 }

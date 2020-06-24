@@ -21,12 +21,11 @@ public final class CoreDataStack {
     
     private let storeDescriptions: [NSPersistentStoreDescription]
     
-    
     init(persistentStoreDescriptions storeDescriptions: [NSPersistentStoreDescription]) {
         self.storeDescriptions = storeDescriptions
     }
 
-    public private(set) lazy var persistentContainer: NSPersistentCloudKitContainer = {
+    public private(set) lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
@@ -38,7 +37,20 @@ public final class CoreDataStack {
             fatalError("cannot locate bundles")
         }
         
-        let container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
+        let container: NSPersistentContainer
+        
+        if storeDescriptions.first?.type == NSInMemoryStoreType {
+            container = NSPersistentContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
+        } else {
+            container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
+            // initialize the CloudKit schema
+            let cloudDBId = "iCloud.com.Sujitech.MailWay"
+            let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudDBId)
+            container.persistentStoreDescriptions.first?.cloudKitContainerOptions = options
+            container.persistentStoreDescriptions.first?.setOption(true as NSNumber,
+            forKey: NSPersistentHistoryTrackingKey)
+        }
+        
         container.persistentStoreDescriptions = storeDescriptions
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -58,6 +70,7 @@ public final class CoreDataStack {
             }
             
             container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+            container.viewContext.automaticallyMergesChangesFromParent = true
 
             os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, storeDescription.debugDescription)
         })
