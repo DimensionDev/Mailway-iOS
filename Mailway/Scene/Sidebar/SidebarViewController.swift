@@ -125,12 +125,11 @@ final class SidebarViewController: UIViewController, NeedsDependency, SidebarTra
         return tableView
     }()
     
-    //let settingsEntryView: SidebarEntryView = {
-    //    let entryView = SidebarEntryView()
-    //    entryView.iconImageView.image = Asset.Sidebar.settings.image
-    //    entryView.titleLabel.text = "Settings"
-    //    return entryView
-    //}()
+    let settingsSeparatorLine: UIView = {
+        let line = UIView()
+        line.backgroundColor = .separator
+        return line
+    }()
     
     private(set) lazy var viewModel = SidebarViewModel(context: context)
     
@@ -163,6 +162,15 @@ extension SidebarViewController {
             view.trailingAnchor.constraint(equalTo: settingsTableView.trailingAnchor),
             view.layoutMarginsGuide.bottomAnchor.constraint(equalTo: settingsTableView.bottomAnchor),
             settingsTableView.heightAnchor.constraint(equalToConstant: 56).priority(.defaultHigh),
+        ])
+        
+        settingsSeparatorLine.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(settingsSeparatorLine)
+        NSLayoutConstraint.activate([
+            settingsSeparatorLine.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            view.layoutMarginsGuide.trailingAnchor.constraint(equalTo: settingsSeparatorLine.trailingAnchor),
+            settingsTableView.topAnchor.constraint(equalTo: settingsSeparatorLine.bottomAnchor),
+            settingsSeparatorLine.heightAnchor.constraint(equalToConstant: 1.0).priority(.defaultHigh),
         ])
         
         tableView.delegate = self
