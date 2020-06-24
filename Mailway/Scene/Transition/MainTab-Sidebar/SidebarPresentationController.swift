@@ -40,10 +40,19 @@ final class SidebarPresentationController: UIPresentationController {
             return presentingViewController.view.bounds
         }
         
-        return CGRect(x: 0,
-                      y: 0,
-                      width: primaryViewController.view.bounds.width - 40,      // fixed 40pt margin
-                      height: containerView!.bounds.height)                     // use container view height by pass layout delay
+        let width = (primaryViewController.view.bounds.width - 40.0)
+        switch UIApplication.shared.userInterfaceLayoutDirection {
+        case .rightToLeft:
+            return CGRect(x: containerView!.bounds.width - width,
+                          y: 0,
+                          width: width,
+                          height: containerView!.bounds.height)
+        default:
+            return CGRect(x: 0,
+                          y: 0,
+                          width: width,                           // fixed 40pt margin
+                          height: containerView!.bounds.height)   // use container view height by pass layout delay
+        }
     }
     
     override func presentationTransitionWillBegin() {

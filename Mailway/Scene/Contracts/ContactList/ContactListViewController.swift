@@ -248,7 +248,7 @@ final class ContactListViewController: UIViewController, NeedsDependency, MainTa
     
     private lazy var sidebarBarButtonItem: UIBarButtonItem = {
         let item = UIBarButtonItem()
-        item.image = UIImage(systemName: "list.dash")
+        item.image = Asset.Sidebar.menu.image
         item.target = self
         item.action = #selector(ContactListViewController.sidebarBarButtonItemPressed(_:))
         return item

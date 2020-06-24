@@ -29,7 +29,12 @@ final class MainTabTransitionController: UIPercentDrivenInteractiveTransition {
     
     weak var viewController: UIViewController?
     
-    private var panGestureRecognizer = UIPanGestureRecognizer()
+    private var panGestureRecognizer: UIPanGestureRecognizer = {
+        let gestureRecognizer = UIScreenEdgePanGestureRecognizer()
+        gestureRecognizer.maximumNumberOfTouches = 1
+        gestureRecognizer.edges = UIApplication.shared.userInterfaceLayoutDirection == .leftToRight ? .left : .right
+        return gestureRecognizer
+    }()
 //    private(set) var transitionType: TransitionType?
 //    private var interactiveTransitioning: UIViewControllerInteractiveTransitioning?
     

@@ -42,10 +42,20 @@ extension SidebarAnimatedTransitioning {
         }
         
         let toViewEndFrame = transitionContext.finalFrame(for: toVC)
-        let toViewStartFrame = CGRect(x: toViewEndFrame.origin.x - toView.bounds.width,
-                                      y: toViewEndFrame.origin.y,
-                                      width: toViewEndFrame.width,
-                                      height: toViewEndFrame.height)
+        let toViewStartFrame: CGRect = {
+            switch UIApplication.shared.userInterfaceLayoutDirection {
+            case .rightToLeft:
+                return CGRect(x: toViewEndFrame.origin.x + toView.bounds.width,
+                              y: toViewEndFrame.origin.y,
+                              width: toViewEndFrame.width,
+                              height: toViewEndFrame.height)
+            default:
+                return CGRect(x: toViewEndFrame.origin.x - toView.bounds.width,
+                              y: toViewEndFrame.origin.y,
+                              width: toViewEndFrame.width,
+                              height: toViewEndFrame.height)
+            }
+        }()
         
         transitionContext.containerView.addSubview(toView)
         toView.frame = toViewStartFrame
@@ -77,10 +87,20 @@ extension SidebarAnimatedTransitioning {
         }
         
         let fromViewStartFrame = fromView.frame
-        let fromViewEndFrame = CGRect(x: fromViewStartFrame.origin.x - fromView.bounds.width,
-                                      y: fromViewStartFrame.origin.y,
-                                      width: fromView.bounds.width,
-                                      height: fromView.bounds.height)
+        let fromViewEndFrame: CGRect = {
+            switch UIApplication.shared.userInterfaceLayoutDirection {
+            case .rightToLeft:
+                return CGRect(x: fromViewStartFrame.origin.x + fromView.bounds.width,
+                              y: fromViewStartFrame.origin.y,
+                              width: fromView.bounds.width,
+                              height: fromView.bounds.height)
+            default:
+                return CGRect(x: fromViewStartFrame.origin.x - fromView.bounds.width,
+                              y: fromViewStartFrame.origin.y,
+                              width: fromView.bounds.width,
+                              height: fromView.bounds.height)
+            }
+        }()
         
         
         let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext), curve: curve)

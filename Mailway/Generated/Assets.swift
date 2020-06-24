@@ -23,6 +23,7 @@ internal enum Asset {
     internal static let contacts = ImageAsset(name: "Sidebar/contacts")
     internal static let drafts = ImageAsset(name: "Sidebar/drafts")
     internal static let inbox = ImageAsset(name: "Sidebar/inbox")
+    internal static let menu = ImageAsset(name: "Sidebar/menu")
     internal static let plugins = ImageAsset(name: "Sidebar/plugins")
     internal static let settings = ImageAsset(name: "Sidebar/settings")
   }
