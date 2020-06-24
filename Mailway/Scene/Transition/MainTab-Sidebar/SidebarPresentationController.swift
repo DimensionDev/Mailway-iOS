@@ -40,7 +40,7 @@ final class SidebarPresentationController: UIPresentationController {
             return presentingViewController.view.bounds
         }
         
-        let width = (primaryViewController.view.bounds.width - 40.0)
+        let width = (primaryViewController.view.bounds.width - 56.0)    // fixed 56pt
         switch UIApplication.shared.userInterfaceLayoutDirection {
         case .rightToLeft:
             return CGRect(x: containerView!.bounds.width - width,
@@ -50,8 +50,8 @@ final class SidebarPresentationController: UIPresentationController {
         default:
             return CGRect(x: 0,
                           y: 0,
-                          width: width,                           // fixed 40pt margin
-                          height: containerView!.bounds.height)   // use container view height by pass layout delay
+                          width: width,
+                          height: containerView!.bounds.height)     // use container view height by pass layout delay
         }
     }
     

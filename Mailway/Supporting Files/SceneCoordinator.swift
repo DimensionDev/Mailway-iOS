@@ -89,10 +89,11 @@ extension SceneCoordinator {
         sceneDelegate.window?.rootViewController = viewController
     }
     
-    func present(scene: Scene, from sender: UIViewController?, transition: Transition) {
+    @discardableResult
+    func present(scene: Scene, from sender: UIViewController?, transition: Transition) -> UIViewController? {
         let viewController = get(scene: scene)
         guard let presentingViewController = sender ?? sceneDelegate.window?.rootViewController else {
-            return
+            return nil
         }
         
         switch transition {
@@ -119,6 +120,8 @@ extension SceneCoordinator {
             viewController.transitioningDelegate = transitioningDelegate
             sender?.present(viewController, animated: true, completion: nil)
         }
+        
+        return viewController
     }
 }
 

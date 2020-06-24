@@ -50,7 +50,7 @@ extension SidebarAnimatedTransitioning {
                               width: toViewEndFrame.width,
                               height: toViewEndFrame.height)
             default:
-                return CGRect(x: toViewEndFrame.origin.x - toView.bounds.width,
+                return CGRect(x: toViewEndFrame.origin.x - toViewEndFrame.width,
                               y: toViewEndFrame.origin.y,
                               width: toViewEndFrame.width,
                               height: toViewEndFrame.height)
@@ -128,18 +128,22 @@ extension SidebarAnimatedTransitioning {
         switch operation {
         case .push:
             animator = pushTransition(using: transitionContext, curve: .linear)
-            panGestureRecognizer.addTarget(self, action: #selector(SidebarAnimatedTransitioning.pan(_:)))
+            presentationPanGestureRecognizer.addTarget(self, action: #selector(SidebarAnimatedTransitioning.presentationPan(_:)))
             
         case .pop:
             animator = popTransition(using: transitionContext, curve: .linear)
-            panGestureRecognizer.addTarget(self, action: #selector(SidebarAnimatedTransitioning.pan(_:)))
+            dismissalPanGestureRecognizer.addTarget(self, action: #selector(SidebarAnimatedTransitioning.dismissalPan(_:)))
             
         default:
             return
         }
+        
+        // fix began event not trigger issue
+        animator?.pauseAnimation()
+        transitionContext.pauseInteractiveTransition()
     }
     
-    @objc private func pan(_ sender: UIPanGestureRecognizer) {
+    @objc private func presentationPan(_ sender: UIPanGestureRecognizer) {
         guard let animator = animator else { return }
         switch sender.state {
         case .began:
@@ -147,7 +151,37 @@ extension SidebarAnimatedTransitioning {
             transitionContext.pauseInteractiveTransition()
         case .changed:
             let translation = sender.translation(in: transitionContext.containerView)
-            let percent = animator.fractionComplete + (operation == .push ? 1.0 : -1.0) * translation.x / transitionContext.containerView.bounds.width
+            let width = transitionContext.view(forKey: .to)?.bounds.width ?? transitionContext.containerView.bounds.width
+            let direction: CGFloat = UIApplication.shared.userInterfaceLayoutDirection == .leftToRight ? 1.0 : -1.0
+            let percent = animator.fractionComplete + (operation == .push ? 1.0 : -1.0) * direction * translation.x / width
+            animator.fractionComplete = percent
+            
+            transitionContext.updateInteractiveTransition(percent)
+            sender.setTranslation(.zero, in: transitionContext.containerView)
+            
+        case .ended, .cancelled:
+            let position = completionPosition(for: animator)
+            position == .end ? transitionContext.finishInteractiveTransition() : transitionContext.cancelInteractiveTransition()
+            
+            animator.isReversed = position == .start
+            animator.startAnimation()
+            
+        default:
+            return
+        }
+    }
+    
+    @objc private func dismissalPan(_ sender: UIPanGestureRecognizer) {
+        guard let animator = animator else { return }
+        switch sender.state {
+        case .began:
+            animator.pauseAnimation()
+            transitionContext.pauseInteractiveTransition()
+        case .changed:
+            let translation = sender.translation(in: transitionContext.containerView)
+            let width = transitionContext.view(forKey: .from)?.bounds.width ?? transitionContext.containerView.bounds.width
+            let direction: CGFloat = UIApplication.shared.userInterfaceLayoutDirection == .leftToRight ? 1.0 : -1.0
+            let percent = animator.fractionComplete + (operation == .push ? 1.0 : -1.0) * direction * translation.x / width
             animator.fractionComplete = percent
             
             transitionContext.updateInteractiveTransition(percent)
@@ -168,8 +202,9 @@ extension SidebarAnimatedTransitioning {
     private func completionPosition(for animator: UIViewPropertyAnimator) -> UIViewAnimatingPosition {
         let completionThreshold: CGFloat = 0.33
         let flickMagnitude: CGFloat = 1200 // pts/sec
-        let velocity = panGestureRecognizer.velocity(in: transitionContext.containerView).vector
-        let isFlick = (velocity.magnitude > flickMagnitude)
+        let velocity = presentationPanGestureRecognizer.velocity(in: transitionContext.containerView).vector
+        let direction: CGFloat = UIApplication.shared.userInterfaceLayoutDirection == .leftToRight ? 1.0 : -1.0
+        let isFlick = (velocity.magnitude * direction > flickMagnitude)
         let isFlickRight = isFlick && (velocity.dx > 0.0)
         let isFlickLeft = isFlick && (velocity.dx < 0.0)
         

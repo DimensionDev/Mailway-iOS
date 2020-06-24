@@ -12,17 +12,19 @@ import UIKit
 class ViewControllerAnimatedTransitioning: NSObject {
 
     let operation: UINavigationController.Operation
-    let panGestureRecognizer: UIPanGestureRecognizer
+    let presentationPanGestureRecognizer: UIPanGestureRecognizer
+    let dismissalPanGestureRecognizer: UIPanGestureRecognizer
 
     var transitionContext: UIViewControllerContextTransitioning!
     var isInteractive: Bool { return transitionContext.isInteractive }
 
     weak var delegate: ViewControllerAnimatedTransitioningDelegate?
 
-    init(operation: UINavigationController.Operation, panGestureRecognizer: UIPanGestureRecognizer) {
+    init(operation: UINavigationController.Operation, presentationPanGestureRecognizer: UIPanGestureRecognizer, dismissalPanGestureRecognizer: UIPanGestureRecognizer) {
         assert(operation != .none)
         self.operation = operation
-        self.panGestureRecognizer = panGestureRecognizer
+        self.presentationPanGestureRecognizer = presentationPanGestureRecognizer
+        self.dismissalPanGestureRecognizer = dismissalPanGestureRecognizer
         super.init()
     }
 
