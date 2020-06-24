@@ -36,6 +36,11 @@
 		DB1E85E324A0858600B1558B /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85E224A0858600B1558B /* CGPoint.swift */; };
 		DB1E85E524A085A200B1558B /* CGVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85E424A085A200B1558B /* CGVector.swift */; };
 		DB1E85E724A092D200B1558B /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85E624A092D200B1558B /* SidebarViewController.swift */; };
+		DB1E85F824A1F24D00B1558B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DB1E85FA24A1F24D00B1558B /* Localizable.strings */; };
+		DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85FB24A1F67C00B1558B /* SidebarEntryTableViewCell.swift */; };
+		DB1E860124A1FB2B00B1558B /* strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85FF24A1FB2B00B1558B /* strings.swift */; };
+		DB1E860224A1FB2B00B1558B /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E860024A1FB2B00B1558B /* Assets.swift */; };
+		DB1E860424A2189200B1558B /* SidebarPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E860324A2189200B1558B /* SidebarPresentationController.swift */; };
 		DB1EC2D924879936002379A1 /* SettingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2D824879936002379A1 /* SettingListViewController.swift */; };
 		DB1EC2DB2488D8CE002379A1 /* MessageInboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2DA2488D8CE002379A1 /* MessageInboxViewController.swift */; };
 		DB1EC2DE2488E591002379A1 /* HitTestExpandedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */; };
@@ -216,6 +221,11 @@
 		DB1E85E224A0858600B1558B /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		DB1E85E424A085A200B1558B /* CGVector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGVector.swift; sourceTree = "<group>"; };
 		DB1E85E624A092D200B1558B /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
+		DB1E85F924A1F24D00B1558B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DB1E85FB24A1F67C00B1558B /* SidebarEntryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarEntryTableViewCell.swift; sourceTree = "<group>"; };
+		DB1E85FF24A1FB2B00B1558B /* strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = strings.swift; sourceTree = "<group>"; };
+		DB1E860024A1FB2B00B1558B /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		DB1E860324A2189200B1558B /* SidebarPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarPresentationController.swift; sourceTree = "<group>"; };
 		DB1EC2D824879936002379A1 /* SettingListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListViewController.swift; sourceTree = "<group>"; };
 		DB1EC2DA2488D8CE002379A1 /* MessageInboxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInboxViewController.swift; sourceTree = "<group>"; };
 		DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HitTestExpandedButton.swift; sourceTree = "<group>"; };
@@ -492,6 +502,7 @@
 			children = (
 				DB1E85D824A079A500B1558B /* MainTabTransitionController.swift */,
 				DB1E85DF24A081A900B1558B /* SidebarAnimatedTransitioning.swift */,
+				DB1E860324A2189200B1558B /* SidebarPresentationController.swift */,
 			);
 			path = "MainTab-Sidebar";
 			sourceTree = "<group>";
@@ -499,9 +510,37 @@
 		DB1E85E824A092D600B1558B /* Sidebar */ = {
 			isa = PBXGroup;
 			children = (
+				DB1E85FD24A1F69C00B1558B /* View */,
 				DB1E85E624A092D200B1558B /* SidebarViewController.swift */,
 			);
 			path = Sidebar;
+			sourceTree = "<group>";
+		};
+		DB1E85F624A1EBFE00B1558B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DBE306AB2474DF7C00EB7193 /* Assets.xcassets */,
+				DBE306B02474DF7C00EB7193 /* LaunchScreen.storyboard */,
+				DB1E85FA24A1F24D00B1558B /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DB1E85FD24A1F69C00B1558B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DB1E85FB24A1F67C00B1558B /* SidebarEntryTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DB1E85FE24A1FB2B00B1558B /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				DB1E85FF24A1FB2B00B1558B /* strings.swift */,
+				DB1E860024A1FB2B00B1558B /* Assets.swift */,
+			);
+			path = Generated;
 			sourceTree = "<group>";
 		};
 		DB1EC2DC2488D8D2002379A1 /* MessageInbox */ = {
@@ -580,8 +619,6 @@
 				DBE306A52474DF7B00EB7193 /* AppDelegate.swift */,
 				DBE306A72474DF7B00EB7193 /* SceneDelegate.swift */,
 				DB6DEC78247E4E270040C817 /* SceneCoordinator.swift */,
-				DBE306AB2474DF7C00EB7193 /* Assets.xcassets */,
-				DBE306B02474DF7C00EB7193 /* LaunchScreen.storyboard */,
 				DB2ABEBD249B30AD00B9C6CA /* UnitTestsPlan.xctestplan */,
 				DB2ABEBE249B30CE00B9C6CA /* UITestsPlan.xctestplan */,
 			);
@@ -802,6 +839,8 @@
 				DB60BF13247527DC0001F9C0 /* Vender */,
 				DB2813A12484F64D001CDD19 /* Extension */,
 				DBE306AD2474DF7C00EB7193 /* Preview Content */,
+				DB1E85FE24A1FB2B00B1558B /* Generated */,
+				DB1E85F624A1EBFE00B1558B /* Resources */,
 				DB60BF14247527EC0001F9C0 /* Supporting Files */,
 			);
 			path = Mailway;
@@ -831,9 +870,9 @@
 				DB1E85DA24A079B300B1558B /* Transition */,
 				DBB981172486452F00FB2FE8 /* Root */,
 				DBE306DB2474EDC800EB7193 /* MainTab */,
+				DB1E85E824A092D600B1558B /* Sidebar */,
 				DBE306DD2474EDD700EB7193 /* Chats */,
 				DBE306DC2474EDD000EB7193 /* Contracts */,
-				DB1E85E824A092D600B1558B /* Sidebar */,
 				DBE306DE2474EDDD00EB7193 /* Settings */,
 			);
 			path = Scene;
@@ -1014,6 +1053,7 @@
 				DBE306A02474DF7B00EB7193 /* Resources */,
 				DB7E1E48247BCA55002FC90E /* Embed Frameworks */,
 				9EDCBC75796D7AC5B0DE67A9 /* [CP] Embed Pods Frameworks */,
+				DB1E85F724A1ED1500B1558B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1137,6 +1177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBE306B22474DF7C00EB7193 /* LaunchScreen.storyboard in Resources */,
+				DB1E85F824A1F24D00B1558B /* Localizable.strings in Resources */,
 				DBE306AF2474DF7C00EB7193 /* Preview Assets.xcassets in Resources */,
 				DBE306AC2474DF7C00EB7193 /* Assets.xcassets in Resources */,
 			);
@@ -1274,6 +1315,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mailway/Pods-Mailway-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DB1E85F724A1ED1500B1558B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ -f \"${PODS_ROOT}/SwiftGen/bin/swiftgen\" ]]; then\n  \"${PODS_ROOT}/SwiftGen/bin/swiftgen\"\nelse\n  echo \"warning: SwiftGen is not installed. Run 'pod install --repo-update' to install it.\"\nfi\n";
+		};
 		EB18CC82DA7099E7C709396A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1364,6 +1422,7 @@
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
 				DB19388E2477BD1D00E24AFB /* IdentitiesListView.swift in Sources */,
 				DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */,
+				DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */,
 				DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */,
 				DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */,
 				DB008AB02476737100CE6A7E /* ViewStata+Contacts.swift in Sources */,
@@ -1375,8 +1434,10 @@
 				DB60BF1A247534C70001F9C0 /* CreateChatView.swift in Sources */,
 				DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */,
 				DB7E1E3C247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift in Sources */,
+				DB1E860424A2189200B1558B /* SidebarPresentationController.swift in Sources */,
 				DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */,
 				DBE306D72474ED0700EB7193 /* AppError.swift in Sources */,
+				DB1E860124A1FB2B00B1558B /* strings.swift in Sources */,
 				DB8B48042484DA9F002D4912 /* ContactInfoView.swift in Sources */,
 				DB1E85E324A0858600B1558B /* CGPoint.swift in Sources */,
 				DBE306E22475184200EB7193 /* Contact.swift in Sources */,
@@ -1409,6 +1470,7 @@
 				DB1E85DE24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift in Sources */,
 				DB1EC2E02488EB4C002379A1 /* ShareService.swift in Sources */,
 				DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */,
+				DB1E860224A1FB2B00B1558B /* Assets.swift in Sources */,
 				DB60BF16247528E20001F9C0 /* FileHelper.swift in Sources */,
 				DB1E85DD24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift in Sources */,
 				DB1938912477E4CD00E24AFB /* IdentityDetailView.swift in Sources */,
@@ -1479,6 +1541,14 @@
 				DB0A905B249B43B300FE0AFC /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		DB1E85FA24A1F24D00B1558B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DB1E85F924A1F24D00B1558B /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		DBE306B02474DF7C00EB7193 /* LaunchScreen.storyboard */ = {

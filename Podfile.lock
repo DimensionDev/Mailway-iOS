@@ -2,17 +2,20 @@ PODS:
   - GrowingTextView (0.7.2)
   - NtgeCore (0.1.0)
   - NtgeCore/Tests (0.1.0)
+  - SwiftGen (6.2.0)
   - "UITextView+Placeholder (1.4.0)"
 
 DEPENDENCIES:
   - GrowingTextView (~> 0.7.2)
   - NtgeCore (from `../ntge`)
   - NtgeCore/Tests (from `../ntge`)
+  - SwiftGen (~> 6.2.0)
   - "UITextView+Placeholder (~> 1.4.0)"
 
 SPEC REPOS:
   trunk:
     - GrowingTextView
+    - SwiftGen
     - "UITextView+Placeholder"
 
 EXTERNAL SOURCES:
@@ -22,8 +25,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
   NtgeCore: e0437e1167105ded1b91f4a4f5975f36a8c6a9b2
+  SwiftGen: 77e88c8609381660cc1084c5ba8e1dc6065de692
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 2e9652dcb99d5e6629a8b89c9e8b1ba690bc0e37
+PODFILE CHECKSUM: f22dd1a3ac039a8d706ddb492d6341d9ac432fde
 
 COCOAPODS: 1.9.3

@@ -40,23 +40,23 @@ extension ChatListChatRoomTableViewCell {
     
     private func _init() {
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(iconImageView)
+        contentView.addSubview(iconImageView)
         let chatRoomIconImageViewHeightLayoutConstraint = iconImageView.heightAnchor.constraint(equalToConstant: 44)
         chatRoomIconImageViewHeightLayoutConstraint.priority = .defaultHigh
         NSLayoutConstraint.activate([
-            iconImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            iconImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            bottomAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 8),
+            iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            iconImageView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 8),
             iconImageView.widthAnchor.constraint(equalToConstant: 44),
             chatRoomIconImageViewHeightLayoutConstraint,
         ])
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(titleLabel)
+        contentView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 8),
             titleLabel.centerYAnchor.constraint(equalTo: iconImageView.centerYAnchor),
-            trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
         ])
     }
     

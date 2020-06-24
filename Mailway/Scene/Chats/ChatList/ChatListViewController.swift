@@ -163,7 +163,7 @@ final class ChatListViewController: UIViewController, NeedsDependency, MainTabTr
 
     private lazy var sidebarBarButtonItem: UIBarButtonItem = {
         let item = UIBarButtonItem()
-        item.image = UIImage(systemName: "list.dash")
+        item.image = Asset.Sidebar.menu.image
         item.target = self
         item.action = #selector(ChatListViewController.sidebarBarButtonItemPressed(_:))
         return item
@@ -193,9 +193,9 @@ extension ChatListViewController {
         super.viewDidLoad()
         
         title = "Chats"
+        transitionController = MainTabTransitionController(viewController: self)
         navigationItem.leftBarButtonItem = sidebarBarButtonItem
         navigationItem.rightBarButtonItem = composeBarButtonItem
-        transitionController = MainTabTransitionController(viewController: self)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
