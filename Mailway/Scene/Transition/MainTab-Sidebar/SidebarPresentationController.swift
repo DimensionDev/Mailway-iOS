@@ -10,6 +10,7 @@ import os
 import UIKit
 
 final class SidebarPresentationController: UIPresentationController {
+    
     let dimmingView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
@@ -29,6 +30,10 @@ final class SidebarPresentationController: UIPresentationController {
         dimmingView.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    override var shouldPresentInFullscreen: Bool {
+        return true
+    }
+    
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let splitViewController = presentingViewController as? UISplitViewController,
         let primaryViewController = splitViewController.viewControllers.first else {
@@ -38,10 +43,12 @@ final class SidebarPresentationController: UIPresentationController {
         return CGRect(x: 0,
                       y: 0,
                       width: primaryViewController.view.bounds.width - 40,      // fixed 40pt margin
-                      height: primaryViewController.view.bounds.height)
+                      height: containerView!.bounds.height)                     // use container view height by pass layout delay
     }
     
     override func presentationTransitionWillBegin() {
+        super.presentationTransitionWillBegin()
+        
         dimmingView.frame = containerView!.bounds
         dimmingView.alpha = 0.0
         containerView!.insertSubview(dimmingView, at: 0)
@@ -51,27 +58,46 @@ final class SidebarPresentationController: UIPresentationController {
         }, completion: nil)
     }
     
+    override func presentationTransitionDidEnd(_ completed: Bool) {
+        super.presentationTransitionDidEnd(completed)
+        
+        // remove dimming view when abort
+        if !completed {
+            dimmingView.removeFromSuperview()
+        }
+    }
+    
     override func dismissalTransitionWillBegin() {
+        super.dismissalTransitionWillBegin()
+        
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { context in
             self.dimmingView.alpha = 0.0
         }, completion: { context in
-            self.dimmingView.removeFromSuperview()
+            if !context.isCancelled {
+                self.dimmingView.removeFromSuperview()
+            }
         })
     }
     
     override func containerViewWillLayoutSubviews() {
+        super.containerViewWillLayoutSubviews()
+        
         dimmingView.frame = containerView!.bounds
         presentedView?.frame = frameOfPresentedViewInContainerView
-        
+                
         guard let splitViewController = presentingViewController as? UISplitViewController,
         let primaryViewController = splitViewController.viewControllers.first else {
             assertionFailure()
             return
         }
         
-        overrideTraitCollection = primaryViewController.traitCollection
+        // elevate interface level
+        overrideTraitCollection = UITraitCollection(traitsFrom: [
+            primaryViewController.traitCollection,
+            UITraitCollection(userInterfaceLevel: .elevated),
+        ])
     }
-    
+
 }
 
 extension SidebarPresentationController {

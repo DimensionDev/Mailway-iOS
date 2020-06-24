@@ -111,7 +111,6 @@ final class SidebarViewController: UIViewController, NeedsDependency, SidebarTra
         tableView.register(SidebarEntryTableViewCell.self, forCellReuseIdentifier: String(describing: SidebarEntryTableViewCell.self))
         tableView.tableFooterView = UIView()
         tableView.separatorStyle = .none
-        tableView.backgroundColor = SidebarViewController.automaticElevatedBackgroundColor
         return tableView
     }()
     
@@ -123,7 +122,6 @@ final class SidebarViewController: UIViewController, NeedsDependency, SidebarTra
         tableView.tableFooterView = UIView()
         tableView.separatorStyle = .none
         tableView.alwaysBounceVertical = false
-        tableView.backgroundColor = SidebarViewController.automaticElevatedBackgroundColor
         return tableView
     }()
     
@@ -147,7 +145,7 @@ extension SidebarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = SidebarViewController.automaticElevatedBackgroundColor
+        view.backgroundColor = .systemBackground
                 
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -173,6 +171,12 @@ extension SidebarViewController {
         settingsTableView.delegate = self
         settingsTableView.dataSource = viewModel
     }
+    
+//    override func viewWillLayoutSubviews() {
+//        super.viewWillLayoutSubviews()
+//        print(view.frame)
+//        view.layoutIfNeeded()
+//    }
 
 }
 
@@ -218,16 +222,4 @@ extension SidebarViewController {
         case plugins
         case settings
     }
-    
-    static var automaticElevatedBackgroundColor = UIColor(dynamicProvider: { traitCollection -> UIColor in
-        switch traitCollection.userInterfaceStyle {
-        case .dark where traitCollection.userInterfaceLevel != .elevated:
-        return .secondarySystemBackground
-        case .light, .dark, .unspecified:
-        return .systemBackground
-        @unknown default:
-        assertionFailure()
-        return .systemBackground
-        }
-    })
 }
