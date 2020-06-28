@@ -79,6 +79,13 @@ final class MainTabTransitionController: NSObject {
 extension MainTabTransitionController: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        guard let sidebarViewController = presented as? SidebarTransitionableViewController else {
+            assertionFailure()
+            return nil
+        }
+
+        self.sidebarViewController = sidebarViewController
+        self.sidebarViewController?.view.addGestureRecognizer(panGestureRecognizer)
         return SidebarAnimatedTransitioning(operation: .push, presentationPanGestureRecognizer: screenEdgePanGestureRecognizer, dismissalPanGestureRecognizer: panGestureRecognizer)
     }
     
@@ -138,8 +145,7 @@ extension MainTabTransitionController {
         switch transitionType {
         case .presentationSidebar:
             wantsInteractive = true
-            sidebarViewController = viewController?.coordinator.present(scene: .sidebar, from: viewController, transition: .custom(transitioningDelegate: self)) as? SidebarTransitionableViewController
-            sidebarViewController?.view.addGestureRecognizer(panGestureRecognizer)
+            viewController?.coordinator.present(scene: .sidebar, from: viewController, transition: .custom(transitioningDelegate: self))
 
         case .dismissSidebar:
             assertionFailure()
