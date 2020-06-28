@@ -1,5 +1,5 @@
 //
-//  SettingListViewController.swift
+//  SettingsViewController.swift
 //  Mailway
 //
 //  Created by Cirno MainasuK on 2020-6-3.
@@ -9,26 +9,24 @@
 import os
 import UIKit
 
-final class SettingListViewModel {
+final class SettingsViewModel {
     
 }
 
-final class SettingsViewController: UIViewController, NeedsDependency, MainTabTransitionableViewController {
-    
-    private(set) var transitionController: MainTabTransitionController!
+final class SettingsViewController: UIViewController, NeedsDependency {
 
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
-//    private lazy var sidebarBarButtonItem: UIBarButtonItem = {
-//        let item = UIBarButtonItem()
-//        item.image = Asset.Sidebar.menu.image
-//        item.target = self
-//        item.action = #selector(SettingListViewController.sidebarBarButtonItemPressed(_:))
-//        return item
-//    }()
+    private lazy var closeBarButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem()
+        item.image = Asset.NavigationBar.close.image
+        item.target = self
+        item.action = #selector(SettingsViewController.closeBarButtonItemPressed(_:))
+        return item
+    }()
     
-    var viewModel: SettingListViewModel!
+    var viewModel: SettingsViewModel!
     
 }
 
@@ -39,8 +37,7 @@ extension SettingsViewController {
         
         view.backgroundColor = .systemBackground
         title = "Settings"
-//        transitionController = MainTabTransitionController(viewController: self)
-//        navigationItem.leftBarButtonItem = sidebarBarButtonItem
+        navigationItem.leftBarButtonItem = closeBarButtonItem
         
     }
     
@@ -48,9 +45,9 @@ extension SettingsViewController {
 
 extension SettingsViewController {
     
-//    @objc private func sidebarBarButtonItemPressed(_ sender: UIBarButtonItem) {
-//        coordinator.present(scene: .sidebar, from: self, transition: .custom(transitioningDelegate: transitionController))
-//    }
+    @objc private func closeBarButtonItemPressed(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
 //
 //    @objc private func buttonPressed(_ sender: UIButton) {
 //        let vm = SettingListViewModel()
@@ -67,8 +64,15 @@ extension SettingsViewController {
 //    }
 }
 
-extension SettingsViewController {
+// MARK: - UIAdaptivePresentationControllerDelegate
+extension SettingsViewController: UIAdaptivePresentationControllerDelegate {
     
-    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        if traitCollection.userInterfaceIdiom == .pad {
+            return .pageSheet
+        } else {
+            return .fullScreen
+        }
+    }
     
 }
