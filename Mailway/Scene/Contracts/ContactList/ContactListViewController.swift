@@ -319,7 +319,7 @@ extension ContactListViewController: UITableViewDelegate {
         if tableView.cellForRow(at: indexPath) is ContactListIdentityBannerTableViewCell {
 //            if viewModel.identities.value.isEmpty {
                 // create identity
-                coordinator.present(scene: .createIdentity, from: self, transition: .modal(animated: true))
+                coordinator.present(scene: .addIdentity, from: self, transition: .modal(animated: true))
 //            } else {
 //                // open list
 //                coordinator.present(scene: .identityList, from: self, transition: .show)

@@ -10,6 +10,8 @@
 #endif
 
 // Deprecated typealiases
+@available(*, deprecated, renamed: "ColorAsset.Color", message: "This typealias will be removed in SwiftGen 7.0")
+internal typealias AssetColorTypeAlias = ColorAsset.Color
 @available(*, deprecated, renamed: "ImageAsset.Image", message: "This typealias will be removed in SwiftGen 7.0")
 internal typealias AssetImageTypeAlias = ImageAsset.Image
 
@@ -19,6 +21,29 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
+  internal enum Color {
+    internal enum Background {
+      internal static let blue = ColorAsset(name: "Color/Background/blue")
+    }
+  }
+  internal enum Communication {
+    internal static let mail = ImageAsset(name: "Communication/mail")
+  }
+  internal enum Editing {
+    internal static let close = ImageAsset(name: "Editing/close")
+    internal static let copy = ImageAsset(name: "Editing/copy")
+    internal static let pencil = ImageAsset(name: "Editing/pencil")
+    internal static let plusCircleFill = ImageAsset(name: "Editing/plus.circle.fill")
+  }
+  internal enum Human {
+    internal static let personCropCircle = ImageAsset(name: "Human/person.crop.circle")
+  }
+  internal enum Logo {
+    internal static let discord = ImageAsset(name: "Logo/discord")
+    internal static let facebook = ImageAsset(name: "Logo/facebook")
+    internal static let telegram = ImageAsset(name: "Logo/telegram")
+    internal static let twitter = ImageAsset(name: "Logo/twitter")
+  }
   internal enum NavigationBar {
     internal static let close = ImageAsset(name: "NavigationBar/close")
   }
@@ -34,6 +59,42 @@ internal enum Asset {
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
 // MARK: - Implementation Details
+
+internal final class ColorAsset {
+  internal fileprivate(set) var name: String
+
+  #if os(macOS)
+  internal typealias Color = NSColor
+  #elseif os(iOS) || os(tvOS) || os(watchOS)
+  internal typealias Color = UIColor
+  #endif
+
+  @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, *)
+  internal private(set) lazy var color: Color = {
+    guard let color = Color(asset: self) else {
+      fatalError("Unable to load color asset named \(name).")
+    }
+    return color
+  }()
+
+  fileprivate init(name: String) {
+    self.name = name
+  }
+}
+
+internal extension ColorAsset.Color {
+  @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, *)
+  convenience init?(asset: ColorAsset) {
+    let bundle = BundleToken.bundle
+    #if os(iOS) || os(tvOS)
+    self.init(named: asset.name, in: bundle, compatibleWith: nil)
+    #elseif os(macOS)
+    self.init(named: NSColor.Name(asset.name), bundle: bundle)
+    #elseif os(watchOS)
+    self.init(named: asset.name)
+    #endif
+  }
+}
 
 internal struct ImageAsset {
   internal fileprivate(set) var name: String

@@ -31,12 +31,13 @@ final class IdentityListViewModel: NSObject {
 
 extension IdentityListViewModel {
     enum Section: CaseIterable {
-        case createIdentityHeader
         case identities
+        case addIdentity
     }
 }
 
 extension IdentityListViewModel {
+    
 //    static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
 //        // set to no identities style
 //        ContactListViewModel.configure(cell: cell, with: [])
@@ -60,33 +61,23 @@ extension IdentityListViewModel: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
-//        let section = Section.allCases[section]
-//        switch section {
-//        case .createIdentityHeader:
-//            return 1
-//        case .identities:
+        let section = Section.allCases[section]
+        switch section {
+        case .identities:
+            return 0
 //            return identities.value.count
-//        }
+        case .addIdentity:
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-//        let section = Section.allCases[indexPath.section]
-//        var cell: UITableViewCell
-//
-//        switch section {
-//        case .createIdentityHeader:
-//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
-//            cell = _cell
-//
-//            identities
-//                .sink { identities in
-//                    IdentityListViewModel.configure(cell: _cell, with: identities)
-//            }
-//            .store(in: &_cell.disposeBag)
-//
-//        case .identities:
+        let section = Section.allCases[indexPath.section]
+        var cell: UITableViewCell
+
+        switch section {
+        case .identities:
+            cell = UITableViewCell()
 //            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListIdentityTableViewCell.self), for: indexPath) as! IdentityListIdentityTableViewCell
 //            cell = _cell
 //
@@ -94,9 +85,13 @@ extension IdentityListViewModel: UITableViewDataSource {
 //            let identity = identities.value[indexPath.row]
 //
 //            _cell.nameLabel.text = identity.name
-//        }
-//
-//        return cell
+            
+        case .addIdentity:
+            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListAddIdentityTableViewCell.self), for: indexPath) as! IdentityListAddIdentityTableViewCell
+            cell = _cell
+        }
+
+        return cell
     }
 }
 
@@ -110,8 +105,9 @@ final class IdentityListViewController: UIViewController, NeedsDependency {
     private(set) lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(IdentityListIdentityTableViewCell.self, forCellReuseIdentifier: String(describing: IdentityListIdentityTableViewCell.self))
-        tableView.register(ContactListIdentityBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self))
+        tableView.register(IdentityListAddIdentityTableViewCell.self, forCellReuseIdentifier: String(describing: IdentityListAddIdentityTableViewCell.self))
         tableView.tableFooterView = UIView()
+        tableView.separatorStyle = .none
         return tableView
     }()
     
@@ -157,11 +153,21 @@ extension IdentityListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        if tableView.cellForRow(at: indexPath) is ContactListIdentityBannerTableViewCell {
-            // create identity
-            coordinator.present(scene: .createIdentity, from: self, transition: .modal(animated: true))
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? IdentityListAddIdentityTableViewCell {
+            cell.delegate = self
         }
+    }
+    
+}
+
+// MARK: - IdentityListAddIdentityTableViewCellDelegate
+extension IdentityListViewController: IdentityListAddIdentityTableViewCellDelegate {
+    
+    func identityListAddIdentityTableViewCell(_ cell: IdentityListAddIdentityTableViewCell, addButtonDidPressed button: UIButton) {
+        coordinator.present(scene: .addIdentity, from: self, transition: .modal(animated: true, completion: nil))
     }
     
 }

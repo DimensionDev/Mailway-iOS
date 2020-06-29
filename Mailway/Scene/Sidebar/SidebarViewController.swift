@@ -170,7 +170,7 @@ extension SidebarViewController {
             settingsSeparatorLine.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             view.layoutMarginsGuide.trailingAnchor.constraint(equalTo: settingsSeparatorLine.trailingAnchor),
             settingsTableView.topAnchor.constraint(equalTo: settingsSeparatorLine.bottomAnchor),
-            settingsSeparatorLine.heightAnchor.constraint(equalToConstant: 1.0).priority(.defaultHigh),
+            settingsSeparatorLine.heightAnchor.constraint(equalToConstant: 1.0 / traitCollection.displayScale).priority(.defaultHigh),
         ])
         
         tableView.delegate = self
