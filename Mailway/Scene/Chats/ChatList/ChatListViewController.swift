@@ -125,6 +125,7 @@ extension ChatListViewModel: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView?.endUpdates()
     }
+    
 }
 
 // MARK: - UITableViewDataSource

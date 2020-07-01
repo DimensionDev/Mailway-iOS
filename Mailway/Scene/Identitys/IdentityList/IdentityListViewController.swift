@@ -9,17 +9,39 @@
 import os
 import UIKit
 import Combine
+import CoreData
+import CoreDataStack
 
 final class IdentityListViewModel: NSObject {
     
     var disposeBag = Set<AnyCancellable>()
     
+    // input
     let context: AppContext
-//    let identities = CurrentValueSubject<[Contact], Never>([])
+    weak var tableView: UITableView?
+
+    // output
+    let fetchedResultsController: NSFetchedResultsController<Contact>
     
     init(context: AppContext) {
         self.context = context
+        self.fetchedResultsController = {
+            let fetchRequest = Contact.sortedFetchRequest
+            fetchRequest.returnsObjectsAsFaults = false
+            fetchRequest.fetchBatchSize = 20
+            
+            let controller = NSFetchedResultsController(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context.managedObjectContext,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            
+            return controller
+        }()
         super.init()
+        
+        fetchedResultsController.delegate = self
         
 //        context.documentStore.$contacts
 //            .map { $0.filter { $0.isIdentity }}
@@ -38,19 +60,74 @@ extension IdentityListViewModel {
 
 extension IdentityListViewModel {
     
-//    static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
-//        // set to no identities style
-//        ContactListViewModel.configure(cell: cell, with: [])
-//
-//        // override header
-//        if identities.count == 0 {
-//            cell.bannerView.headerLabel.text = "No Identity"
-//        } else if identities.count == 1 {
-//            cell.bannerView.headerLabel.text = "1 Identity"
-//        } else {
-//            cell.bannerView.headerLabel.text = "\(identities.count) Identity"
-//        }
-//    }
+    static func configure(cell: IdentityListIdentityTableViewCell, with identity: Contact) {
+        cell.avatarImageView.image = identity.avatar ?? UIImage.placeholder(color: .systemFill)
+        // TODO: color bar
+        cell.nameLabel.text = identity.name
+        cell.keyIDLabel.text = String(identity.keypair.keyID.suffix(8)).separate(every: 4, with: " ")
+    }
+    
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension IdentityListViewModel: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView?.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .update:
+            break
+        case .move:
+            break
+        case .delete:
+            tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else { fatalError("Index Path should be not nil") }
+            tableView?.insertRows(at: [newIndexPath], with: .fade)
+            
+        case .update:
+            guard let indexPath = indexPath else {
+                fatalError("Index Path should be not nil")
+            }
+            let identity = fetchedResultsController.object(at: indexPath)
+            guard let cell = tableView?.cellForRow(at: indexPath) as? IdentityListIdentityTableViewCell else {
+                assertionFailure()
+                return
+            }
+            IdentityListViewModel.configure(cell: cell, with: identity)
+            
+        case .move:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
+            
+            tableView?.deleteRows(at: [indexPath], with: .fade)
+            tableView?.insertRows(at: [newIndexPath], with: .fade)
+            
+        case .delete:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            tableView?.deleteRows(at: [indexPath], with: .fade)
+            
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.endUpdates()
+    }
+    
 }
 
 // MARK: - UITableViewDataSource
@@ -64,8 +141,8 @@ extension IdentityListViewModel: UITableViewDataSource {
         let section = Section.allCases[section]
         switch section {
         case .identities:
-            return 0
-//            return identities.value.count
+            // one section flat results
+            return fetchedResultsController.sections?.first?.numberOfObjects ?? 0
         case .addIdentity:
             return 1
         }
@@ -77,14 +154,12 @@ extension IdentityListViewModel: UITableViewDataSource {
 
         switch section {
         case .identities:
-            cell = UITableViewCell()
-//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListIdentityTableViewCell.self), for: indexPath) as! IdentityListIdentityTableViewCell
-//            cell = _cell
-//
-//            guard indexPath.row < identities.value.count else { break }
-//            let identity = identities.value[indexPath.row]
-//
-//            _cell.nameLabel.text = identity.name
+            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListIdentityTableViewCell.self), for: indexPath) as! IdentityListIdentityTableViewCell
+            cell = _cell
+
+            guard indexPath.row < fetchedResultsController.sections?[indexPath.section].numberOfObjects ?? 0 else { break }
+            let identity = fetchedResultsController.object(at: indexPath)
+            IdentityListViewModel.configure(cell: _cell, with: identity)
             
         case .addIdentity:
             let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListAddIdentityTableViewCell.self), for: indexPath) as! IdentityListAddIdentityTableViewCell
@@ -135,8 +210,11 @@ extension IdentityListViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        viewModel.tableView = tableView
         tableView.delegate = self
+        try! viewModel.fetchedResultsController.performFetch()
         tableView.dataSource = viewModel
+        tableView.reloadData()
 
 //        viewModel.identities
 //            .receive(on: DispatchQueue.main)

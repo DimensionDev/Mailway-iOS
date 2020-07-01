@@ -12,15 +12,32 @@ final class IdentityListIdentityTableViewCell: UITableViewCell {
     
     let avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.crop.circle.fill")
+        imageView.image = UIImage.placeholder(color: .systemFill)
         imageView.contentMode = .scaleAspectFill
         imageView.tintColor = .label
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 40 * 0.5
         return imageView
     }()
+    
+    let colorBarView: UIView = {
+        let bar = UIView()
+        bar.backgroundColor = .systemPurple
+        return bar
+    }()
+    
     let nameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        return label
+    }()
+    
+    let keyIDLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.textColor = .secondaryLabel
         return label
     }()
     
@@ -40,23 +57,48 @@ extension IdentityListIdentityTableViewCell {
     
     private func _init() {
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(avatarImageView)
-        let avatarImageViewHeightLayoutContraint = avatarImageView.heightAnchor.constraint(equalToConstant: 44)
-        avatarImageViewHeightLayoutContraint.priority = .defaultHigh
+        contentView.addSubview(avatarImageView)
         NSLayoutConstraint.activate([
-            avatarImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            avatarImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 44),
-            avatarImageViewHeightLayoutContraint,
+            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
+            avatarImageView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 18),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 40),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 40).priority(.defaultHigh),
+        ])
+        
+        colorBarView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(colorBarView)
+        NSLayoutConstraint.activate([
+            colorBarView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
+            colorBarView.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
+            colorBarView.widthAnchor.constraint(equalToConstant: 2),
+            colorBarView.heightAnchor.constraint(equalToConstant: 40 - 2 * 4),
+        ])
+        
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(container)
+        NSLayoutConstraint.activate([
+            container.leadingAnchor.constraint(equalTo: colorBarView.trailingAnchor, constant: 16),
+            container.centerYAnchor.constraint(equalTo: colorBarView.centerYAnchor),
+            contentView.layoutMarginsGuide.trailingAnchor.constraint(equalTo: container.trailingAnchor),
         ])
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(nameLabel)
+        container.addSubview(nameLabel)
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 8),
-            nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            nameLabel.topAnchor.constraint(equalTo: container.topAnchor),
+            nameLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+        ])
+        
+        keyIDLabel.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(keyIDLabel)
+        NSLayoutConstraint.activate([
+            keyIDLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
+            keyIDLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            keyIDLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            keyIDLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor),
         ])
     }
     

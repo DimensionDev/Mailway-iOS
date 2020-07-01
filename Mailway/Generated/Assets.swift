@@ -25,6 +25,9 @@ internal enum Asset {
     internal enum Background {
       internal static let blue = ColorAsset(name: "Color/Background/blue")
     }
+    internal enum Tint {
+      internal static let barButtonItem = ColorAsset(name: "Color/Tint/bar.button.item")
+    }
   }
   internal enum Communication {
     internal static let mail = ImageAsset(name: "Communication/mail")

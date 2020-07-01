@@ -1,5 +1,5 @@
 //
-//  AddIdentityFormView.swift
+//  AddIdentityView.swift
 //  Mailway
 //
 //  Created by Cirno MainasuK on 2020-6-28.
@@ -9,76 +9,21 @@
 import SwiftUI
 import Combine
 
-struct ContactInfo: Identifiable, Hashable {
-    let id: UUID = UUID()
+struct AddIdentityView: View {
     
-    let type: InfoType
-    
-    var key: String
-    var value: String
-    var avaliable = true
-    
-    var isEmptyInfo: Bool {
-        switch type {
-        case .channel:
-            return key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-                   value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        default:
-            return value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        }
-    }
-    
-    enum InfoType: CaseIterable {
-        case email
-        case twitter
-        case facebook
-        case telegram
-        case discord
-        case channel
-        
-        var iconImage: UIImage {
-            switch self {
-            case .email:    return Asset.Communication.mail.image
-            case .twitter:  return Asset.Logo.twitter.image
-            case .facebook: return Asset.Logo.facebook.image
-            case .telegram: return Asset.Logo.telegram.image
-            case .discord:  return Asset.Logo.discord.image
-            case .channel:  return Asset.Editing.plusCircleFill.image
-            }
-        }
-        
-        var typeName: String {
-            switch self {
-            case .email:    return "E-Mail"
-            case .twitter:  return "Twitter"
-            case .facebook: return "Facebook"
-            case .telegram: return "Telegram"
-            case .discord:  return "Discord"
-            case .channel:  return "Custom contact info"
-            }
-        }
-    }
-}
-
-struct AddIdentityFormView: View {
-    
+    @EnvironmentObject var context: AppContext
     @ObservedObject var keyboard = KeyboardResponder()
     
-    @State var avatarImage = UIImage.placeholder(color: .systemFill)
-    @State var name = ""
-    @State var idColor = UIColor.systemPurple   // TODO: use random system color
-    @State var privateKeyArmor = "pri1q8gqt3uyktu92n0vf22vhff3psmtx76ufxwmtpy7n59sns3r4ulqp3ynhe-Ed25519"   // TODO:
-    @State var publicKeyArmor = "pub17rae4d3fmzvndag07h3vaw9ecymm7x9y6ptvj6k0wfn4jf5ujq2q9dws07-Ed25519"    // TODO:
-    
-    @State var contactInfos: [ContactInfo.InfoType: [ContactInfo]] = [:]
-    
+//    @State var privateKeyArmor = "pri1q8gqt3uyktu92n0vf22vhff3psmtx76ufxwmtpy7n59sns3r4ulqp3ynhe-Ed25519"   // TODO:
+//    @State var publicKeyArmor = "pub17rae4d3fmzvndag07h3vaw9ecymm7x9y6ptvj6k0wfn4jf5ujq2q9dws07-Ed25519"    // TODO:
+        
     var body: some View {
         ScrollView {
             // Section avatar
             Button("Edit Avatar") {
                     print("Tap")
                 }
-                .buttonStyle(AvatarButtonStyle(avatarImage: avatarImage))
+            .buttonStyle(AvatarButtonStyle(avatarImage: context.viewStateStore.addIdentityView.avatarImage.image))
                 .padding(.top, 16.0)
                 .padding(.bottom, 16.0)
             
@@ -87,7 +32,7 @@ struct AddIdentityFormView: View {
                 VStack(spacing: 2.0) {
                     Text("Name".uppercased())
                         .modifier(TextSectionHeaderStyleModifier())
-                    TextField("Name", text: $name)
+                    TextField("Name", text: $context.viewStateStore.addIdentityView.name)
                         .modifier(TextSectionBodyStyleModifier())
                 }
                 .modifier(SectionCellPaddingStyleModifier())
@@ -100,7 +45,7 @@ struct AddIdentityFormView: View {
                 HStack {
                     Text("Set ID Color")
                         .modifier(TextSectionBodyStyleModifier())
-                    Image(uiImage: UIImage.placeholder(color: idColor))
+                    Image(uiImage: UIImage.placeholder(color: context.viewStateStore.addIdentityView.color))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 18.0, height: 18.0)
@@ -184,10 +129,10 @@ struct AddIdentityFormView: View {
                         }) {
                             AddEntryView(iconImage: type.iconImage, entryName: type.typeName)
                         }
-                        ForEach(Array((self.contactInfos[type] ?? []).enumerated()), id: \.1.id) { index, info in
+                        ForEach(Array((self.context.viewStateStore.addIdentityView.contactInfos[type] ?? []).enumerated()), id: \.1.id) { index, info in
                             Group {
                                 if info.avaliable {
-                                    EditableContactInfoView(contactInfo: Binding(self.$contactInfos[type])![index])
+                                    EditableContactInfoView(contactInfo: Binding(self.$context.viewStateStore.addIdentityView.contactInfos[type])![index])
                                 }
                             }
                             .transition(.slide)
@@ -206,7 +151,7 @@ struct AddIdentityFormView: View {
     }
     
     func addContactInfoInputEntry(for type: ContactInfo.InfoType) {
-        let infos = contactInfos[type] ?? []
+        let infos = context.viewStateStore.addIdentityView.contactInfos[type] ?? []
         let shouldAppendNewEntry: Bool = {
             if infos.isEmpty { return true }
             if let last = infos.last, !last.isEmptyInfo { return true }
@@ -217,7 +162,7 @@ struct AddIdentityFormView: View {
             return
         }
         
-        contactInfos[type] = infos + [ContactInfo(type: type, key: "", value: "")]
+        context.viewStateStore.addIdentityView.contactInfos[type] = infos + [ContactInfo(type: type, key: "", value: "")]
     }
     
 }
@@ -275,7 +220,7 @@ struct InputEntryView: View {
     var body: some View {
         VStack(spacing: 0) {
             // network input
-            if infoType == .channel {
+            if infoType == .custom {
                 HStack(spacing: 0) {
                     Color.clear
                         .frame(width: 24 + 32, height: 24)
@@ -294,7 +239,7 @@ struct InputEntryView: View {
                     .frame(width: 24 + 32, height: 24)
                 TextField(inputValueTextFieldPlaceholder, text: $valueInput)
                     .modifier(TextSectionBodyStyleModifier())
-                if infoType != .channel {
+                if infoType != .custom {
                     deleteButton
                 }
             }
@@ -306,7 +251,7 @@ struct InputEntryView: View {
     
     var inputValueTextFieldPlaceholder: String {
         switch infoType {
-        case .channel:  return "Custom ID"
+        case .custom:  return "Custom ID"
         default:        return "Input \(infoType.typeName)"
         }
     }
@@ -328,7 +273,7 @@ struct InputEntryView: View {
     }
     
     var isDeleteButtonHidden: Bool {
-        if infoType == .channel {
+        if infoType == .custom {
             return keyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
                    valueInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
@@ -340,7 +285,7 @@ struct InputEntryView: View {
 
 struct AddIdentityFormView_Previews: PreviewProvider {
     static var previews: some View {
-        AddIdentityFormView()
+        AddIdentityView().environmentObject(AppContext.shared)
     }
 }
 

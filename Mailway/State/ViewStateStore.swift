@@ -11,5 +11,6 @@ import Combine
 struct ViewStateStore {
     var chatsView = ViewState.ChatsView()
     var contactsView = ViewState.Contacts()
+    var addIdentityView = ViewState.AddIdentityView()
 }
 
