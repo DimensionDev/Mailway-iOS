@@ -66,6 +66,7 @@
 		DB65474F24AC39970039AFE5 /* ViewState+AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65474E24AC39970039AFE5 /* ViewState+AddIdentityView.swift */; };
 		DB65475124AC66460039AFE5 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65475024AC66460039AFE5 /* UIAlertController.swift */; };
 		DB65475324ACA6BB0039AFE5 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65475224ACA6BB0039AFE5 /* String.swift */; };
+		DB65475524AD897C0039AFE5 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65475424AD897C0039AFE5 /* UIView.swift */; };
 		DB6DEC77247E4AA90040C817 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC76247E4AA90040C817 /* ChatViewController.swift */; };
 		DB6DEC79247E4E270040C817 /* SceneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC78247E4E270040C817 /* SceneCoordinator.swift */; };
 		DB6DEC7C247E6D300040C817 /* SelectChatIdentityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6DEC7B247E6D300040C817 /* SelectChatIdentityViewController.swift */; };
@@ -264,6 +265,7 @@
 		DB65474E24AC39970039AFE5 /* ViewState+AddIdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewState+AddIdentityView.swift"; sourceTree = "<group>"; };
 		DB65475024AC66460039AFE5 /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
 		DB65475224ACA6BB0039AFE5 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		DB65475424AD897C0039AFE5 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		DB6DEC76247E4AA90040C817 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		DB6DEC78247E4E270040C817 /* SceneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCoordinator.swift; sourceTree = "<group>"; };
 		DB6DEC7B247E6D300040C817 /* SelectChatIdentityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectChatIdentityViewController.swift; sourceTree = "<group>"; };
@@ -641,6 +643,7 @@
 				DB1EDECF24AB0D3F000C5E58 /* DateFormatter.swift */,
 				DB65475024AC66460039AFE5 /* UIAlertController.swift */,
 				DB65475224ACA6BB0039AFE5 /* String.swift */,
+				DB65475424AD897C0039AFE5 /* UIView.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1525,6 +1528,7 @@
 				DB008AB02476737100CE6A7E /* ViewStata+Contacts.swift in Sources */,
 				DB1EC2DE2488E591002379A1 /* HitTestExpandedButton.swift in Sources */,
 				DB6DEC79247E4E270040C817 /* SceneCoordinator.swift in Sources */,
+				DB65475524AD897C0039AFE5 /* UIView.swift in Sources */,
 				DBB981162486452C00FB2FE8 /* RootSplitViewController.swift in Sources */,
 				DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */,
 				DB7E1E3C247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift in Sources */,

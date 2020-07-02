@@ -36,10 +36,12 @@ final class IdentityListIdentityTableViewCell: UITableViewCell {
     let keyIDLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textColor = .secondaryLabel
         return label
     }()
+    
+    let separatorLine = UIView.separatorLine
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -99,6 +101,15 @@ extension IdentityListIdentityTableViewCell {
             keyIDLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             keyIDLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             keyIDLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+        ])
+        
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(separatorLine)
+        NSLayoutConstraint.activate([
+            separatorLine.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            separatorLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: separatorLine.bottomAnchor),
+            separatorLine.heightAnchor.constraint(equalToConstant: UIView.separatorLineHeight(of: separatorLine)).priority(.defaultHigh),
         ])
     }
     

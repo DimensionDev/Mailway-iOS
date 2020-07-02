@@ -24,11 +24,7 @@ final class SettingEntryTableViewCell: UITableViewCell {
         return label
     }()
     
-    let separatorLine: UIView = {
-        let line = UIView()
-        line.backgroundColor = .separator
-        return line
-    }()
+    let separatorLine = UIView.separatorLine
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -71,7 +67,7 @@ extension SettingEntryTableViewCell {
             separatorLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: separatorLine.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: separatorLine.bottomAnchor),
-            separatorLine.heightAnchor.constraint(equalToConstant: 1.0 / traitCollection.displayScale).priority(.defaultHigh),
+            separatorLine.heightAnchor.constraint(equalToConstant: UIView.separatorLineHeight(of: separatorLine)).priority(.defaultHigh),
         ])
     }
     
