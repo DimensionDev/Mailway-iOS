@@ -30,6 +30,7 @@ internal enum Asset {
     }
   }
   internal enum Communication {
+    internal static let listBubble = ImageAsset(name: "Communication/list.bubble")
     internal static let mail = ImageAsset(name: "Communication/mail")
   }
   internal enum Editing {

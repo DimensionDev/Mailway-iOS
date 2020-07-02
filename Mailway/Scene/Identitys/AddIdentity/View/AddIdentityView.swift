@@ -139,6 +139,20 @@ struct AddIdentityView: View {
                         }
                     }
                 }
+                // note
+                Button(action: {
+                    withAnimation {
+                        self.context.viewStateStore.addIdentityView.note.isEnabled = true
+                    }
+                }) {
+                    AddEntryView(iconImage: Asset.Communication.listBubble.image, entryName: "Node")
+                }
+                Group {
+                    if context.viewStateStore.addIdentityView.note.isEnabled {
+                        EdiableNoteView(note: $context.viewStateStore.addIdentityView.note)
+                    }
+                }
+                .transition(.slide)
             }
             .background(Color(.systemBackground))
             .padding(.leading)
@@ -178,14 +192,68 @@ struct AddIdentityView: View {
 //}
 
 struct EditableContactInfoView: View {
+    
     @Binding var contactInfo: ContactInfo
     
     var body: some View {
-        InputEntryView(infoType: contactInfo.type,
-                       keyInput: $contactInfo.key,
-                       valueInput: $contactInfo.value,
-                       available: $contactInfo.avaliable)
+        VStack(spacing: 0) {
+            // key (only for .custom)
+            if contactInfo.type == .custom {
+                InputEntryView(isRemoveButtonEnabled: true && !isDeleteButtonHidden,
+                               removeButtonPressAction: { self.contactInfo.avaliable = false },
+                               placeholder: "Custom network",
+                               input: $contactInfo.key,
+                               available: $contactInfo.avaliable)
+            }
+            // value
+            InputEntryView(isRemoveButtonEnabled: contactInfo.type != .custom && !isDeleteButtonHidden,
+                           removeButtonPressAction: { self.contactInfo.avaliable = false },
+                           placeholder: valueInputPlaceholder,
+                           input: $contactInfo.value,
+                           available: $contactInfo.avaliable)
+        }
+        
     }
+    
+    var valueInputPlaceholder: String {
+        switch contactInfo.type {
+        case .custom:   return "Custom ID"
+        default:        return "Input \(contactInfo.type.typeName)"
+        }
+    }
+    
+    var isDeleteButtonHidden: Bool {
+        if contactInfo.type == .custom {
+            return contactInfo.key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+                contactInfo.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+        
+        return contactInfo.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
+}
+
+struct EdiableNoteView: View {
+    
+    @Binding var note: ViewState.AddIdentityView.Note
+    
+    var body: some View {
+        InputEntryView(
+            isRemoveButtonEnabled: !isDeleteButtonHidden,
+            removeButtonPressAction: {
+                self.note.input = ""
+                self.note.isEnabled = false
+            },
+            placeholder: "Input Note",
+            input: $note.input,
+            available: $note.isEnabled
+        )
+    }
+    
+    var isDeleteButtonHidden: Bool {
+        return note.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
 }
 
 struct AddEntryView: View {
@@ -211,35 +279,21 @@ struct AddEntryView: View {
 
 struct InputEntryView: View {
     
-    let infoType: ContactInfo.InfoType
-    
-    @Binding var keyInput: String
-    @Binding var valueInput: String
+    let isRemoveButtonEnabled: Bool
+    let removeButtonPressAction: () -> Void
+    let placeholder: String
+        
+    @Binding var input: String
     @Binding var available: Bool
     
     var body: some View {
         VStack(spacing: 0) {
-            // network input
-            if infoType == .custom {
-                HStack(spacing: 0) {
-                    Color.clear
-                        .frame(width: 24 + 32, height: 24)
-                    TextField("Custom network", text: $keyInput)
-                        .modifier(TextSectionBodyStyleModifier())
-                    deleteButton
-                }
-                .modifier(SectionCellPaddingStyleModifier())
-                Divider()
-                    .padding(.leading, 24 + 32)
-            }
-            
-            // value input
             HStack(spacing: 0) {
                 Color.clear
                     .frame(width: 24 + 32, height: 24)
-                TextField(inputValueTextFieldPlaceholder, text: $valueInput)
+                TextField(placeholder, text: $input)
                     .modifier(TextSectionBodyStyleModifier())
-                if infoType != .custom {
+                if isRemoveButtonEnabled {
                     deleteButton
                 }
             }
@@ -249,19 +303,12 @@ struct InputEntryView: View {
         }
     }
     
-    var inputValueTextFieldPlaceholder: String {
-        switch infoType {
-        case .custom:  return "Custom ID"
-        default:        return "Input \(infoType.typeName)"
-        }
-    }
-    
     var deleteButton: some View {
         Group {
-            if !isDeleteButtonHidden {
+            if isRemoveButtonEnabled {
                 Button(action: {
                     withAnimation {
-                        self.available = false
+                        self.removeButtonPressAction()
                     }
                 }) {
                     Image(uiImage: Asset.Editing.close.image)
@@ -270,15 +317,6 @@ struct InputEntryView: View {
                 // TODO: add fade transition animation
             }
         }
-    }
-    
-    var isDeleteButtonHidden: Bool {
-        if infoType == .custom {
-            return keyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-                   valueInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        }
-        
-        return valueInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
 }

@@ -21,20 +21,35 @@ extension ViewState {
             }
         }
         let namePublisher = PassthroughSubject<String, Never>()
+        
         var color = UIColor.systemPurple
         var contactInfos: [ContactInfo.InfoType: [ContactInfo]] = [:]
         
-        enum Avatar {
-            case placeholder(UIImage)
-            case image(UIImage)
-            
-            var image: UIImage {
-                switch self {
-                case .placeholder(let image), .image(let image):
-                    return image
-                }
+        var note = Note()
+    }
+}
+
+extension ViewState.AddIdentityView {
+    enum Avatar {
+        case placeholder(UIImage)
+        case image(UIImage)
+        
+        var image: UIImage {
+            switch self {
+            case .placeholder(let image), .image(let image):
+                return image
             }
         }
+    }
+    
+    struct Note {
+        var isEnabled = false
+        var input = "" {
+            didSet {
+                publisher.send(input)
+            }
+        }
+        let publisher = PassthroughSubject<String, Never>()
     }
 }
 
