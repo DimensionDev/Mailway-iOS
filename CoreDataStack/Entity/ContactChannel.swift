@@ -69,8 +69,12 @@ extension ContactChannel {
                 case .facebook:             return "facebook"
                 case .telegram:             return "telegram"
                 case .discord:              return "discord"
-                case .custom(let name):     return name.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                case .custom(let name):     return name.trimmingCharacters(in: .whitespacesAndNewlines)
                 }
+            }
+            
+            public static var fixed: [Self] {
+                return [.email, .twitter, .facebook, .telegram, .discord]
             }
         }
     }

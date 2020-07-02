@@ -49,52 +49,48 @@ final class AddIdentityViewModel: NSObject {
         
         // 2. check channel
         var orderedContactInfo: [ContactInfo] = []
-        var validContactInfo: [ContactInfo] = []
+        var validContactChannelProperties: [ContactChannel.Property] = []
         for infoType in ContactInfo.InfoType.allCases {
             orderedContactInfo.append(contentsOf: viewState.contactInfos[infoType] ?? [])
         }
         for info in orderedContactInfo {
             guard info.avaliable else { continue }      // skip removed info
             guard !info.isEmptyInfo else { continue }   // skip empty info
-            if ContactInfo.InfoType.custom == info.type {
-                let key = info.key.trimmingCharacters(in: .whitespacesAndNewlines)
-                guard !key.isEmpty else {
-                    return Future { $0(.success(Result.failure(Error.channelKeyEmpty))) }
-                }
-                guard key.count <= 128 else {
-                    return Future { $0(.success(Result.failure(Error.channelKeyTooLong))) }
-                }
+
+            do {
+                let property = try AddIdentityViewModel.validate(contactInfo: info)
+                validContactChannelProperties.append(property)
+            } catch {
+                return Future { $0(.success(Result.failure(error))) }
             }
-            
-            let value = info.value.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !value.isEmpty else {
-                return Future { $0(.success(Result.failure(Error.channelValueEmpty))) }
-            }
-            guard value.count <= 128 else {
-                return Future { $0(.success(Result.failure(Error.channelValueTooLong))) }
-            }
-            
-            validContactInfo.append(info)
         }
 
         // 3. check note
-        // TODO:
+        let note = viewState.note.input.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard note.count <= 512 else {
+            return Future { $0(.success(Result.failure(Error.noteTooLong))) }
+        }
         
         // 4. avatar
         // TODO:
         
         // prepare database stuff
-        let contactProperty = Contact.Property(name: name,i18nNames: [:], note: nil, avatar: nil)
+        let contactProperty = Contact.Property(name: name,i18nNames: [:], note: note.isEmpty ? nil : note, avatar: nil)
         
         let ed25519Keypair = Ed25519.Keypair()
         let privateKey = ed25519Keypair.privateKey
         let publicKey = ed25519Keypair.publicKey
         let keypairProperty = Keypair.Property(privateKey: privateKey.serialize(), publicKey: publicKey.serialize(), keyID: publicKey.keyID)
         
+        let channelProperties = validContactChannelProperties
+        
         let managedObjectContext = context.managedObjectContext
         return managedObjectContext.performChanges { [weak self] in
             let keypair = Keypair.insert(into: managedObjectContext, property: keypairProperty)
-            let contact = Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: [])
+            let channels = channelProperties.map {
+                ContactChannel.insert(into: managedObjectContext, property: $0)
+            }
+            let contact = Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: channels)
             
             self?.insertedContact.send(contact)
         }
@@ -112,6 +108,7 @@ extension AddIdentityViewModel {
         case channelKeyTooLong
         case channelValueEmpty
         case channelValueTooLong
+        case noteTooLong
         
         var errorDescription: String? {
             switch self {
@@ -120,6 +117,8 @@ extension AddIdentityViewModel {
             case .channelKeyEmpty, .channelKeyTooLong,
                  .channelValueEmpty, .channelValueTooLong:
                 return "Invalid Contact Info Format"
+            case .noteTooLong:
+                return "Invalid Note Format"
             }
         }
         
@@ -137,6 +136,8 @@ extension AddIdentityViewModel {
                 return "Custom ID cannot be empty."
             case .channelValueTooLong:
                 return "Custom ID is too long."
+            case .noteTooLong:
+                return "Note is too long."
             }
         }
         
@@ -154,8 +155,51 @@ extension AddIdentityViewModel {
                 return "Please input custom ID."
             case .channelValueTooLong:
                 return "Please input custom ID no more than 128 characters."
+            case .noteTooLong:
+                return "Please input note no more than 512 characters."
             }
         }
+    }
+    
+    private static func validate(contactInfo info: ContactInfo) throws -> ContactChannel.Property {
+        let name: ContactChannel.Property.ChannelName = try {
+            switch info.type {
+            case .email:    return .email
+            case .twitter:  return .twitter
+            case .facebook: return .facebook
+            case .telegram: return .telegram
+            case .discord:  return .discord
+            case .custom:
+                let inputNameText = info.key.trimmingCharacters(in: .whitespacesAndNewlines)
+                switch inputNameText {
+                case ContactChannel.Property.ChannelName.email.text:        return .email
+                case ContactChannel.Property.ChannelName.twitter.text:      return .twitter
+                case ContactChannel.Property.ChannelName.facebook.text:     return .facebook
+                case ContactChannel.Property.ChannelName.telegram.text:     return .telegram
+                case ContactChannel.Property.ChannelName.discord.text:      return .discord
+                default:
+                    guard !inputNameText.isEmpty else {
+                        throw Error.channelKeyEmpty
+                    }
+                    guard inputNameText.count <= 128 else {
+                        throw Error.channelKeyTooLong
+                    }
+                    return .custom(inputNameText)
+                }
+            }
+        }()
+        
+        let value = info.value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !value.isEmpty else {
+            throw Error.channelValueEmpty
+        }
+        guard value.count <= 128 else {
+            throw Error.channelValueTooLong
+        }
+        
+        // TODO: validate value by name type
+        
+        return ContactChannel.Property(name: name, value: value)
     }
     
 }

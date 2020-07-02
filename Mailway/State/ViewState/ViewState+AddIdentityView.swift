@@ -102,4 +102,5 @@ struct ContactInfo: Identifiable, Hashable {
             }
         }
     }
+    
 }
