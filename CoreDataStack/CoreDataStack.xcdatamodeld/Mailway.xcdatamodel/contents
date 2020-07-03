@@ -47,7 +47,7 @@
         <attribute name="nameFirstInitial" optional="YES" transient="YES" attributeType="String"/>
         <attribute name="note" optional="YES" attributeType="String"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="channels" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="ContactChannel" inverseName="contact" inverseEntity="ContactChannel"/>
+        <relationship name="channels" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ContactChannel" inverseName="contact" inverseEntity="ContactChannel"/>
         <relationship name="keypair" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Keypair" inverseName="contact" inverseEntity="Keypair"/>
     </entity>
     <entity name="ContactChannel" representedClassName=".ContactChannel" syncable="YES">

@@ -41,8 +41,10 @@ public final class CoreDataStack {
         
         if storeDescriptions.first?.type == NSInMemoryStoreType {
             container = NSPersistentContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
+            container.persistentStoreDescriptions = storeDescriptions
         } else {
             container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
+            container.persistentStoreDescriptions = storeDescriptions
             // initialize the CloudKit schema
             let cloudDBId = "iCloud.com.Sujitech.MailWay"
             let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudDBId)
@@ -51,7 +53,7 @@ public final class CoreDataStack {
             forKey: NSPersistentHistoryTrackingKey)
         }
         
-        container.persistentStoreDescriptions = storeDescriptions
+        
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
