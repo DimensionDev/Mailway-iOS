@@ -168,13 +168,13 @@ struct IdentityInfo: Codable, Equatable {
     
     let public_key_armor: String
     let name: String
-    let i18nNames: [String: String]
-    let channels: [IdentityChannel]
+    let i18nNames: [String: String]?
+    let channels: [IdentityChannel]?
     let updatedAt: String
     let mac: Data
     let signature: Data
     
-    init?(privateKey: Ed25519.PrivateKey, name: String, i18nNames: [String : String], channels: [IdentityChannel]) {
+    init?(privateKey: Ed25519.PrivateKey, name: String, i18nNames: [String : String] = [:], channels: [IdentityChannel] = []) {
         let public_key_armor = privateKey.publicKey.serialize()
         self.public_key_armor = public_key_armor
         self.name = name
@@ -194,16 +194,16 @@ struct IdentityInfo: Codable, Equatable {
         self.signature = signature
     }
     
-    static func calculateMac(use publicKey: Ed25519.PublicKey, public_key_armor: String, name: String, i18nNames: [String: String], channels: [IdentityChannel], updatedAt: String) -> Data? {
+    static func calculateMac(use publicKey: Ed25519.PublicKey, public_key_armor: String, name: String, i18nNames: [String: String]?, channels: [IdentityChannel]?, updatedAt: String) -> Data? {
         let data: Data = {
             var bytes = Data()
             bytes.append(Data(public_key_armor.utf8))
             bytes.append(Data(name.utf8))
-            for (key, value) in i18nNames {
+            for (key, value) in i18nNames ?? [:] {
                 bytes.append(Data(key.utf8))
                 bytes.append(Data(value.utf8))
             }
-            for channel in channels {
+            for channel in channels ?? [] {
                 bytes.append(Data(channel.name.utf8))
                 bytes.append(Data(channel.value.utf8))
             }
