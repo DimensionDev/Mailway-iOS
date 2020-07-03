@@ -68,6 +68,7 @@ struct SidebarEntryView_Previews: PreviewProvider {
             view.titleLabel.text = "Inbox"
             return view
         }
+        .previewLayout(.fixed(width: 320, height: 320))
     }
 }
 

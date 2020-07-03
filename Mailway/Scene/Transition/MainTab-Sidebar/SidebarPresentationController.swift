@@ -13,7 +13,7 @@ final class SidebarPresentationController: UIPresentationController {
     
     let dimmingView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
+        view.backgroundColor = UIColor(white: 0.0, alpha: 0.2)
         return view
     }()
     
@@ -40,7 +40,7 @@ final class SidebarPresentationController: UIPresentationController {
             return presentingViewController.view.bounds
         }
         
-        let width = (primaryViewController.view.bounds.width - 56.0)    // fixed 56pt
+        let width = primaryViewController.view.bounds.width - 56.0    // fixed 56pt
         switch UIApplication.shared.userInterfaceLayoutDirection {
         case .rightToLeft:
             return CGRect(x: containerView!.bounds.width - width,

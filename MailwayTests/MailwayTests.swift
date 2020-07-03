@@ -8,6 +8,8 @@
 
 import XCTest
 @testable import Mailway
+import NtgeCore
+import MessagePack
 
 class MailwayTests: XCTestCase {
 
@@ -31,4 +33,39 @@ class MailwayTests: XCTestCase {
         }
     }
 
+}
+
+extension MailwayTests {
+    
+    func testSmoke() { }
+    
+    func testIdentityCardSerialization() throws {
+        let keypair = Ed25519.Keypair()
+        let privateKey = keypair.privateKey
+    
+        let info = IdentityInfo(
+            privateKey: privateKey,
+            name: "Alice",
+            i18nNames: [:],
+            channels: []
+        )
+        
+        let supplementation = IdentitySupplementation(
+            name: "Alice or not Alice ",
+            i18nNames: [:],
+            channels: []
+        )
+        
+        let card = IdentityCard(info: info, supplementation: supplementation)
+        
+        let encoder = MessagePackEncoder()
+        let encoded = try encoder.encode(card)
+        
+        let decoder = MessagePackDecoder()
+        let decoded = try decoder.decode(IdentityCard.self, from: encoded)
+        
+        XCTAssertEqual(card, decoded)
+        print(decoded)
+    }
+    
 }

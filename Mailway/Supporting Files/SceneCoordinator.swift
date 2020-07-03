@@ -69,14 +69,21 @@ extension SceneCoordinator {
         
         // contacts
         case contactDetail(viewModel: ContactDetailViewModel)
-        case createIdentity
+        
+        // identities
         case identityList
+        case addIdentity
         
         // settings
-        case setting(viewModel: SettingListViewModel)
+        case setting
         
         // sidebar
         case sidebar
+        
+        // debug only
+        #if DEBUG
+        case splitDemo(viewModel: SplitDemoViewModel)
+        #endif
     }
 }
 
@@ -143,8 +150,6 @@ extension SceneCoordinator {
             _viewController.viewModel = viewModel
             _viewController.hidesBottomBarWhenPushed = true
             viewController = _viewController
-        case .createIdentity:
-            viewController = CreateIdentityViewController()
         case .chatRoom(let viewModel):
             let _viewController = ChatViewController()
             _viewController.viewModel = viewModel
@@ -152,13 +157,19 @@ extension SceneCoordinator {
             viewController = _viewController
         case .identityList:
             viewController = IdentityListViewController()
-        case .setting(let viewModel):
-            // FIXME:
-            let _viewController = SettingListViewController()
-            _viewController.viewModel = viewModel
-            viewController = _viewController
+        case .addIdentity:
+            viewController = AddIdentityViewController()
+        case .setting:
+            viewController = SettingsViewController()
         case .sidebar:
             viewController = SidebarViewController()
+            
+        #if DEBUG
+        case .splitDemo(viewModel: let viewModel):
+            let _viewController = SplitDemoViewController()
+            _viewController.viewModel = viewModel
+            viewController = _viewController
+        #endif
         }
         
         setupDependency(for: viewController as? NeedsDependency)

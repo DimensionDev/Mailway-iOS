@@ -53,10 +53,10 @@ final class MainTabBarController: UITabBarController {
                 viewController.coordinator = coordinator
                 navigationController = UINavigationController(rootViewController: viewController)
             case .settings:
-                let viewController = SettingListViewController()
+                let viewController = SettingsViewController()
                 viewController.context = context
                 viewController.coordinator = coordinator
-                viewController.viewModel = SettingListViewModel()
+                viewController.viewModel = SettingsViewModel()
                 navigationController = UINavigationController(rootViewController: viewController)
             }
             return navigationController
@@ -82,7 +82,7 @@ final class MainTabBarController: UITabBarController {
                 case .contacts:
                     self.selectedIndex = Tabs.contacts.rawValue
                 case .settings:
-                    self.selectedIndex = Tabs.settings.rawValue
+                    coordinator.present(scene: .setting, from: nil, transition: .modal(animated: true, completion: nil))
                 default:
                     break   // TODO:
                 }

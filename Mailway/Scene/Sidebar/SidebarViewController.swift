@@ -125,11 +125,7 @@ final class SidebarViewController: UIViewController, NeedsDependency, SidebarTra
         return tableView
     }()
     
-    let settingsSeparatorLine: UIView = {
-        let line = UIView()
-        line.backgroundColor = .separator
-        return line
-    }()
+    let settingsSeparatorLine = UIView.separatorLine
     
     private(set) lazy var viewModel = SidebarViewModel(context: context)
     
@@ -170,7 +166,7 @@ extension SidebarViewController {
             settingsSeparatorLine.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             view.layoutMarginsGuide.trailingAnchor.constraint(equalTo: settingsSeparatorLine.trailingAnchor),
             settingsTableView.topAnchor.constraint(equalTo: settingsSeparatorLine.bottomAnchor),
-            settingsSeparatorLine.heightAnchor.constraint(equalToConstant: 1.0).priority(.defaultHigh),
+            settingsSeparatorLine.heightAnchor.constraint(equalToConstant: UIView.separatorLineHeight(of: settingsSeparatorLine)).priority(.defaultHigh),
         ])
         
         tableView.delegate = self

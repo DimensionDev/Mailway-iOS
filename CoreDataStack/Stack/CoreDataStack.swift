@@ -46,11 +46,10 @@ public final class CoreDataStack {
             container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
             container.persistentStoreDescriptions = storeDescriptions
             // initialize the CloudKit schema
-            let cloudDBId = "iCloud.com.Sujitech.MailWay"
-            let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudDBId)
+            let containerIdentifier = "iCloud.com.Sujitech.MailWay"
+            let options = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
             container.persistentStoreDescriptions.first?.cloudKitContainerOptions = options
-            container.persistentStoreDescriptions.first?.setOption(true as NSNumber,
-            forKey: NSPersistentHistoryTrackingKey)
+            container.persistentStoreDescriptions.first?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         }
         
         
