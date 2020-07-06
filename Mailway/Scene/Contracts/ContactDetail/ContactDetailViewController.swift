@@ -22,26 +22,29 @@ final class ContactDetailViewModel: ObservableObject {
     // output
     let removeButtonPressedPublisher = PassthroughSubject<Void, Never>()
     let contactDidRemovedPublisher = PassthroughSubject<Void, Never>()
+    let error = PassthroughSubject<Error, Never>()
     
     init(contact: Contact) {
         self.contact = contact
         
         removeButtonPressedPublisher
             .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: false)
-            .sink { [weak self] _ in
-                guard let `self` = self else { return }
-                
-                var subscription: AnyCancellable?
-                subscription = self.contact.managedObjectContext?.performChanges {
-                    os_log("%{public}s[%{public}ld], %{public}s: remove contact %s", ((#file as NSString).lastPathComponent), #line, #function, self.contact.debugDescription)
-                    self.contact.managedObjectContext?.delete(self.contact)
+            .flatMap { _ -> Future<Result<Void, Error>, Never> in
+                guard let managedObjectContext = self.contact.managedObjectContext else {
+                    return Future<Result<Void, Error>, Never> { $0(.success(Result.success(()))) }
                 }
-                .sink(receiveCompletion: { _ in
-                    os_log("%{public}s[%{public}ld], %{public}s: subscription finish: %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
-                    subscription = nil
-                }, receiveValue: { result in
-                    os_log("%{public}s[%{public}ld], %{public}s: reuslt: %s", ((#file as NSString).lastPathComponent), #line, #function, String(describing: result))
-                })
+                os_log("%{public}s[%{public}ld], %{public}s: remove contact %s", ((#file as NSString).lastPathComponent), #line, #function, self.contact.debugDescription)
+                return managedObjectContext.performChanges {
+                    managedObjectContext.delete(self.contact)
+                }
+            }
+            .sink { result in
+                do {
+                    _ = try result.get()
+                } catch {
+                    os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, error.localizedDescription)
+                    self.error.send(error)
+                }
             }
             .store(in: &disposeBag)
         
@@ -70,7 +73,6 @@ final class ContactDetailViewController: UIViewController, NeedsDependency {
     var viewModel: ContactDetailViewModel!
     
     deinit {
-        try? context.managedObjectContext.setQueryGenerationFrom(nil)
         os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
     }
 
@@ -80,9 +82,7 @@ extension ContactDetailViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        try? context.managedObjectContext.setQueryGenerationFrom(.current)
-        
+                
         title = viewModel.contact.name
         view.backgroundColor = .systemBackground
         
@@ -102,6 +102,14 @@ extension ContactDetailViewController {
         viewModel.contactDidRemovedPublisher
             .sink { [weak self] _ in
                 self?.navigationController?.popViewController(animated: true)
+            }
+            .store(in: &disposeBag)
+        
+        viewModel.error
+            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: false)
+            .sink { error in
+                let alertController = UIAlertController.standardAlert(of: error)
+                self.present(alertController, animated: true, completion: nil)
             }
             .store(in: &disposeBag)
     }

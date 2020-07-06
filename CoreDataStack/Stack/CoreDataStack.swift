@@ -44,15 +44,22 @@ public final class CoreDataStack {
             container.persistentStoreDescriptions = storeDescriptions
         } else {
             container = NSPersistentCloudKitContainer(name: "CoreDataStack", managedObjectModel: managedObjectModel)
-            container.persistentStoreDescriptions = storeDescriptions
-            // initialize the CloudKit schema
+            
+            // initialize the CloudKit container options
             let containerIdentifier = "iCloud.com.Sujitech.MailWay"
-            let options = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
-            container.persistentStoreDescriptions.first?.cloudKitContainerOptions = options
-            container.persistentStoreDescriptions.first?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            let cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
+            
+            for storeDescription in storeDescriptions {
+                // TODO: add iCloud switcher in user defaults
+                storeDescription.cloudKitContainerOptions = cloudKitContainerOptions
+
+                // enable history tracking for old data records
+                storeDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            }
+            
+            // set store descriptions
+            container.persistentStoreDescriptions = storeDescriptions
         }
-        
-        
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -71,6 +78,8 @@ public final class CoreDataStack {
             }
             
             container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+            
+            // it's looks like the remote notification only trigger when app enter and leave background
             container.viewContext.automaticallyMergesChangesFromParent = true
 
             os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, storeDescription.debugDescription)
