@@ -17,6 +17,11 @@ struct IdentityCard: Codable, Equatable {
     let info: IdentityInfo
     let supplementation: IdentitySupplementation?
     
+    init(info: IdentityInfo, supplementation: IdentitySupplementation) {
+        self.info = info
+        self.supplementation = supplementation.isEmpty ? nil : supplementation
+    }
+    
 }
 
 extension IdentityCard {
@@ -218,16 +223,20 @@ struct IdentityInfo: Codable, Equatable {
 
 struct IdentitySupplementation: Codable, Equatable {
     
-    let name: String
-    let i18nNames: [String: String]
-    let channels: [IdentityChannel]
+    let name: String?
+    let i18nNames: [String: String]?
+    let channels: [IdentityChannel]?
     let updatedAt: String
     
-    init(name: String, i18nNames: [String : String], channels: [IdentityChannel]) {
+    init(name: String? = nil, i18nNames: [String : String]? = nil, channels: [IdentityChannel]? = nil) {
         self.name = name
         self.i18nNames = i18nNames
         self.channels = channels
         self.updatedAt = ISO8601DateFormatter.fractionalSeconds.string(from: Date())
+    }
+    
+    var isEmpty: Bool {
+        return name == nil && (i18nNames?.isEmpty ?? true) && (channels?.isEmpty ?? true)
     }
     
 }
