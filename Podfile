@@ -22,9 +22,13 @@ target 'Mailway' do
   # Pods for Mailway
   common_ntge
 
+  # ui
+  pod 'Floaty', '~> 4.2.0'
   pod 'GrowingTextView', '~> 0.7.2'
-  pod 'SwiftGen', '~> 6.2.0'
   pod 'UITextView+Placeholder', '~> 1.4.0'
+  
+  # misc
+  pod 'SwiftGen', '~> 6.2.0'
 
   target 'MailwayTests' do
     inherit! :search_paths

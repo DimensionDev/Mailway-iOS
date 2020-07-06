@@ -11,6 +11,7 @@ import SwiftUI
 import Combine
 import CoreData
 import CoreDataStack
+import Floaty
 
 final class ChatListViewModel: NSObject {
     
@@ -170,12 +171,40 @@ final class ChatListViewController: UIViewController, NeedsDependency, MainTabTr
         return item
     }()
     
-    private lazy var composeBarButtonItem: UIBarButtonItem = {
-        let item = UIBarButtonItem()
-        item.image = UIImage(systemName: "square.and.pencil")
-        item.target = self
-        item.action = #selector(ChatListViewController.composeBarButtonItemPressed(_:))
-        return item
+//    private lazy var composeBarButtonItem: UIBarButtonItem = {
+//        let item = UIBarButtonItem()
+//        item.image = UIImage(systemName: "square.and.pencil")
+//        item.target = self
+//        item.action = #selector(ChatListViewController.composeBarButtonItemPressed(_:))
+//        return item
+//    }()
+    
+    private lazy var floatyButton: Floaty = {
+        let button = Floaty()
+        button.plusColor = .white
+        button.buttonColor = Asset.Color.Background.blue.color
+        
+        let compose: FloatyItem = {
+            let item = FloatyItem()
+            item.title = "Compose"
+            item.icon = Asset.Editing.pencil.image
+            item.buttonColor = Asset.Color.Background.greenLight.color
+            item.handler = self.composeFloatyItemPressed
+            return item
+        }()
+        let receive: FloatyItem = {
+            let item = FloatyItem()
+            item.title = "Receive"
+            item.icon = Asset.Communication.trayAndArrowDown.image
+            item.buttonColor = Asset.Color.Background.tealLight.color
+            item.handler = self.receiveFloatyItemPressed
+            return item
+        }()
+        
+        button.addItem(item: compose)
+        button.addItem(item: receive)
+        
+        return button
     }()
     
     private lazy var tableView: UITableView = {
@@ -193,10 +222,10 @@ extension ChatListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Chats"
+        title = "Inbox"
         transitionController = MainTabTransitionController(viewController: self)
         navigationItem.leftBarButtonItem = sidebarBarButtonItem
-        navigationItem.rightBarButtonItem = composeBarButtonItem
+        // navigationItem.rightBarButtonItem = composeBarButtonItem
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -213,12 +242,20 @@ extension ChatListViewController {
         tableView.dataSource = viewModel
         tableView.reloadData()
         
+        view.addSubview(floatyButton)
+        
 //        viewModel.chats
 //            .receive(on: DispatchQueue.main)
 //            .sink { [weak self] _ in
 //                self?.tableView.reloadData()
 //            }
 //            .store(in: &disposeBag)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        floatyButton.close()
     }
     
 }
@@ -229,7 +266,15 @@ extension ChatListViewController {
         coordinator.present(scene: .sidebar, from: self, transition: .custom(transitioningDelegate: transitionController))
     }
     
-    @objc private func composeBarButtonItemPressed(_ sender: UIBarButtonItem) {
+//    @objc private func composeBarButtonItemPressed(_ sender: UIBarButtonItem) {
+//        coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
+//    }
+    
+    @objc private func composeFloatyItemPressed(_ sender: FloatyItem) {
+        coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
+    }
+    
+    @objc private func receiveFloatyItemPressed(_ sender: FloatyItem) {
         coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
     }
     
