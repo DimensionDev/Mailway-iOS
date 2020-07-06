@@ -1,6 +1,7 @@
 PODS:
   - Floaty (4.2.0)
   - GrowingTextView (0.7.2)
+  - IQKeyboardManagerSwift (6.5.0)
   - NtgeCore (0.1.0)
   - NtgeCore/Tests (0.1.0)
   - SwiftGen (6.2.0)
@@ -9,6 +10,7 @@ PODS:
 DEPENDENCIES:
   - Floaty (~> 4.2.0)
   - GrowingTextView (~> 0.7.2)
+  - IQKeyboardManagerSwift (= 6.5.0)
   - NtgeCore (from `../ntge`)
   - NtgeCore/Tests (from `../ntge`)
   - SwiftGen (~> 6.2.0)
@@ -18,6 +20,7 @@ SPEC REPOS:
   trunk:
     - Floaty
     - GrowingTextView
+    - IQKeyboardManagerSwift
     - SwiftGen
     - "UITextView+Placeholder"
 
@@ -28,10 +31,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Floaty: e2bd5a0f6f7f70899e26ff2da31081c8bee8d1b0
   GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
+  IQKeyboardManagerSwift: 6cd19976c6e871907c4ed9127c2d3affdd4defc2
   NtgeCore: e0437e1167105ded1b91f4a4f5975f36a8c6a9b2
   SwiftGen: 77e88c8609381660cc1084c5ba8e1dc6065de692
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 6a91c39a6590f6db66aafedc09bbdf16c957f261
+PODFILE CHECKSUM: 47987e1817d782bcce2e27edbdaea31a95e77630
 
 COCOAPODS: 1.9.3

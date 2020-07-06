@@ -29,6 +29,8 @@
 		DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB19388824778D3E00E24AFB /* CommonNames.swift */; };
 		DB1938912477E4CD00E24AFB /* IdentityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1938902477E4CD00E24AFB /* IdentityDetailView.swift */; };
 		DB1938952477E8BA00E24AFB /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1938942477E8BA00E24AFB /* ContactListViewController.swift */; };
+		DB1997A524B2F87300C1A293 /* ComposeMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1997A424B2F87300C1A293 /* ComposeMessageViewController.swift */; };
+		DB1997A824B302CE00C1A293 /* KeyboardResponderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1997A724B302CE00C1A293 /* KeyboardResponderService.swift */; };
 		DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1B0135247D09E700098254 /* UIViewPreview.swift */; };
 		DB1E85D924A079A500B1558B /* MainTabTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85D824A079A500B1558B /* MainTabTransitionController.swift */; };
 		DB1E85DD24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85DB24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift */; };
@@ -221,6 +223,8 @@
 		DB19388D2477BD1D00E24AFB /* IdentitiesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesListView.swift; sourceTree = "<group>"; };
 		DB1938902477E4CD00E24AFB /* IdentityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityDetailView.swift; sourceTree = "<group>"; };
 		DB1938942477E8BA00E24AFB /* ContactListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
+		DB1997A424B2F87300C1A293 /* ComposeMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeMessageViewController.swift; sourceTree = "<group>"; };
+		DB1997A724B302CE00C1A293 /* KeyboardResponderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponderService.swift; sourceTree = "<group>"; };
 		DB1B0135247D09E700098254 /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
 		DB1E85D824A079A500B1558B /* MainTabTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabTransitionController.swift; sourceTree = "<group>"; };
 		DB1E85DB24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerAnimatedTransitioning.swift; sourceTree = "<group>"; };
@@ -535,6 +539,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		DB1997A624B2FB7D00C1A293 /* ComposeMessage */ = {
+			isa = PBXGroup;
+			children = (
+				DB1997A424B2F87300C1A293 /* ComposeMessageViewController.swift */,
+			);
+			path = ComposeMessage;
+			sourceTree = "<group>";
+		};
 		DB1E85DA24A079B300B1558B /* Transition */ = {
 			isa = PBXGroup;
 			children = (
@@ -603,6 +615,7 @@
 			isa = PBXGroup;
 			children = (
 				DB1EC2DF2488EB4C002379A1 /* ShareService.swift */,
+				DB1997A724B302CE00C1A293 /* KeyboardResponderService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1011,6 +1024,7 @@
 				DBB498D1247D1AF400EFBACD /* ChatList */,
 				DB6DEC7A247E5FD10040C817 /* Chat */,
 				DBB498D0247D1AED00EFBACD /* CreateChat */,
+				DB1997A624B2FB7D00C1A293 /* ComposeMessage */,
 				DB6DEC7D247E6D330040C817 /* SelectChatIdentity */,
 				DB1EC2DC2488D8D2002379A1 /* MessageInbox */,
 			);
@@ -1518,10 +1532,12 @@
 				DB1EC2D924879936002379A1 /* SettingsViewController.swift in Sources */,
 				DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */,
 				DBE306E0247515C000EB7193 /* DocumentStore.swift in Sources */,
+				DB1997A524B2F87300C1A293 /* ComposeMessageViewController.swift in Sources */,
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
 				DB65474F24AC39970039AFE5 /* ViewState+AddIdentityView.swift in Sources */,
 				DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */,
 				DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */,
+				DB1997A824B302CE00C1A293 /* KeyboardResponderService.swift in Sources */,
 				DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */,
 				DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */,
 				DB970CA224A8660D00DE481C /* AddIdentityViewController.swift in Sources */,
