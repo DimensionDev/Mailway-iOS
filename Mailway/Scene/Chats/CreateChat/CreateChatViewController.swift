@@ -220,7 +220,11 @@ extension CreateChatViewController {
         
         viewModel.tableView = tableView
         tableView.delegate = self
-        try! viewModel.fetchedResultsController.performFetch()
+        do {
+            try viewModel.fetchedResultsController.performFetch()
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
         tableView.dataSource = viewModel
         tableView.reloadData()
         

@@ -29,6 +29,7 @@ final class IdentityListViewModel: NSObject {
             let fetchRequest = Contact.sortedFetchRequest
             fetchRequest.returnsObjectsAsFaults = false
             fetchRequest.fetchBatchSize = 20
+            fetchRequest.predicate = Contact.isIdentityPredicate
             
             let controller = NSFetchedResultsController(
                 fetchRequest: fetchRequest,
@@ -212,7 +213,11 @@ extension IdentityListViewController {
         
         viewModel.tableView = tableView
         tableView.delegate = self
-        try! viewModel.fetchedResultsController.performFetch()
+        do {
+            try viewModel.fetchedResultsController.performFetch()
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
         tableView.dataSource = viewModel
         tableView.reloadData()
 
