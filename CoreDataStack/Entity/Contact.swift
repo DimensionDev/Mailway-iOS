@@ -142,3 +142,15 @@ extension Contact: Managed {
         return [NSSortDescriptor(keyPath: \Contact.name, ascending: true)]
     }
 }
+
+extension Contact {
+    
+    public static var notIdentityPredicate: NSPredicate {
+        return NSPredicate(format: "%K.%K == nil", #keyPath(Contact.keypair), #keyPath(Keypair.privateKey))
+    }
+    
+    public static var isIdentityPredicate: NSPredicate {
+        return NSPredicate(format: "%K.%K != nil", #keyPath(Contact.keypair), #keyPath(Keypair.privateKey))
+    }
+    
+}
