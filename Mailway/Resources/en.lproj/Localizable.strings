@@ -5,3 +5,20 @@
   Created by Cirno MainasuK on 2020-6-23.
   Copyright © 2020 Dimension. All rights reserved.
 */
+
+"ComposeMessage.Error.EmptyMessage.ErrorDescription" = "Message Format Invalid";
+"ComposeMessage.Error.EmptyMessage.FailureReason" = "Cannot compose empty message.";
+"ComposeMessage.Error.EmptyMessage.Message" = "Cannot compose empty message. Please input message and try again.";
+"ComposeMessage.Error.EmptyMessage.RecoverySuggestion" = "Please input message and try again.";
+"ComposeMessage.Error.EmptyMessage.Title" = "Message Format Invalid";
+"ComposeMessage.Error.IdentityNotFound.ErrorDescription" = "Identity Not Found";
+"ComposeMessage.Error.IdentityNotFound.FailureReason" = "Cannot compose message without identity.";
+"ComposeMessage.Error.IdentityNotFound.Message" = "Cannot compose message without identity. Please select identity and try again.";
+"ComposeMessage.Error.IdentityNotFound.RecoverySuggestion" = "Please select identity and try again.";
+"ComposeMessage.Error.IdentityNotFound.Title" = "Identity Not Found";
+"ComposeMessage.Error.RecipientNotFound.ErrorDescription" = "Recipient Not Found";
+"ComposeMessage.Error.RecipientNotFound.FailureReason" = "Cannot compose message without recipient.";
+"ComposeMessage.Error.RecipientNotFound.Message" = "Cannot compose message without recipient. Please select recipient and try again.";
+"ComposeMessage.Error.RecipientNotFound.RecoverySuggestion" = "Please select recipient and try again.";
+"ComposeMessage.Error.RecipientNotFound.Title" = "Recipient Not Found";
+"Inbox.Title" = "Inbox";
