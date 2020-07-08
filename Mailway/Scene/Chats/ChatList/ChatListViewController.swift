@@ -24,6 +24,7 @@ final class ChatListViewModel: NSObject {
     weak var tableView: UITableView?
     
     // output
+    // let identityCount = CurrentValueSubject<Int, Never>(0)
     // let chats = CurrentValueSubject<[Chat], Never>([])
     
     init(context: AppContext) {
@@ -275,11 +276,28 @@ extension ChatListViewController {
 //    }
     
     @objc private func composeFloatyItemPressed(_ sender: FloatyItem) {
-        coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
+        let fetchRequest = Contact.sortedFetchRequest
+        fetchRequest.predicate = Contact.isIdentityPredicate
+        
+        do {
+            let count = try context.managedObjectContext.count(for: fetchRequest)
+            guard count != 0 else {
+                let alertController = UIAlertController(title: "Identity Not Found", message: "Please create idenitty before compose message.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                present(alertController, animated: true, completion: nil)
+                return
+            }
+            
+            coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
+        } catch {
+            let alertController = UIAlertController.standardAlert(of: error)
+            present(alertController, animated: true, completion: nil)
+        }
     }
     
     @objc private func receiveFloatyItemPressed(_ sender: FloatyItem) {
-        coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
+        
     }
     
 }

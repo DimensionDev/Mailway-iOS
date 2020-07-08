@@ -12,6 +12,7 @@ import SwiftUI
 import Combine
 import CoreData
 import CoreDataStack
+import NtgeCore
 
 final class CreateChatViewModel: NSObject {
     
@@ -195,9 +196,24 @@ extension CreateChatViewController {
     }
     
     @objc private func doneBarButtonItemPressed(_ sender: UIBarButtonItem) {
-        let composeMessageViewModel = ComposeMessageViewModel()
+        guard !viewModel.selectedContacts.value.isEmpty else {
+            assertionFailure()
+            return
+        }
+        
+        let recipientPublicKeys: [Ed25519.PublicKey] = Array(viewModel.selectedContacts.value)
+            .compactMap { contact in
+                guard let publicKeyText = contact.keypair?.publicKey,
+                let publicKey = Ed25519.PublicKey.deserialize(serialized: publicKeyText) else {
+                    return nil
+                }
+                
+                return publicKey
+            }
+        let composeMessageViewModel = ComposeMessageViewModel(context: context, recipientPublicKeys: recipientPublicKeys)
         coordinator.present(scene: .composeMessage(viewModel: composeMessageViewModel), from: self, transition: .show)
     }
+    
 }
 
 extension CreateChatViewController {

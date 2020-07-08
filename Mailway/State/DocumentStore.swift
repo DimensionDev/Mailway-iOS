@@ -22,52 +22,75 @@ class DocumentStore: ObservableObject {
 
 extension DocumentStore {
     
-    // create identity
-//    func create(identity: Contact) {
-//        guard !contacts.contains(where: { $0.id == identity.id }) else {
-//            return
-//        }
-//
-//        let keypair = Ed25519.Keypair()
-//        let privateKey = keypair.privateKey
-//        let publicKey = keypair.publicKey
-//
-//        var key = Key()
-//        key.keyID = publicKey.keyID
-//        key.privateKey = privateKey.serialize()
-//        key.publicKey = publicKey.serialize()
-        
-//        var identity = identity
-//        identity.keyID = key.keyID
-            
-//        contacts.append(identity)
-//    }
+    static func createChatMessage(into context: NSManagedObjectContext, plaintextData plaintext: Data, recipientPublicKeys recipients: [Ed25519.PublicKey], signerPrivateKey signer: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
+        Future { promise in
+            DispatchQueue.global().async {
+                do {
+                    let message = try CryptoService.seal(plaintext: plaintext, recipients: recipients, signer: signer)
+                    let armoredMessage = try message.serialize()
+                    
+                    // append signer as recipient
+                    let signerPublicKey = signer.publicKey
+                    let recipientPublicKeys = recipients.map { $0.serialize() }
+                    
+                    assert(message.timestamp != nil)
+                    let timestamp = message.timestamp ?? Date()
+                    
+                    let chatMessageProperty = ChatMessage.Property(
+                        senderPublicKey: signerPublicKey.serialize(),
+                        recipientPublicKeys: recipientPublicKeys,
+                        version: CryptoService.Version.current.rawValue,
+                        armoredMessage: armoredMessage,
+                        payload: plaintext,
+                        payloadKind: .plaintext,
+                        messageTimestamp: message.timestamp,
+                        composeTimestamp: timestamp,
+                        receiveTimestamp: timestamp,
+                        shareTimestamp: nil
+                    )
+                    
+                    var chatMessage: ChatMessage?
+                    var subscription: AnyCancellable?
+                    subscription = context.performChanges {
+                        chatMessage = ChatMessage.insert(into: context, property: chatMessageProperty, chat: nil, quoteMessage: nil)
+
+                    }
+                    .sink(receiveCompletion: { _ in
+                        os_log("%{public}s[%{public}ld], %{public}s: complete subscription", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+                        subscription = nil
+                    }, receiveValue: { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success:
+                                guard let chatMessage = chatMessage else {
+                                    promise(.success(Result.failure(DocumentStoreError.internal)))
+                                    return
+                                }
+                                promise(.success(Result.success(chatMessage)))
+                                
+                            case .failure(let error):
+                                promise(.success(Result.failure(error)))
+                            }
+                        }
+                    })
+                    
+                } catch {
+                    DispatchQueue.main.async {
+                        promise(.success(Result.failure(error)))
+                    }
+                }
+            }   // end DispatchQueue.global().async
+        }   // end Future
+    }
     
 }
 
 extension DocumentStore {
-    
-//    func queryExists(chat: Chat) -> Chat? {
-//        let duplicated = chats
-//            .filter { existChat in
-//                existChat.identityKeyID == chat.identityKeyID &&
-//                Set(existChat.memberKeyIDs).elementsEqual(chat.memberKeyIDs)
-//            }
-//        return duplicated.first
-//    }
-//    
-//    func create(chat: Chat) {
-//        guard !chats.contains(where: { $0.id == chat.id }) else {
-//            return
-//        }
-//        
-//        chats.append(chat)
-//    }
-//    
-//    func create(chatMessage: ChatMessage, forChat chat: Chat) {
-//        create(chat: chat)
-//        chatMessages.append(chatMessage)
-//    }
+
+    enum DocumentStoreError: Swift.Error {
+        case `internal`
+    }
+
 }
 
 #if PREVIEW

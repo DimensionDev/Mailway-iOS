@@ -46,7 +46,6 @@ class CoreDataStackTests: XCTestCase {
 extension CoreDataStackTests {
     
     func testCURDForContact() {
-
         // init keypair
         let Ed25519Keypair = Ed25519.Keypair()
         let Ed25519PrivateKey = Ed25519Keypair.privateKey
@@ -109,19 +108,121 @@ extension CoreDataStackTests {
             XCTAssertEqual(contact.i18nNames["en"], "Alice")
             XCTAssertEqual(contact.i18nNames["jp"], "アリス")
             XCTAssertNotNil(contact.keypair)
-            XCTAssertEqual(contact.channels.count, 2)
-            var emailChannels = contact.channels.filter { (channel) -> Bool in
+            XCTAssertEqual(contact.channels?.count, 2)
+            let emailChannels = contact.channels?.filter { (channel) -> Bool in
                 return channel.name == ContactChannel.Property.ChannelName.email.text && channel.value == "alice@gmail.com"
             }
-            var twitterChannels = contact.channels.filter { (channel) -> Bool in
+            let twitterChannels = contact.channels?.filter { (channel) -> Bool in
                 return channel.name == ContactChannel.Property.ChannelName.twitter.text && channel.value == "@alice"
             }
-            XCTAssertEqual(emailChannels.count, 1)
-            XCTAssertEqual(twitterChannels.count, 1)
+            XCTAssertEqual(emailChannels?.count, 1)
+            XCTAssertEqual(twitterChannels?.count, 1)
         } catch {
             XCTFail(error.localizedDescription)
         }
+    }
+    
+    func testCURDForChatMessage() throws {
+        let alice = try setupStubAlice()
+        let bob = try setupStubBob()
         
+        let insertExpectation = expectation(description: "insert chat message")
+        context.performChanges {
+            
+        }
+        .sink { result in
+            do {
+                let _ = try result.get()
+                insertExpectation.fulfill()
+            } catch {
+                XCTFail(error.localizedDescription)
+            }
+        }
+        .store(in: &disposeBag)
+        wait(for: [insertExpectation], timeout: 5.0)
+
+    }
+    
+}
+
+extension CoreDataStackTests {
+    
+    // setup Alice identity
+    func setupStubAlice() throws -> Contact {
+        // insert identity
+        let insertExpectation = expectation(description: "insert alice")
+        context.performChanges {
+            let keypair: Keypair = {
+                let keypair = Ed25519.Keypair()
+                let property = Keypair.Property(privateKey: keypair.privateKey.serialize(),
+                                                publicKey: keypair.publicKey.serialize(),
+                                                keyID: keypair.publicKey.keyID)
+                return Keypair.insert(into: self.context, property: property)
+            }()
+            _ = Contact.insert(into: self.context,
+                                       property: Contact.Property(name: "Alice"),
+                                       keypair: keypair, channels: [])
+        }
+        .sink { result in
+            do {
+                let _ = try result.get()
+                insertExpectation.fulfill()
+            } catch {
+                XCTFail(error.localizedDescription)
+            }
+        }
+        .store(in: &disposeBag)
+        wait(for: [insertExpectation], timeout: 5.0)
+        
+        // check identity
+        let identityFetchRequest = Contact.sortedFetchRequest
+        identityFetchRequest.predicate = Contact.isIdentityPredicate
+        let identities = try context.fetch(identityFetchRequest)
+        XCTAssertEqual(identities.count, 1)
+        let alice = identities.first
+        XCTAssertNotNil(alice)
+        XCTAssertEqual(alice?.name, "Alice")
+        
+        return alice!
+    }
+    
+    // setup Bob contact
+    func setupStubBob() throws -> Contact {
+        // insert contact
+        let insertExpectation = expectation(description: "insert Bob")
+        context.performChanges {
+            let keypair: Keypair = {
+                let keypair = Ed25519.Keypair()
+                let property = Keypair.Property(privateKey: nil,
+                                                publicKey: keypair.publicKey.serialize(),
+                                                keyID: keypair.publicKey.keyID)
+                return Keypair.insert(into: self.context, property: property)
+            }()
+            _ = Contact.insert(into: self.context,
+                               property: Contact.Property(name: "Bob"),
+                               keypair: keypair, channels: [])
+        }
+        .sink { result in
+            do {
+                let _ = try result.get()
+                insertExpectation.fulfill()
+            } catch {
+                XCTFail(error.localizedDescription)
+            }
+        }
+        .store(in: &disposeBag)
+        wait(for: [insertExpectation], timeout: 5.0)
+        
+        // check contact
+        let identityFetchRequest = Contact.sortedFetchRequest
+        identityFetchRequest.predicate = Contact.notIdentityPredicate
+        let identities = try context.fetch(identityFetchRequest)
+        XCTAssertEqual(identities.count, 1)
+        let bob = identities.first
+        XCTAssertNotNil(bob)
+        XCTAssertEqual(bob?.name, "Bob")
+        
+        return bob!
     }
     
 }

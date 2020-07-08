@@ -65,7 +65,7 @@ extension IdentityListViewModel {
         cell.avatarImageView.image = identity.avatar ?? UIImage.placeholder(color: .systemFill)
         // TODO: color bar
         cell.nameLabel.text = identity.name
-        cell.keyIDLabel.text = String(identity.keypair.keyID.suffix(8)).separate(every: 4, with: " ")
+        cell.keyIDLabel.text = identity.keypair.flatMap { String($0.keyID.suffix(8)).separate(every: 4, with: " ") } ?? "-"
     }
     
 }

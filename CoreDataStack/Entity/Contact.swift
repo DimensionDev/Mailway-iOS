@@ -87,9 +87,9 @@ final public class Contact: NSManagedObject {
     }
     
     // one-to-one keypair
-    @NSManaged public private(set) var keypair: Keypair
+    @NSManaged public private(set) var keypair: Keypair?
     // one-to-many relationship
-    @NSManaged public private(set) var channels: Set<ContactChannel>
+    @NSManaged public private(set) var channels: Set<ContactChannel>?
     
 }
 
@@ -146,11 +146,11 @@ extension Contact: Managed {
 extension Contact {
     
     public static var notIdentityPredicate: NSPredicate {
-        return NSPredicate(format: "%K.%K == nil", #keyPath(Contact.keypair), #keyPath(Keypair.privateKey))
+        return NSPredicate(format: "%K != nil AND %K.%K == nil", #keyPath(Contact.keypair), #keyPath(Contact.keypair), #keyPath(Keypair.privateKey))
     }
     
     public static var isIdentityPredicate: NSPredicate {
-        return NSPredicate(format: "%K.%K != nil", #keyPath(Contact.keypair), #keyPath(Keypair.privateKey))
+        return NSPredicate(format: "%K != nil AND %K.%K != nil", #keyPath(Contact.keypair), #keyPath(Contact.keypair), #keyPath(Keypair.privateKey))
     }
     
 }
