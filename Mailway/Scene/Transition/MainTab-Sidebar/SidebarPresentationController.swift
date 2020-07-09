@@ -92,7 +92,9 @@ final class SidebarPresentationController: UIPresentationController {
         super.containerViewWillLayoutSubviews()
         
         dimmingView.frame = containerView!.bounds
-        presentedView?.frame = frameOfPresentedViewInContainerView
+        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { context in
+            self.presentedView?.frame = self.frameOfPresentedViewInContainerView
+        }, completion: nil)
                 
         guard let splitViewController = presentingViewController as? UISplitViewController,
         let primaryViewController = splitViewController.viewControllers.first else {
