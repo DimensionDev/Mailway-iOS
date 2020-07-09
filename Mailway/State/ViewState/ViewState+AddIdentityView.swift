@@ -72,13 +72,25 @@ struct ContactInfo: Identifiable, Hashable {
         }
     }
     
-    enum InfoType: CaseIterable {
+    enum InfoType: Hashable, CaseIterable {
         case email
         case twitter
         case facebook
         case telegram
         case discord
         case custom
+        
+        init(name: String) {
+            let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            switch name {
+            case InfoType.email.text:        self = .email
+            case InfoType.twitter.text:      self = .twitter
+            case InfoType.facebook.text:     self = .facebook
+            case InfoType.telegram.text:     self = .telegram
+            case InfoType.discord.text:      self = .discord
+            default:                         self = .custom
+            }
+        }
         
         var iconImage: UIImage {
             switch self {
@@ -91,7 +103,18 @@ struct ContactInfo: Identifiable, Hashable {
             }
         }
         
-        var typeName: String {
+        public var text: String {
+            switch self {
+            case .email:                return "email"
+            case .twitter:              return "twitter"
+            case .facebook:             return "facebook"
+            case .telegram:             return "telegram"
+            case .discord:              return "discord"
+            case .custom:               return ""
+            }
+        }
+        
+        var editSectionName: String {
             switch self {
             case .email:    return "E-Mail"
             case .twitter:  return "Twitter"

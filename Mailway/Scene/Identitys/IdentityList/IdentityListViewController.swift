@@ -235,7 +235,14 @@ extension IdentityListViewController {
 extension IdentityListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+        
+        guard indexPath.row < viewModel.fetchedResultsController.sections?[indexPath.section].numberOfObjects ?? 0 else { return }
+        let identity = viewModel.fetchedResultsController.object(at: indexPath)
+        let identityDetailViewModel = IdentityDetailViewModel(context: context, identity: identity)
+        
+        // use .showDetail if possiable
+        coordinator.present(scene: .identityDetail(viewModel: identityDetailViewModel), from: self, transition: .show)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

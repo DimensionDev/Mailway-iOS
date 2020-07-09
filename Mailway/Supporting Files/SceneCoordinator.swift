@@ -73,6 +73,7 @@ extension SceneCoordinator {
         
         // identities
         case identityList
+        case identityDetail(viewModel: IdentityDetailViewModel)
         case addIdentity
         
         // settings
@@ -162,6 +163,10 @@ extension SceneCoordinator {
             viewController = _viewController
         case .identityList:
             viewController = IdentityListViewController()
+        case .identityDetail(let viewModel):
+            let _viewController = IdentityDetailViewController()
+            _viewController.viewModel = viewModel
+            viewController = _viewController
         case .addIdentity:
             viewController = AddIdentityViewController()
         case .setting:

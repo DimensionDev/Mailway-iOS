@@ -40,6 +40,7 @@ internal enum Asset {
   internal enum Editing {
     internal static let close = ImageAsset(name: "Editing/close")
     internal static let copy = ImageAsset(name: "Editing/copy")
+    internal static let moreVertical = ImageAsset(name: "Editing/more.vertical")
     internal static let pencil = ImageAsset(name: "Editing/pencil")
     internal static let plusCircleFill = ImageAsset(name: "Editing/plus.circle.fill")
   }
