@@ -9,24 +9,6 @@
 import UIKit
 import SwiftUI
 
-struct AvatarView: View {
-    
-    @State var infos: [Info] = []
-    
-    var body: some View {
-        ZStack {
-            Circle()
-                .foregroundColor(Color(Asset.Color.Background.blue.color))
-        }
-    }
-}
-
-extension AvatarView {
-    struct Info {
-        let name: String
-        let image: UIImage?
-    }
-}
 
 final class ContactListContactTableViewCell: UITableViewCell {
     

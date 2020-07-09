@@ -13,7 +13,7 @@ final public class Contact: NSManagedObject {
     
     @NSManaged public private(set) var id: UUID
     @NSManaged public private(set) var name: String
-    @NSManaged public private(set) var i18nNames: [String: String]
+    @NSManaged public private(set) var i18nNames: [String: String]?
     @NSManaged public private(set) var note: String?
     @NSManaged public private(set) var avatarData: Data?
     
@@ -44,6 +44,7 @@ final public class Contact: NSManagedObject {
     
     public var i18nName: String? {
         var i18nName: String?
+        let i18nNames = self.i18nNames ?? [:]
         if !i18nNames.isEmpty {
             let preferredLanguages = Locale.preferredLanguages
             for language in preferredLanguages {
@@ -124,11 +125,11 @@ extension Contact {
 extension Contact {
     public struct Property {
         public let name: String
-        public let i18nNames: [String:String]
+        public let i18nNames: [String:String]?
         public let note: String?
         public let avatar: UIImage?
         
-        public init(name: String, i18nNames: [String: String] = [:], note: String? = nil, avatar: UIImage? = nil) {
+        public init(name: String, i18nNames: [String: String]? = nil, note: String? = nil, avatar: UIImage? = nil) {
             self.name = name
             self.i18nNames = i18nNames
             self.note = note
@@ -151,6 +152,10 @@ extension Contact {
     
     public static var isIdentityPredicate: NSPredicate {
         return NSPredicate(format: "%K != nil AND %K.%K != nil", #keyPath(Contact.keypair), #keyPath(Contact.keypair), #keyPath(Keypair.privateKey))
+    }
+    
+    public static func predicate(publicKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K != nil AND %K.%K == %@", #keyPath(Contact.keypair), #keyPath(Contact.keypair), #keyPath(Keypair.publicKey), publicKey)
     }
     
 }

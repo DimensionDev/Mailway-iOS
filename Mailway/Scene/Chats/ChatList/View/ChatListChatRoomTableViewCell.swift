@@ -7,20 +7,30 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class ChatListChatRoomTableViewCell: UITableViewCell {
     
-    let iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(systemName: "person.crop.circle.fill")
-        imageView.tintColor = .label
-        return imageView
+    let avatarView = AvatarView()
+    
+    let colorBarView: UIView = {
+        let bar = UIView()
+        bar.backgroundColor = .systemPurple
+        return bar
     }()
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.text = "Title"
+        label.font = .systemFont(ofSize: 16, weight: .regular)
+        return label
+    }()
+    
+    let detailLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Detail"
+        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.textColor = .secondaryLabel
         return label
     }()
     
@@ -39,24 +49,51 @@ final class ChatListChatRoomTableViewCell: UITableViewCell {
 extension ChatListChatRoomTableViewCell {
     
     private func _init() {
-        iconImageView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(iconImageView)
-        let chatRoomIconImageViewHeightLayoutConstraint = iconImageView.heightAnchor.constraint(equalToConstant: 44)
-        chatRoomIconImageViewHeightLayoutConstraint.priority = .defaultHigh
+        let hostingController = UIHostingController(rootView: avatarView)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(hostingController.view)
         NSLayoutConstraint.activate([
-            iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            iconImageView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 8),
-            iconImageView.widthAnchor.constraint(equalToConstant: 44),
-            chatRoomIconImageViewHeightLayoutConstraint,
+            hostingController.view.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            hostingController.view.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor, constant: 16),
+            hostingController.view.widthAnchor.constraint(equalToConstant: 40),
+            hostingController.view.heightAnchor.constraint(equalToConstant: 40).priority(.defaultHigh),
+        ])
+        hostingController.view.backgroundColor = .clear
+        
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: hostingController.view.trailingAnchor, constant: 24),
+            contentView.layoutMarginsGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            containerView.centerYAnchor.constraint(equalTo: hostingController.view.centerYAnchor),
+        ])
+        
+        colorBarView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(colorBarView)
+        NSLayoutConstraint.activate([
+            colorBarView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            colorBarView.widthAnchor.constraint(equalToConstant: 2),
+            colorBarView.heightAnchor.constraint(equalToConstant: 12).priority(.defaultHigh),
         ])
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
+        containerView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 8),
-            titleLabel.centerYAnchor.constraint(equalTo: iconImageView.centerYAnchor),
-            contentView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: colorBarView.trailingAnchor, constant: 4),
+            containerView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: colorBarView.centerYAnchor),
+        ])
+        
+        detailLabel.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(detailLabel)
+        NSLayoutConstraint.activate([
+            detailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            detailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            detailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            detailLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
     }
     
@@ -65,3 +102,14 @@ extension ChatListChatRoomTableViewCell {
     }
     
 }
+
+#if DEBUG
+struct ChatListChatRoomTableViewCell_Previews: PreviewProvider {
+    static var previews: some View {
+        UIViewPreview {
+            ChatListChatRoomTableViewCell()
+        }
+        .previewLayout(.sizeThatFits)
+    }
+}
+#endif

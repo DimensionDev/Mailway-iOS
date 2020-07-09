@@ -26,18 +26,19 @@ extension DocumentStore {
         Future { promise in
             DispatchQueue.global().async {
                 do {
+                    // seal Message
                     let message = try CryptoService.seal(plaintext: plaintext, recipients: recipients, signer: signer)
                     let armoredMessage = try message.serialize()
                     
-                    // append signer as recipient
-                    let signerPublicKey = signer.publicKey
-                    let recipientPublicKeys = recipients.map { $0.serialize() }
+                    let signerPublicKey = signer.publicKey.serialize()
+                    let recipientPublicKeys = Array(Set(recipients)).map { $0.serialize() }.filter { $0 != signerPublicKey }
+                    let memberPublicKeys = Array(Set(recipientPublicKeys + [signerPublicKey]))
                     
                     assert(message.timestamp != nil)
                     let timestamp = message.timestamp ?? Date()
                     
                     let chatMessageProperty = ChatMessage.Property(
-                        senderPublicKey: signerPublicKey.serialize(),
+                        senderPublicKey: signerPublicKey,
                         recipientPublicKeys: recipientPublicKeys,
                         version: CryptoService.Version.current.rawValue,
                         armoredMessage: armoredMessage,
@@ -52,8 +53,68 @@ extension DocumentStore {
                     var chatMessage: ChatMessage?
                     var subscription: AnyCancellable?
                     subscription = context.performChanges {
-                        chatMessage = ChatMessage.insert(into: context, property: chatMessageProperty, chat: nil, quoteMessage: nil)
+                        // query chat if exist
+                        let request = Chat.sortedFetchRequest
+                        request.predicate = Chat.predicate(identityPublicKey: signerPublicKey, memberPublicKeys: memberPublicKeys)
+                        request.fetchLimit = 1
+                        var chat: Chat? = try? context.fetch(request).first
 
+                        var memberNameStubProperty: [ChatMemberNameStub.Property] = []
+                        var memberNameStub: [ChatMemberNameStub] = []
+                        
+                        // A. create chat if no exist
+                        if chat == nil {
+                            // A.1. query stub and create stub properties
+                            for memberPublicKey in memberPublicKeys {
+                                // get KeyID
+                                guard let keyID = Ed25519.PublicKey.deserialize(serialized: memberPublicKey)?.keyID else {
+                                    continue
+                                }
+
+                                // query stub if exist
+                                let stubRequest = ChatMemberNameStub.sortedFetchRequest
+                                stubRequest.predicate = ChatMemberNameStub.predicate(publicKey: memberPublicKey)
+                                stubRequest.fetchLimit = 1
+                                if let stub = try? context.fetch(stubRequest).first {
+                                    memberNameStub.append(stub)
+                                    continue
+                                }
+                                
+                                // fetch contact to retrieve stub property infos
+                                let contactRequest = Contact.sortedFetchRequest
+                                contactRequest.predicate = Contact.predicate(publicKey: memberPublicKey)
+                                contactRequest.fetchLimit = 1
+                                guard let contact = try? context.fetch(contactRequest).first else {
+                                    continue
+                                }
+                                
+                                let property = ChatMemberNameStub.Property(name: contact.name, i18nNames: contact.i18nNames, publicKey: memberPublicKey, keyID: keyID)
+                                
+                                // append property
+                                memberNameStubProperty.append(property)
+                            }
+                            
+                            // A.2 validate and create stub from properties
+                            guard memberNameStub.count + memberNameStubProperty.count == memberPublicKeys.count else {
+                                // error occurred, interrupt operation
+                                return
+                            }
+                            let newStubs = memberNameStubProperty.map { property in
+                                ChatMemberNameStub.insert(into: context, property: property)
+                            }
+                            memberNameStub.append(contentsOf: newStubs)
+                            
+                            // A.3 create chat
+                            let property = Chat.Property(title: nil, identityPublicKey: signerPublicKey)
+                            chat = Chat.insert(into: context, property: property, memberNameStubs: memberNameStub, chatMessages: [])
+                        }
+                        
+                        assert(chat != nil)
+                        
+                        // TODO: QuoteMessage
+                        
+                        // B. create chat message
+                        chatMessage = ChatMessage.insert(into: context, property: chatMessageProperty, chat: chat, quoteMessage: nil)
                     }
                     .sink(receiveCompletion: { _ in
                         os_log("%{public}s[%{public}ld], %{public}s: complete subscription", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
@@ -63,6 +124,7 @@ extension DocumentStore {
                             switch result {
                             case .success:
                                 guard let chatMessage = chatMessage else {
+                                    // return error when output not found
                                     promise(.success(Result.failure(DocumentStoreError.internal)))
                                     return
                                 }

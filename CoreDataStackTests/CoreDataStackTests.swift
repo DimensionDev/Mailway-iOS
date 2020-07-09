@@ -105,8 +105,8 @@ extension CoreDataStackTests {
                 return
             }
             XCTAssertEqual(contact.name, "Alice")
-            XCTAssertEqual(contact.i18nNames["en"], "Alice")
-            XCTAssertEqual(contact.i18nNames["jp"], "アリス")
+            XCTAssertEqual(contact.i18nNames?["en"], "Alice")
+            XCTAssertEqual(contact.i18nNames?["jp"], "アリス")
             XCTAssertNotNil(contact.keypair)
             XCTAssertEqual(contact.channels?.count, 2)
             let emailChannels = contact.channels?.filter { (channel) -> Bool in

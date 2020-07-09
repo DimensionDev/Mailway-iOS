@@ -64,7 +64,14 @@ extension ChatListViewModel {
 extension ChatListViewModel {
     
     static func configure(cell: ChatListChatRoomTableViewCell, with chat: Chat) {
-        cell.titleLabel.text = chat.title
+        cell.titleLabel.text = {
+            guard let title = chat.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                let names = chat.memberNameStubs?.compactMap { $0.i18nName ?? $0.name } ?? []
+                return names.sorted().joined(separator: ", ")
+            }
+            
+            return title
+        }()
     }
     
 }
@@ -210,7 +217,7 @@ final class ChatListViewController: UIViewController, NeedsDependency, MainTabTr
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ChatListInboxBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ChatListInboxBannerTableViewCell.self))
+        // tableView.register(ChatListInboxBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ChatListInboxBannerTableViewCell.self))
         tableView.register(ChatListChatRoomTableViewCell.self, forCellReuseIdentifier: String(describing: ChatListChatRoomTableViewCell.self))
         tableView.tableFooterView = UIView()
         return tableView

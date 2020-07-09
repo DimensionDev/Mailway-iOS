@@ -73,7 +73,6 @@ extension ComposeMessageViewModel {
                 promise(.success(.failure(Error.recipientNotFound)))
             }
         }
-        let recipients = recipientPublicKeys
         
         let plaintext = message.value.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !plaintext.isEmpty else {
@@ -83,7 +82,7 @@ extension ComposeMessageViewModel {
         }
         let plaintextData = Data(plaintext.utf8)
                 
-        return DocumentStore.createChatMessage(into: context.managedObjectContext, plaintextData: plaintextData, recipientPublicKeys: recipients, signerPrivateKey: signer)
+        return DocumentStore.createChatMessage(into: context.managedObjectContext, plaintextData: plaintextData, recipientPublicKeys: recipientPublicKeys, signerPrivateKey: signer)
     }
     
 }
@@ -281,7 +280,9 @@ extension ComposeMessageViewController {
                 }, receiveValue: { [weak self] result in
                     switch result {
                     case .success(let chatMessage):
-                        break
+                        self?.dismiss(animated: true) {
+                            // TODO: open chat
+                        }
                     case .failure(let error):
                         let alertController = UIAlertController.standardAlert(of: error)
                         self?.present(alertController, animated: true, completion: nil)
