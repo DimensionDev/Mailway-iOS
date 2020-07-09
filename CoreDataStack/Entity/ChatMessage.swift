@@ -25,7 +25,7 @@ final public class ChatMessage: NSManagedObject {
     private(set) public var payloadKind: PayloadKind {
         get {
             guard let kind = PayloadKind(rawValue: payloadKindRawValue) else {
-                return .unknwon
+                return .unknown
             }
             
             return kind
@@ -53,7 +53,7 @@ final public class ChatMessage: NSManagedObject {
 
 extension ChatMessage {
     public enum PayloadKind: String {
-        case unknwon
+        case unknown
         case plaintext
         case image
         case video
@@ -138,3 +138,16 @@ extension ChatMessage: Managed {
     }
 }
 
+extension ChatMessage {
+    public static var latestFirstSortFetchRequest: NSFetchRequest<ChatMessage> {
+        let request = NSFetchRequest<ChatMessage>(entityName: entityName)
+        request.sortDescriptors =  [NSSortDescriptor(keyPath: \ChatMessage.receiveTimestamp, ascending: false)]
+        return request
+    }
+}
+
+extension ChatMessage {
+    public static func predicate(chat: Chat) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(ChatMessage.chat), chat)
+    }
+}

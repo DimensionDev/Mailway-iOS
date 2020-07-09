@@ -66,11 +66,40 @@ extension ChatListViewModel {
     static func configure(cell: ChatListChatRoomTableViewCell, with chat: Chat) {
         cell.titleLabel.text = {
             guard let title = chat.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                let names = chat.memberNameStubs?.compactMap { $0.i18nName ?? $0.name } ?? []
-                return names.sorted().joined(separator: ", ")
+                let names = chat.memberNameStubs?
+                    .filter { $0.publicKey != chat.identityPublicKey }  // remove sender
+                    .compactMap { $0.i18nName ?? $0.name } ?? []
+                
+                let text = names.sorted().joined(separator: ", ")
+                guard !text.isEmpty else {
+                    return "<Empty>"
+                }
+                return text
             }
             
             return title
+        }()
+        cell.detailLabel.text = {
+            let request = ChatMessage.latestFirstSortFetchRequest
+            request.fetchLimit = 1
+            request.returnsObjectsAsFaults = false
+            request.predicate = ChatMessage.predicate(chat: chat)
+            guard let chatMessage = try? chat.managedObjectContext?.fetch(request).first else {
+                return " "
+            }
+            
+            switch chatMessage.payloadKind {
+            case .plaintext:
+                guard let text = String(data: chatMessage.payload, encoding: .utf8) else {
+                    assertionFailure()
+                    return " "
+                }
+                
+                return text
+                
+            default:
+                return " "
+            }
         }()
     }
     
@@ -159,7 +188,6 @@ extension ChatListViewModel: UITableViewDataSource {
     }
     
 }
-
 
 final class ChatListViewController: UIViewController, NeedsDependency, MainTabTransitionableViewController {
     
