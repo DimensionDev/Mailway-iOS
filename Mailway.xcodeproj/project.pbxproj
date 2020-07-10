@@ -24,6 +24,9 @@
 		DB1191EF24A887A400C1342E /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1191EE24A887A400C1342E /* AddIdentityView.swift */; };
 		DB1191F124A887CD00C1342E /* EditableAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970CA424A86DB200DE481C /* EditableAvatarView.swift */; };
 		DB1191F424A890AD00C1342E /* EditableAvatarButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1191F324A890AD00C1342E /* EditableAvatarButtonStyle.swift */; };
+		DB17252E24B8420E0090DFA9 /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB17252D24B8420E0090DFA9 /* CALayer.swift */; };
+		DB17253324B866610090DFA9 /* IdentityCardCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB17253224B866610090DFA9 /* IdentityCardCollectionViewModel.swift */; };
+		DB17253724B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB17253624B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift */; };
 		DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB193883247693D000E24AFB /* AutoFocusTextField.swift */; };
 		DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB193886247782F500E24AFB /* MainTabBarController.swift */; };
 		DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB19388824778D3E00E24AFB /* CommonNames.swift */; };
@@ -65,7 +68,7 @@
 		DB1EDED024AB0D3F000C5E58 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EDECF24AB0D3F000C5E58 /* DateFormatter.swift */; };
 		DB25C75324B7236800813755 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75224B7236800813755 /* ProfileView.swift */; };
 		DB25C75524B725A400813755 /* LargeRoundedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75424B725A400813755 /* LargeRoundedButtonStyle.swift */; };
-		DB25C75724B732FF00813755 /* IdentityCardCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75624B732FF00813755 /* IdentityCardCollectionTableViewCell.swift */; };
+		DB25C75724B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75624B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift */; };
 		DB25C75924B733F800813755 /* IdentityCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75824B733F800813755 /* IdentityCardCollectionViewCell.swift */; };
 		DB25C75B24B7344D00813755 /* IdentityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75A24B7344D00813755 /* IdentityCardView.swift */; };
 		DB25C75D24B8225C00813755 /* HidingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75C24B8225C00813755 /* HidingViews.swift */; };
@@ -223,6 +226,9 @@
 		DB0A9065249B45E800FE0AFC /* UnitTestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = UnitTestsPlan.xctestplan; path = /Users/MainasuK/Developer/Swift/SujiTech/Mailway/CoreDataStackTestsHost/UnitTestsPlan.xctestplan; sourceTree = "<absolute>"; };
 		DB1191EE24A887A400C1342E /* AddIdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityView.swift; sourceTree = "<group>"; };
 		DB1191F324A890AD00C1342E /* EditableAvatarButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableAvatarButtonStyle.swift; sourceTree = "<group>"; };
+		DB17252D24B8420E0090DFA9 /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
+		DB17253224B866610090DFA9 /* IdentityCardCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardCollectionViewModel.swift; sourceTree = "<group>"; };
+		DB17253624B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappingCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		DB193883247693D000E24AFB /* AutoFocusTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFocusTextField.swift; sourceTree = "<group>"; };
 		DB193886247782F500E24AFB /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		DB19388824778D3E00E24AFB /* CommonNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonNames.swift; sourceTree = "<group>"; };
@@ -266,7 +272,7 @@
 		DB1EDECF24AB0D3F000C5E58 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		DB25C75224B7236800813755 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		DB25C75424B725A400813755 /* LargeRoundedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeRoundedButtonStyle.swift; sourceTree = "<group>"; };
-		DB25C75624B732FF00813755 /* IdentityCardCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardCollectionTableViewCell.swift; sourceTree = "<group>"; };
+		DB25C75624B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListIdentityCardCollectionTableViewCell.swift; sourceTree = "<group>"; };
 		DB25C75824B733F800813755 /* IdentityCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardCollectionViewCell.swift; sourceTree = "<group>"; };
 		DB25C75A24B7344D00813755 /* IdentityCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardView.swift; sourceTree = "<group>"; };
 		DB25C75C24B8225C00813755 /* HidingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HidingViews.swift; sourceTree = "<group>"; };
@@ -511,9 +517,35 @@
 			path = ButtonStyle;
 			sourceTree = "<group>";
 		};
+		DB17253424B866AB0090DFA9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DB25C75824B733F800813755 /* IdentityCardCollectionViewCell.swift */,
+				DB25C75A24B7344D00813755 /* IdentityCardView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DB17253524B866B00090DFA9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DB17253224B866610090DFA9 /* IdentityCardCollectionViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DB17253824B86E7F0090DFA9 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				DB17253624B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
 		DB193885247693D400E24AFB /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DB17253824B86E7F0090DFA9 /* Layout */,
 				DB1191F624A890B900C1342E /* ButtonStyle */,
 				DB1997B124B6BD7100C1A293 /* AvatarView.swift */,
 				DB193883247693D000E24AFB /* AutoFocusTextField.swift */,
@@ -547,9 +579,7 @@
 			isa = PBXGroup;
 			children = (
 				DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */,
-				DB25C75624B732FF00813755 /* IdentityCardCollectionTableViewCell.swift */,
-				DB25C75824B733F800813755 /* IdentityCardCollectionViewCell.swift */,
-				DB25C75A24B7344D00813755 /* IdentityCardView.swift */,
+				DB25C75624B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -673,6 +703,7 @@
 		DB2813A12484F64D001CDD19 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				DB17252D24B8420E0090DFA9 /* CALayer.swift */,
 				DB1E85E224A0858600B1558B /* CGPoint.swift */,
 				DB1E85E424A085A200B1558B /* CGVector.swift */,
 				DB1EDECF24AB0D3F000C5E58 /* DateFormatter.swift */,
@@ -683,6 +714,15 @@
 				DB65475224ACA6BB0039AFE5 /* String.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		DB44580124B840440050334C /* IdentityCard */ = {
+			isa = PBXGroup;
+			children = (
+				DB17253524B866B00090DFA9 /* ViewModel */,
+				DB17253424B866AB0090DFA9 /* View */,
+			);
+			path = IdentityCard;
 			sourceTree = "<group>";
 		};
 		DB60BF13247527DC0001F9C0 /* Vender */ = {
@@ -753,6 +793,7 @@
 		DB772FF724A84E4B00558F37 /* Identitys */ = {
 			isa = PBXGroup;
 			children = (
+				DB44580124B840440050334C /* IdentityCard */,
 				DB19388F2477BD2100E24AFB /* IdentityList */,
 				DB1938922477E4E000E24AFB /* IdentityDetail */,
 				DB970CA324A8661000DE481C /* AddIdentity */,
@@ -1580,6 +1621,8 @@
 				DB008AAB247666D200CE6A7E /* CreateIdentityView.swift in Sources */,
 				DBE306D82474ED0700EB7193 /* AppAction.swift in Sources */,
 				DBE306E524751AAD00EB7193 /* ViewState+ChatsView.swift in Sources */,
+				DB17253324B866610090DFA9 /* IdentityCardCollectionViewModel.swift in Sources */,
+				DB17253724B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift in Sources */,
 				DBE306D12474ECE100EB7193 /* ViewStateStore.swift in Sources */,
 				DB6DEC77247E4AA90040C817 /* ChatViewController.swift in Sources */,
 				DB1E85E724A092D200B1558B /* SidebarViewController.swift in Sources */,
@@ -1593,8 +1636,9 @@
 				DB008AB22476750800CE6A7E /* CreateIdentityViewController.swift in Sources */,
 				DB772FF524A8423800558F37 /* SettingEntryTableViewCell.swift in Sources */,
 				DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */,
-				DB25C75724B732FF00813755 /* IdentityCardCollectionTableViewCell.swift in Sources */,
+				DB25C75724B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift in Sources */,
 				DB1EC2DB2488D8CE002379A1 /* MessageInboxViewController.swift in Sources */,
+				DB17252E24B8420E0090DFA9 /* CALayer.swift in Sources */,
 				DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */,
 				DB772FF224A8382E00558F37 /* SplitDemoViewController.swift in Sources */,
 				DB1E85E524A085A200B1558B /* CGVector.swift in Sources */,

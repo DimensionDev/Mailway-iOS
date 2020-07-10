@@ -35,7 +35,7 @@ final class IdentityCardView: UIView {
         return label
     }()
     
-    let keyIDLabel: UILabel = {
+    let shortKeyIDLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.text = "-"
@@ -72,7 +72,7 @@ extension IdentityCardView {
         NSLayoutConstraint.activate([
             avatarImageView.leadingAnchor.constraint(equalTo: colorBarView.trailingAnchor, constant: 18),
             avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 48),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 48).priority(.defaultHigh),
             avatarImageView.heightAnchor.constraint(equalToConstant: 48).priority(.defaultHigh),
         ])
         
@@ -80,10 +80,11 @@ extension IdentityCardView {
         container.translatesAutoresizingMaskIntoConstraints = false
         addSubview(container)
         NSLayoutConstraint.activate([
-            container.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 24),
+            container.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 24).priority(.defaultHigh),
             layoutMarginsGuide.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             container.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
+        container.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(nameLabel)
@@ -93,13 +94,13 @@ extension IdentityCardView {
             nameLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor),
         ])
         
-        keyIDLabel.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(keyIDLabel)
+        shortKeyIDLabel.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(shortKeyIDLabel)
         NSLayoutConstraint.activate([
-            keyIDLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
-            keyIDLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            keyIDLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            keyIDLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            shortKeyIDLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
+            shortKeyIDLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            shortKeyIDLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            shortKeyIDLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor),
         ])
     }
     
@@ -109,7 +110,10 @@ extension IdentityCardView {
 struct IdentityCardView_Previews: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
-            IdentityCardView()
+            let card = IdentityCardView()
+            card.nameLabel.text = "Alice"
+            card.shortKeyIDLabel.text = "45cc 807c"
+            return card
         }
         .previewLayout(.fixed(width: 311, height: 80))
     }

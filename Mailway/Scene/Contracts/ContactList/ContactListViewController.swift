@@ -16,22 +16,23 @@ final class ContactListViewModel: NSObject {
     
     var disposeBag = Set<AnyCancellable>()
     
-    let fetchedResultsController: NSFetchedResultsController<Contact>
-    
     // input
     let context: AppContext
     weak var tableView: UITableView?
-//    let identities = CurrentValueSubject<[Contact], Never>([])
-//    let contacts = CurrentValueSubject<[Contact], Never>([])
+    let contactFetchedResultsController: NSFetchedResultsController<Contact>
+
+    let identityCardCollectionViewModel: IdentityCardCollectionViewModel
     
     // output
     let pushIdentityListPublisher = PassthroughSubject<Void, Never>()
     
     init(context: AppContext) {
-        self.fetchedResultsController = {
+        self.context = context
+        self.contactFetchedResultsController = {
             let fetchRequest = Contact.sortedFetchRequest
             fetchRequest.returnsObjectsAsFaults = false
             fetchRequest.fetchBatchSize = 20
+            fetchRequest.predicate = Contact.notIdentityPredicate
             let controller = NSFetchedResultsController(
                 fetchRequest: fetchRequest,
                 managedObjectContext: context.managedObjectContext,
@@ -41,20 +42,10 @@ final class ContactListViewModel: NSObject {
             
             return controller
         }()
-        self.context = context
+        self.identityCardCollectionViewModel = IdentityCardCollectionViewModel(context: context)
         super.init()
     
-        fetchedResultsController.delegate = self
-        
-//        context.documentStore.$contacts
-//            .map { $0.filter { $0.isIdentity }}
-//            .assign(to: \.value, on: self.identities)
-//            .store(in: &disposeBag)
-//
-//        context.documentStore.$contacts
-//            .map { $0.filter { !$0.isIdentity }}
-//            .assign(to: \.value, on: self.contacts)
-//            .store(in: &disposeBag)
+        contactFetchedResultsController.delegate = self
     }
     
 }
@@ -67,22 +58,6 @@ extension ContactListViewModel {
 }
 
 extension ContactListViewModel {
-    
-//    static func configure(cell: ContactListIdentityBannerTableViewCell, with identities: [Contact]) {
-//        if identities.count == 0 {
-//            cell.bannerView.personIconImageView.image = UIImage(systemName: "person.crop.circle.fill.badge.plus")
-//            cell.bannerView.headerLabel.text = "No Identity"
-//            cell.bannerView.captionLabel.text = "Tap to add identity"
-//        } else if identities.count == 1 {
-//            cell.bannerView.personIconImageView.image = UIImage(systemName: "person.crop.square.fill")
-//            cell.bannerView.headerLabel.text = "My Identity"
-//            cell.bannerView.captionLabel.text = "1 identity"
-//        } else {
-//            cell.bannerView.personIconImageView.image = UIImage(systemName: "rectangle.stack.person.crop.fill")
-//            cell.bannerView.headerLabel.text = "My Identity"
-//            cell.bannerView.captionLabel.text = "\(identities.count) identities"
-//        }
-//    }
     
     static func configure(cell: ContactListContactTableViewCell, with contact: Contact) {
         cell.nameLabel.text = contact.i18nName ?? contact.name
@@ -131,7 +106,7 @@ extension ContactListViewModel: NSFetchedResultsControllerDelegate {
                 fatalError("Index Path should be not nil")
             }
             let resultIndexPath = IndexPath(row: indexPath.row, section: contactsSectionRange.lowerBound + indexPath.section)
-            let contact = fetchedResultsController.object(at: indexPath)
+            let contact = contactFetchedResultsController.object(at: indexPath)
             guard let cell = tableView?.cellForRow(at: resultIndexPath) as? ContactListContactTableViewCell else {
                 return
             }
@@ -171,7 +146,7 @@ extension ContactListViewModel: UITableViewDataSource {
     }
     
     var contactsSectionCount: Int {
-        return fetchedResultsController.sections?.count ?? 0
+        return contactFetchedResultsController.sections?.count ?? 0
     }
         
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -194,7 +169,7 @@ extension ContactListViewModel: UITableViewDataSource {
             return 1
         case contactsSectionRange:
             let resultSection = section - identitySectionRange.upperBound
-            guard let sectionInfo = fetchedResultsController.sections?[resultSection] else {
+            guard let sectionInfo = contactFetchedResultsController.sections?[resultSection] else {
                 return 0
             }
             return sectionInfo.numberOfObjects
@@ -212,11 +187,10 @@ extension ContactListViewModel: UITableViewDataSource {
         
         switch indexPath.section {
         case identitySectionRange:
-            cell = UITableViewCell()
-//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
-//            cell = _cell
+            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityCardCollectionTableViewCell.self), for: indexPath) as! ContactListIdentityCardCollectionTableViewCell
+            cell = _cell
             
-            // TODO:
+            identityCardCollectionViewModel.setup(collectionView: _cell.collectionView)
 
         case contactsSectionRange:
             let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListContactTableViewCell.self), for: indexPath) as! ContactListContactTableViewCell
@@ -224,7 +198,7 @@ extension ContactListViewModel: UITableViewDataSource {
             
             let resultSection = indexPath.section - identitySectionRange.upperBound
             let resultIndexPath = IndexPath(row: indexPath.row, section: resultSection)
-            let contact = fetchedResultsController.object(at: resultIndexPath)
+            let contact = contactFetchedResultsController.object(at: resultIndexPath)
             
             ContactListViewModel.configure(cell: _cell, with: contact)
             
@@ -234,8 +208,6 @@ extension ContactListViewModel: UITableViewDataSource {
         
         return cell
     }
-    
-    
     
 }
 
@@ -257,8 +229,10 @@ final class ContactListViewController: UIViewController, NeedsDependency, MainTa
     
     private(set) lazy var tableView: UITableView = {
         let tableView = UITableView()
-//        tableView.register(ContactListIdentityBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self))
+        tableView.register(ContactListIdentityCardCollectionTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListIdentityCardCollectionTableViewCell.self))
         tableView.register(ContactListContactTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListContactTableViewCell.self))
+        tableView.estimatedRowHeight = 80
+        tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         return tableView
     }()
@@ -288,7 +262,7 @@ extension ContactListViewController {
         viewModel.tableView = tableView
         tableView.delegate = self
         do {
-            try viewModel.fetchedResultsController.performFetch()
+            try viewModel.contactFetchedResultsController.performFetch()
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -316,21 +290,24 @@ extension ContactListViewController {
 // MARK: - UITableViewDelegate
 extension ContactListViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // Set collection and flow layout delegate
+        if let cell = cell as? ContactListIdentityCardCollectionTableViewCell {
+            cell.collectionView.delegate = self
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer {
             tableView.deselectRow(at: indexPath, animated: true)
         }
-        
-//        if tableView.cellForRow(at: indexPath) is ContactListIdentityBannerTableViewCell {
-//            coordinator.present(scene: .addIdentity, from: self, transition: .modal(animated: true))
-//        }
         
         if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell {
             let identitySectionRange = 0..<viewModel.identitySectionCount
             let contactsSectionRange = identitySectionRange.upperBound..<identitySectionRange.upperBound + viewModel.contactsSectionCount
             
             let resultIndexPath = IndexPath(row: indexPath.row, section: indexPath.section - contactsSectionRange.lowerBound)
-            let contact = viewModel.fetchedResultsController.object(at: resultIndexPath)
+            let contact = viewModel.contactFetchedResultsController.object(at: resultIndexPath)
             let contactDetailViewModel = ContactDetailViewModel(context: context, contact: contact)
             coordinator.present(scene: .contactDetail(viewModel: contactDetailViewModel), from: self, transition: .showDetail)
         }
@@ -386,7 +363,7 @@ extension ContactListViewController: UITableViewDelegate {
             
             // configure title label
             let indexPath = IndexPath(row: 0, section: section - contactsSectionRange.lowerBound)
-            let contact = viewModel.fetchedResultsController.object(at: indexPath)
+            let contact = viewModel.contactFetchedResultsController.object(at: indexPath)
             let firstInitial = contact.nameFirstInitial
             titleLabel.text = firstInitial
                 
@@ -395,6 +372,40 @@ extension ContactListViewController: UITableViewDelegate {
         default:
             return UIView()
         }
+    }
+    
+}
+
+// MARK: - UICollectionViewDelegate
+extension ContactListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        print(indexPath)
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath)
+    }
+}
+
+// MAKR: - UICollectionViewDelegateFlowLayout
+extension ContactListViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let itemWidth = max(0, collectionView.frame.size.width - 2 * (ContactListIdentityCardCollectionTableViewCell.itemSpacing + ContactListIdentityCardCollectionTableViewCell.itemPeeking))
+        return CGSize(width: itemWidth, height: ContactListIdentityCardCollectionTableViewCell.itemHeight)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let margin = ContactListIdentityCardCollectionTableViewCell.itemSpacing + ContactListIdentityCardCollectionTableViewCell.itemPeeking
+        return UIEdgeInsets(top: ContactListIdentityCardCollectionTableViewCell.itemTopPadding, left: margin, bottom: ContactListIdentityCardCollectionTableViewCell.itemBottomPadding, right: margin)
+    }
+    
+
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+//        return view.layoutMargins.left + view.layoutMargins.right
+//    }
+//
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
     
 }
