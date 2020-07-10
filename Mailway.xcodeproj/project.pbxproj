@@ -27,6 +27,7 @@
 		DB17252E24B8420E0090DFA9 /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB17252D24B8420E0090DFA9 /* CALayer.swift */; };
 		DB17253324B866610090DFA9 /* IdentityCardCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB17253224B866610090DFA9 /* IdentityCardCollectionViewModel.swift */; };
 		DB17253724B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB17253624B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift */; };
+		DB17253A24B871DC0090DFA9 /* ContactListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB17253924B871DC0090DFA9 /* ContactListViewModel.swift */; };
 		DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB193883247693D000E24AFB /* AutoFocusTextField.swift */; };
 		DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB193886247782F500E24AFB /* MainTabBarController.swift */; };
 		DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB19388824778D3E00E24AFB /* CommonNames.swift */; };
@@ -229,6 +230,7 @@
 		DB17252D24B8420E0090DFA9 /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		DB17253224B866610090DFA9 /* IdentityCardCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardCollectionViewModel.swift; sourceTree = "<group>"; };
 		DB17253624B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappingCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		DB17253924B871DC0090DFA9 /* ContactListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewModel.swift; sourceTree = "<group>"; };
 		DB193883247693D000E24AFB /* AutoFocusTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFocusTextField.swift; sourceTree = "<group>"; };
 		DB193886247782F500E24AFB /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		DB19388824778D3E00E24AFB /* CommonNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonNames.swift; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 		DB008AA7247661D900CE6A7E /* ContactList */ = {
 			isa = PBXGroup;
 			children = (
+				DB17253B24B872740090DFA9 /* ViewModel */,
 				DB1938932477E8A900E24AFB /* View */,
 				DB1938942477E8BA00E24AFB /* ContactListViewController.swift */,
 			);
@@ -540,6 +543,14 @@
 				DB17253624B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift */,
 			);
 			path = Layout;
+			sourceTree = "<group>";
+		};
+		DB17253B24B872740090DFA9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DB17253924B871DC0090DFA9 /* ContactListViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		DB193885247693D400E24AFB /* View */ = {
@@ -1618,6 +1629,7 @@
 				DBA5F9EC247F90B700C9B552 /* ChatMessageTableViewCell.swift in Sources */,
 				DBE306A82474DF7B00EB7193 /* SceneDelegate.swift in Sources */,
 				DB6DEC7C247E6D300040C817 /* SelectChatIdentityViewController.swift in Sources */,
+				DB17253A24B871DC0090DFA9 /* ContactListViewModel.swift in Sources */,
 				DB008AAB247666D200CE6A7E /* CreateIdentityView.swift in Sources */,
 				DBE306D82474ED0700EB7193 /* AppAction.swift in Sources */,
 				DBE306E524751AAD00EB7193 /* ViewState+ChatsView.swift in Sources */,

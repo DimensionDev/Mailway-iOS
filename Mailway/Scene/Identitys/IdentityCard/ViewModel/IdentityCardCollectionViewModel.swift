@@ -16,7 +16,7 @@ final class IdentityCardCollectionViewModel: NSObject {
     let context: AppContext
     let identityFetchedResultsController: NSFetchedResultsController<Contact>
     
-    private weak var collectionView: UICollectionView?
+    private(set) weak var collectionView: UICollectionView?
     private var dataSource: DataSource?
     
     init(context: AppContext) {
