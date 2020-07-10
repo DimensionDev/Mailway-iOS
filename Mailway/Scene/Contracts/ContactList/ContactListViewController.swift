@@ -212,8 +212,9 @@ extension ContactListViewModel: UITableViewDataSource {
         
         switch indexPath.section {
         case identitySectionRange:
-            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
-            cell = _cell
+            cell = UITableViewCell()
+//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self), for: indexPath) as! ContactListIdentityBannerTableViewCell
+//            cell = _cell
             
             // TODO:
 
@@ -256,7 +257,7 @@ final class ContactListViewController: UIViewController, NeedsDependency, MainTa
     
     private(set) lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ContactListIdentityBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self))
+//        tableView.register(ContactListIdentityBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListIdentityBannerTableViewCell.self))
         tableView.register(ContactListContactTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListContactTableViewCell.self))
         tableView.tableFooterView = UIView()
         return tableView
@@ -320,15 +321,9 @@ extension ContactListViewController: UITableViewDelegate {
             tableView.deselectRow(at: indexPath, animated: true)
         }
         
-        if tableView.cellForRow(at: indexPath) is ContactListIdentityBannerTableViewCell {
-//            if viewModel.identities.value.isEmpty {
-                // create identity
-                coordinator.present(scene: .addIdentity, from: self, transition: .modal(animated: true))
-//            } else {
-//                // open list
-//                coordinator.present(scene: .identityList, from: self, transition: .show)
-//            }
-        }
+//        if tableView.cellForRow(at: indexPath) is ContactListIdentityBannerTableViewCell {
+//            coordinator.present(scene: .addIdentity, from: self, transition: .modal(animated: true))
+//        }
         
         if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell {
             let identitySectionRange = 0..<viewModel.identitySectionCount

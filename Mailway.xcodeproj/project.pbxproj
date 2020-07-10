@@ -88,7 +88,6 @@
 		DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9DA32498C22600D39BAD /* ChatMessage.swift */; };
 		DB772FF224A8382E00558F37 /* SplitDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB772FF124A8382E00558F37 /* SplitDemoViewController.swift */; };
 		DB772FF524A8423800558F37 /* SettingEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB772FF424A8423800558F37 /* SettingEntryTableViewCell.swift */; };
-		DB7E1E3C247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */; };
 		DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */; };
 		DB7E1E40247BC73B002FC90E /* IdentityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3F247BC73B002FC90E /* IdentityListViewController.swift */; };
 		DB7E1E43247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E42247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift */; };
@@ -104,7 +103,6 @@
 		DBB358702491F76C00803C98 /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB3586F2491F76C00803C98 /* Managed.swift */; };
 		DBB358742491FFBD00803C98 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358732491FFBD00803C98 /* Contact.swift */; };
 		DBB358762492128300803C98 /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358752492128300803C98 /* NSManagedObjectContext.swift */; };
-		DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */; };
 		DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498CC247D17A600EFBACD /* ChatListViewController.swift */; };
 		DBB981162486452C00FB2FE8 /* RootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB981152486452C00FB2FE8 /* RootSplitViewController.swift */; };
 		DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */; };
@@ -548,9 +546,7 @@
 		DB1938932477E8A900E24AFB /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */,
 				DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */,
-				DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */,
 				DB25C75624B732FF00813755 /* IdentityCardCollectionTableViewCell.swift */,
 				DB25C75824B733F800813755 /* IdentityCardCollectionViewCell.swift */,
 				DB25C75A24B7344D00813755 /* IdentityCardView.swift */,
@@ -786,6 +782,8 @@
 		DB7E1E54247CF0E8002FC90E /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */,
+				DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */,
 				DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */,
 				DB6DEC7E247F59E00040C817 /* Key.swift */,
 				DBA5F9E9247F832900C9B552 /* ChatMessage.swift */,
@@ -1560,7 +1558,6 @@
 				DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */,
 				DB1997A824B302CE00C1A293 /* KeyboardResponderService.swift in Sources */,
 				DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */,
-				DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */,
 				DB970CA224A8660D00DE481C /* AddIdentityViewController.swift in Sources */,
 				DB008AB02476737100CE6A7E /* ViewStata+Contacts.swift in Sources */,
 				DB1EC2DE2488E591002379A1 /* HitTestExpandedButton.swift in Sources */,
@@ -1569,7 +1566,6 @@
 				DBB981162486452C00FB2FE8 /* RootSplitViewController.swift in Sources */,
 				DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */,
 				DB25C75524B725A400813755 /* LargeRoundedButtonStyle.swift in Sources */,
-				DB7E1E3C247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift in Sources */,
 				DB1E860424A2189200B1558B /* SidebarPresentationController.swift in Sources */,
 				DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */,
 				DBE306D72474ED0700EB7193 /* AppError.swift in Sources */,
