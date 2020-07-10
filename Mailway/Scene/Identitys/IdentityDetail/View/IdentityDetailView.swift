@@ -16,11 +16,14 @@ struct IdentityDetailView: View {
     var body: some View {
         ProfileView(
             avatar: $viewModel.avatar,
+            colorBarColor: $viewModel.color,
             name: $viewModel.name,
-            shortKeyID: $viewModel.shortKeyID,
-            shareProfileAction: { self.viewModel.shareProfileActionPublisher.send(()) },
+            isMyProfile: .constant(true),
+            keyID: $viewModel.keyID,
             contactInfoDict: $viewModel.contactInfoDict,
-            note: $viewModel.note
+            note: $viewModel.note,
+            shareProfileAction: { self.viewModel.shareProfileActionPublisher.send(()) },
+            copyKeyIDAction: { self.viewModel.copyKeyIDActionPublisher.send(()) }
         )
     }
         

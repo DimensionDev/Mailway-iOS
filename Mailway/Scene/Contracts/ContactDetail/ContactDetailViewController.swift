@@ -17,15 +17,51 @@ final class ContactDetailViewModel: ObservableObject {
     var disposeBag = Set<AnyCancellable>()
     
     // input
+    let context: AppContext
     let contact: Contact
+    let shareProfileActionPublisher = PassthroughSubject<Void, Never>()
+    let copyKeyIDActionPublisher = PassthroughSubject<Void, Never>()
+    let removeButtonPressedPublisher = PassthroughSubject<Void, Never>()
     
     // output
-    let removeButtonPressedPublisher = PassthroughSubject<Void, Never>()
+    @Published var avatar: UIImage
+    @Published var name: String
+    @Published var keyID: String
+    @Published var contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
+    @Published var note: String
+
     let contactDidRemovedPublisher = PassthroughSubject<Void, Never>()
     let error = PassthroughSubject<Error, Never>()
     
-    init(contact: Contact) {
+    init(context: AppContext, contact: Contact) {
+        self.context = context
         self.contact = contact
+        self.avatar = contact.avatar ?? UIImage.placeholder(color: .systemFill)
+        self.name = contact.name
+        self.keyID = contact.keypair?.keyID ?? "-"
+        self.contactInfoDict = {
+            var infoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
+            
+            let infos = contact.channels?.compactMap { channel -> ContactInfo in
+                let type = ContactInfo.InfoType(name: channel.name)
+                return ContactInfo(type: type, key: channel.name, value: channel.value)
+                } ?? []
+            let groupingInfos = Dictionary(grouping: infos, by: { $0.type })
+            for infoType in ContactInfo.InfoType.allCases {
+                infoDict[infoType] = groupingInfos[infoType]?.sorted(by: { $0.value < $1.value })
+            }
+            return infoDict
+        }()
+        self.note = contact.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
+        // setup action
+        // TODO: Share Profile
+        
+        copyKeyIDActionPublisher
+            .sink { _ in
+                UIPasteboard.general.string = self.keyID
+            }
+            .store(in: &disposeBag)
         
         removeButtonPressedPublisher
             .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: false)
@@ -37,16 +73,16 @@ final class ContactDetailViewModel: ObservableObject {
                 return managedObjectContext.performChanges {
                     managedObjectContext.delete(self.contact)
                 }
+        }
+        .sink { result in
+            do {
+                _ = try result.get()
+            } catch {
+                os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, error.localizedDescription)
+                self.error.send(error)
             }
-            .sink { result in
-                do {
-                    _ = try result.get()
-                } catch {
-                    os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, error.localizedDescription)
-                    self.error.send(error)
-                }
-            }
-            .store(in: &disposeBag)
+        }
+        .store(in: &disposeBag)
         
         ManagedObjectObserver.observe(object: contact)
             .sink(receiveCompletion: { completion in
@@ -64,14 +100,15 @@ final class ContactDetailViewModel: ObservableObject {
 
 final class ContactDetailViewController: UIViewController, NeedsDependency {
     
+    var disposeBag = Set<AnyCancellable>()
+
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
-    lazy var contactDetailView = ContactDetailView(viewModel: viewModel)
-    
-    var disposeBag = Set<AnyCancellable>()
     var viewModel: ContactDetailViewModel!
-    
+
+    lazy var contactDetailView = ContactDetailView(viewModel: viewModel)
+        
     deinit {
         os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
     }
@@ -115,4 +152,3 @@ extension ContactDetailViewController {
     }
     
 }
-

@@ -13,15 +13,19 @@ import Combine
 import CoreDataStack
 
 final class IdentityDetailViewModel: ObservableObject {
+    
+    var disposeBag = Set<AnyCancellable>()
 
     // input
     let context: AppContext
     let shareProfileActionPublisher = PassthroughSubject<Void, Never>()
+    let copyKeyIDActionPublisher = PassthroughSubject<Void, Never>()
     
     // output
     @Published var avatar: UIImage
+    @Published var color: UIColor
     @Published var name: String
-    @Published var shortKeyID: String
+    @Published var keyID: String
     @Published var contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
     @Published var note: String
 
@@ -29,13 +33,9 @@ final class IdentityDetailViewModel: ObservableObject {
         self.context = context
         
         self.avatar = identity.avatar ?? UIImage.placeholder(color: .systemFill)
+        self.color = .systemPurple
         self.name = identity.name
-        self.shortKeyID = {
-            guard let keyID = identity.keypair?.keyID else {
-                return "-"
-            }
-            return String(keyID.suffix(8)).separate(every: 4, with: " ")
-        }()
+        self.keyID = identity.keypair?.keyID ?? "-"
         self.contactInfoDict = {
             var infoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
             
@@ -50,6 +50,12 @@ final class IdentityDetailViewModel: ObservableObject {
             return infoDict
         }()
         self.note = identity.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
+        copyKeyIDActionPublisher
+            .sink { _ in
+                UIPasteboard.general.string = self.keyID
+            }
+            .store(in: &disposeBag)
     }
     
 }

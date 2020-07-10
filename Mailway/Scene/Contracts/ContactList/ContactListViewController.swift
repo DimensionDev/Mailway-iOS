@@ -336,7 +336,7 @@ extension ContactListViewController: UITableViewDelegate {
             
             let resultIndexPath = IndexPath(row: indexPath.row, section: indexPath.section - contactsSectionRange.lowerBound)
             let contact = viewModel.fetchedResultsController.object(at: resultIndexPath)
-            let contactDetailViewModel = ContactDetailViewModel(contact: contact)
+            let contactDetailViewModel = ContactDetailViewModel(context: context, contact: contact)
             coordinator.present(scene: .contactDetail(viewModel: contactDetailViewModel), from: self, transition: .showDetail)
         }
     }

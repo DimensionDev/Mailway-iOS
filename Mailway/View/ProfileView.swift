@@ -11,46 +11,96 @@ import SwiftUI
 struct ProfileView: View {
     
     @Binding var avatar: UIImage
+    @Binding var colorBarColor: UIColor
     @Binding var name: String
-    @Binding var shortKeyID: String
-    var shareProfileAction: () -> ()
+    @Binding var isMyProfile: Bool
+    @Binding var keyID: String
     @Binding var contactInfoDict: [ContactInfo.InfoType: [ContactInfo]]
     @Binding var note: String
+    
+    var shareProfileAction: () -> ()
+    var copyKeyIDAction: () -> ()
     
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                // avatar
-                ProfileAvatarView(avatar: $avatar)
-                // 32pt padding
-                Color.clear.frame(width: .leastNonzeroMagnitude, height: 32)
-                // name
-                Text(name)
-                    .font(.system(size: 24, weight: .regular))
-                // 16pt padding
-                Color.clear.frame(width: .leastNonzeroMagnitude, height: 16)
-                // KeyID
-                VStack(spacing: 4) {
-                    Text("KeyID")
+                // Banner
+                Group {
+                    // avatar
+                    ProfileAvatarView(avatar: $avatar)
+                    // 14pt padding
+                    Color.clear.frame(width: .leastNonzeroMagnitude, height: 14)
+                    // color bar
+                    colorBar
+                    // 14pt padding
+                    Color.clear.frame(width: .leastNonzeroMagnitude, height: 14)
+                    // name
+                    Text(name)
+                        .font(.system(size: 24, weight: .regular))
+                    // 16pt padding
+                    Color.clear.frame(width: .leastNonzeroMagnitude, height: 8)
+                    // My Profile
+                    Text("My Profile")
                         .font(.system(size: 12))
                         .foregroundColor(Color(.secondaryLabel))
-                    Text(shortKeyID)
-                        .font(.system(size: 14))
+                        .isHidden(!isMyProfile)
+                    // 16pt padding
+                    Color.clear.frame(width: .leastNonzeroMagnitude, height: 16)
+                    // share button
+                    Button("Share Profile", action: {
+                        self.shareProfileAction()
+                    }).buttonStyle(LargeRoundedButtonStyle(title: "Share Profile"))
                 }
-                // 16pt padding
-                Color.clear.frame(width: .leastNonzeroMagnitude, height: 16)
-                // share button
-                Button("Share Profile", action: {
-                    self.shareProfileAction()
-                }).buttonStyle(LargeRoundedButtonStyle(title: "Share Profile"))
                 // 32pt padding
                 Color.clear.frame(width: .leastNonzeroMagnitude, height: 32)
-                // info section
-                infoSections
-                // note section
-                noteSection
-            }
+                // Info list
+                Group {
+                    // key ID section
+                    keyIDSection
+                    // info section
+                    infoSections
+                    // note section
+                    noteSection
+                }
+            }.frame(maxWidth: .infinity)
         }
+    }
+    
+}
+
+extension ProfileView {
+    
+    var colorBar: some View {
+        RoundedRectangle(cornerRadius: 4 * 0.5, style: .continuous)
+            .frame(width: 24, height: 4)
+            .foregroundColor(Color(colorBarColor))
+    }
+    
+    var keyIDSection: some View {
+        Group {
+            Text("Key ID")
+                .font(.system(size: 12, weight: .regular))
+                .foregroundColor(Color(UIColor.label.withAlphaComponent(0.6)))
+                .frame(maxWidth: .infinity, alignment: .leading)
+            // 8pt padding
+            Color.clear.frame(width: .leastNonzeroMagnitude, height: 8.0)
+            HStack {
+            Text(ProfileView.formate(keyID: keyID))
+                .lineLimit(2)
+                .font(.system(size: 12, weight: .regular, design: .monospaced))
+                .minimumScaleFactor(0.5)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                Button(action: {
+                    
+                }) {
+                    Image(uiImage: Asset.Editing.docOnDoc.image)
+                }
+                .accentColor(Color(.label))
+            }
+            // 24pt padding
+            Color.clear.frame(width: .leastNonzeroMagnitude, height: 24)
+        }
+        .padding([.leading, .trailing])
     }
     
     var infoSections: some View {
@@ -106,6 +156,22 @@ struct ProfileView: View {
     
 }
 
+extension ProfileView {
+    
+    static func formate(keyID: String) -> String {
+        // assert(keyID.count == 64)
+        guard keyID.count == 64 else {
+            return keyID
+        }
+        
+        return [keyID.prefix(32), keyID.suffix(32)]
+            .map { String($0) }
+            .map { $0.separate(every: 4, with: Character(" ")) }    // add cast to fix Xcode Preview crash issue
+            .joined(separator: "\n")
+    }
+    
+}
+
 fileprivate struct TextSectionHeaderStyleModifier: ViewModifier {
     
     func body(content: Content) -> some View {
@@ -148,11 +214,14 @@ struct ProfileView_Previews: PreviewProvider {
         ]
         return ProfileView(
             avatar: .constant(UIImage.placeholder(color: .systemFill)),
+            colorBarColor: .constant(.systemPurple),
             name: .constant("Alice"),
-            shortKeyID: .constant("9035 a2853"),
-            shareProfileAction: { print("Tap") },
+            isMyProfile: .constant(true),
+            keyID: .constant("0816fe6c1edebe9fbb83af9102ad9c899abec1a87a1d123bc24bf11945cc807c"),
             contactInfoDict: .constant(contactInfoDict),
-            note: .constant("Alice in the Book\nPhone Number: +00 123-456-7890")
+            note: .constant("Alice in the Book\nPhone Number: +00 123-456-7890"),
+            shareProfileAction: { print("Share") },
+            copyKeyIDAction: { print("Copy") }
         )
     }
 }

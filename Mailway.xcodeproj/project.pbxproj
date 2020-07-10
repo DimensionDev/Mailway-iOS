@@ -65,6 +65,10 @@
 		DB1EDED024AB0D3F000C5E58 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EDECF24AB0D3F000C5E58 /* DateFormatter.swift */; };
 		DB25C75324B7236800813755 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75224B7236800813755 /* ProfileView.swift */; };
 		DB25C75524B725A400813755 /* LargeRoundedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75424B725A400813755 /* LargeRoundedButtonStyle.swift */; };
+		DB25C75724B732FF00813755 /* IdentityCardCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75624B732FF00813755 /* IdentityCardCollectionTableViewCell.swift */; };
+		DB25C75924B733F800813755 /* IdentityCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75824B733F800813755 /* IdentityCardCollectionViewCell.swift */; };
+		DB25C75B24B7344D00813755 /* IdentityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75A24B7344D00813755 /* IdentityCardView.swift */; };
+		DB25C75D24B8225C00813755 /* HidingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75C24B8225C00813755 /* HidingViews.swift */; };
 		DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB28139F2484F64A001CDD19 /* NSLayoutConstraint.swift */; };
 		DB3050E6249B6FC700F361FC /* QuoteMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB3050E5249B6FC700F361FC /* QuoteMessage.swift */; };
 		DB4B9CA82480C3B1009F06BE /* MessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B9CA72480C3B1009F06BE /* MessageInputView.swift */; };
@@ -264,6 +268,10 @@
 		DB1EDECF24AB0D3F000C5E58 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		DB25C75224B7236800813755 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		DB25C75424B725A400813755 /* LargeRoundedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeRoundedButtonStyle.swift; sourceTree = "<group>"; };
+		DB25C75624B732FF00813755 /* IdentityCardCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardCollectionTableViewCell.swift; sourceTree = "<group>"; };
+		DB25C75824B733F800813755 /* IdentityCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardCollectionViewCell.swift; sourceTree = "<group>"; };
+		DB25C75A24B7344D00813755 /* IdentityCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardView.swift; sourceTree = "<group>"; };
+		DB25C75C24B8225C00813755 /* HidingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HidingViews.swift; sourceTree = "<group>"; };
 		DB26C81B24A87E8000845265 /* EditableAvatarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableAvatarTableViewCell.swift; sourceTree = "<group>"; };
 		DB28139F2484F64A001CDD19 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		DB2ABEBD249B30AD00B9C6CA /* UnitTestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTestsPlan.xctestplan; sourceTree = "<group>"; };
@@ -513,6 +521,7 @@
 				DB193883247693D000E24AFB /* AutoFocusTextField.swift */,
 				DB970CA424A86DB200DE481C /* EditableAvatarView.swift */,
 				DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */,
+				DB25C75C24B8225C00813755 /* HidingViews.swift */,
 				DB25C75224B7236800813755 /* ProfileView.swift */,
 			);
 			path = View;
@@ -542,6 +551,9 @@
 				DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */,
 				DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */,
 				DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */,
+				DB25C75624B732FF00813755 /* IdentityCardCollectionTableViewCell.swift */,
+				DB25C75824B733F800813755 /* IdentityCardCollectionViewCell.swift */,
+				DB25C75A24B7344D00813755 /* IdentityCardView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1543,6 +1555,7 @@
 				DB1997A524B2F87300C1A293 /* ComposeMessageViewController.swift in Sources */,
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
 				DB65474F24AC39970039AFE5 /* ViewState+AddIdentityView.swift in Sources */,
+				DB25C75B24B7344D00813755 /* IdentityCardView.swift in Sources */,
 				DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */,
 				DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */,
 				DB1997A824B302CE00C1A293 /* KeyboardResponderService.swift in Sources */,
@@ -1574,6 +1587,7 @@
 				DBE306D12474ECE100EB7193 /* ViewStateStore.swift in Sources */,
 				DB6DEC77247E4AA90040C817 /* ChatViewController.swift in Sources */,
 				DB1E85E724A092D200B1558B /* SidebarViewController.swift in Sources */,
+				DB25C75924B733F800813755 /* IdentityCardCollectionViewCell.swift in Sources */,
 				DBE306D62474ED0700EB7193 /* AppCommand.swift in Sources */,
 				DB970CA024A8518700DE481C /* UIColor.swift in Sources */,
 				DB1E85D924A079A500B1558B /* MainTabTransitionController.swift in Sources */,
@@ -1583,6 +1597,7 @@
 				DB008AB22476750800CE6A7E /* CreateIdentityViewController.swift in Sources */,
 				DB772FF524A8423800558F37 /* SettingEntryTableViewCell.swift in Sources */,
 				DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */,
+				DB25C75724B732FF00813755 /* IdentityCardCollectionTableViewCell.swift in Sources */,
 				DB1EC2DB2488D8CE002379A1 /* MessageInboxViewController.swift in Sources */,
 				DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */,
 				DB772FF224A8382E00558F37 /* SplitDemoViewController.swift in Sources */,
@@ -1606,6 +1621,7 @@
 				DB970C9E24A84FF300DE481C /* IdentityListAddIdentityTableViewCell.swift in Sources */,
 				DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */,
 				DBE306CF2474EA7500EB7193 /* AppContext.swift in Sources */,
+				DB25C75D24B8225C00813755 /* HidingViews.swift in Sources */,
 				DB1191F424A890AD00C1342E /* EditableAvatarButtonStyle.swift in Sources */,
 				DB1191EF24A887A400C1342E /* AddIdentityView.swift in Sources */,
 				DB1938952477E8BA00E24AFB /* ContactListViewController.swift in Sources */,
