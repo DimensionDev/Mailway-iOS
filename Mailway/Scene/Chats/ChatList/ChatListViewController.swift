@@ -11,6 +11,7 @@ import SwiftUI
 import Combine
 import CoreData
 import CoreDataStack
+import Floaty
 
 final class ChatListViewModel: NSObject {
     
@@ -23,6 +24,7 @@ final class ChatListViewModel: NSObject {
     weak var tableView: UITableView?
     
     // output
+    // let identityCount = CurrentValueSubject<Int, Never>(0)
     // let chats = CurrentValueSubject<[Chat], Never>([])
     
     init(context: AppContext) {
@@ -62,7 +64,43 @@ extension ChatListViewModel {
 extension ChatListViewModel {
     
     static func configure(cell: ChatListChatRoomTableViewCell, with chat: Chat) {
-        cell.titleLabel.text = chat.title
+        cell.titleLabel.text = {
+            guard let title = chat.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                let names = chat.memberNameStubs?
+                    .filter { $0.publicKey != chat.identityPublicKey }  // remove sender
+                    .compactMap { $0.i18nName ?? $0.name } ?? []
+                
+                let text = names.sorted().joined(separator: ", ")
+                guard !text.isEmpty else {
+                    return "<Empty>"
+                }
+                return text
+            }
+            
+            return title
+        }()
+        cell.detailLabel.text = {
+            let request = ChatMessage.latestFirstSortFetchRequest
+            request.fetchLimit = 1
+            request.returnsObjectsAsFaults = false
+            request.predicate = ChatMessage.predicate(chat: chat)
+            guard let chatMessage = try? chat.managedObjectContext?.fetch(request).first else {
+                return " "
+            }
+            
+            switch chatMessage.payloadKind {
+            case .plaintext:
+                guard let text = String(data: chatMessage.payload, encoding: .utf8) else {
+                    assertionFailure()
+                    return " "
+                }
+                
+                return text
+                
+            default:
+                return " "
+            }
+        }()
     }
     
 }
@@ -151,7 +189,6 @@ extension ChatListViewModel: UITableViewDataSource {
     
 }
 
-
 final class ChatListViewController: UIViewController, NeedsDependency, MainTabTransitionableViewController {
     
     private(set) var transitionController: MainTabTransitionController!
@@ -170,17 +207,45 @@ final class ChatListViewController: UIViewController, NeedsDependency, MainTabTr
         return item
     }()
     
-    private lazy var composeBarButtonItem: UIBarButtonItem = {
-        let item = UIBarButtonItem()
-        item.image = UIImage(systemName: "square.and.pencil")
-        item.target = self
-        item.action = #selector(ChatListViewController.composeBarButtonItemPressed(_:))
-        return item
+//    private lazy var composeBarButtonItem: UIBarButtonItem = {
+//        let item = UIBarButtonItem()
+//        item.image = UIImage(systemName: "square.and.pencil")
+//        item.target = self
+//        item.action = #selector(ChatListViewController.composeBarButtonItemPressed(_:))
+//        return item
+//    }()
+    
+    private lazy var floatyButton: Floaty = {
+        let button = Floaty()
+        button.plusColor = .white
+        button.buttonColor = Asset.Color.Background.blue.color
+        
+        let compose: FloatyItem = {
+            let item = FloatyItem()
+            item.title = "Compose"
+            item.icon = Asset.Editing.pencil.image
+            item.buttonColor = Asset.Color.Background.greenLight.color
+            item.handler = self.composeFloatyItemPressed
+            return item
+        }()
+        let receive: FloatyItem = {
+            let item = FloatyItem()
+            item.title = "Receive"
+            item.icon = Asset.Communication.trayAndArrowDown.image
+            item.buttonColor = Asset.Color.Background.tealLight.color
+            item.handler = self.receiveFloatyItemPressed
+            return item
+        }()
+        
+        button.addItem(item: compose)
+        button.addItem(item: receive)
+        
+        return button
     }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ChatListInboxBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ChatListInboxBannerTableViewCell.self))
+        // tableView.register(ChatListInboxBannerTableViewCell.self, forCellReuseIdentifier: String(describing: ChatListInboxBannerTableViewCell.self))
         tableView.register(ChatListChatRoomTableViewCell.self, forCellReuseIdentifier: String(describing: ChatListChatRoomTableViewCell.self))
         tableView.tableFooterView = UIView()
         return tableView
@@ -193,10 +258,10 @@ extension ChatListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Chats"
+        title = "Inbox"
         transitionController = MainTabTransitionController(viewController: self)
         navigationItem.leftBarButtonItem = sidebarBarButtonItem
-        navigationItem.rightBarButtonItem = composeBarButtonItem
+        // navigationItem.rightBarButtonItem = composeBarButtonItem
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -209,9 +274,15 @@ extension ChatListViewController {
         
         viewModel.tableView = tableView
         tableView.delegate = self
-        try! viewModel.fetchedResultsController.performFetch()
+        do {
+            try viewModel.fetchedResultsController.performFetch()
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
         tableView.dataSource = viewModel
         tableView.reloadData()
+        
+        view.addSubview(floatyButton)
         
 //        viewModel.chats
 //            .receive(on: DispatchQueue.main)
@@ -219,6 +290,12 @@ extension ChatListViewController {
 //                self?.tableView.reloadData()
 //            }
 //            .store(in: &disposeBag)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        floatyButton.close()
     }
     
 }
@@ -229,8 +306,33 @@ extension ChatListViewController {
         coordinator.present(scene: .sidebar, from: self, transition: .custom(transitioningDelegate: transitionController))
     }
     
-    @objc private func composeBarButtonItemPressed(_ sender: UIBarButtonItem) {
-        coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
+//    @objc private func composeBarButtonItemPressed(_ sender: UIBarButtonItem) {
+//        coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
+//    }
+    
+    @objc private func composeFloatyItemPressed(_ sender: FloatyItem) {
+        let fetchRequest = Contact.sortedFetchRequest
+        fetchRequest.predicate = Contact.isIdentityPredicate
+        
+        do {
+            let count = try context.managedObjectContext.count(for: fetchRequest)
+            guard count != 0 else {
+                let alertController = UIAlertController(title: "Identity Not Found", message: "Please create idenitty before compose message.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                present(alertController, animated: true, completion: nil)
+                return
+            }
+            
+            coordinator.present(scene: .createChat, from: self, transition: .modal(animated: true))
+        } catch {
+            let alertController = UIAlertController.standardAlert(of: error)
+            present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    @objc private func receiveFloatyItemPressed(_ sender: FloatyItem) {
+        
     }
     
 }

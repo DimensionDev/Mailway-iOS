@@ -29,6 +29,7 @@ final class IdentityListViewModel: NSObject {
             let fetchRequest = Contact.sortedFetchRequest
             fetchRequest.returnsObjectsAsFaults = false
             fetchRequest.fetchBatchSize = 20
+            fetchRequest.predicate = Contact.isIdentityPredicate
             
             let controller = NSFetchedResultsController(
                 fetchRequest: fetchRequest,
@@ -64,7 +65,7 @@ extension IdentityListViewModel {
         cell.avatarImageView.image = identity.avatar ?? UIImage.placeholder(color: .systemFill)
         // TODO: color bar
         cell.nameLabel.text = identity.name
-        cell.keyIDLabel.text = String(identity.keypair.keyID.suffix(8)).separate(every: 4, with: " ")
+        cell.keyIDLabel.text = identity.keypair.flatMap { String($0.keyID.suffix(8)).separate(every: 4, with: " ") } ?? "-"
     }
     
 }
@@ -212,7 +213,11 @@ extension IdentityListViewController {
         
         viewModel.tableView = tableView
         tableView.delegate = self
-        try! viewModel.fetchedResultsController.performFetch()
+        do {
+            try viewModel.fetchedResultsController.performFetch()
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
         tableView.dataSource = viewModel
         tableView.reloadData()
 

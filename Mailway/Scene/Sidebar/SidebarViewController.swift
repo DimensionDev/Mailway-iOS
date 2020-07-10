@@ -145,10 +145,10 @@ extension SidebarViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            view.layoutMarginsGuide.bottomAnchor.constraint(equalTo: tableView.bottomAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            view.layoutMarginsGuide.bottomAnchor.constraint(equalTo: tableView.bottomAnchor),       // make not cross settings bottom
         ])
         
         settingsTableView.translatesAutoresizingMaskIntoConstraints = false

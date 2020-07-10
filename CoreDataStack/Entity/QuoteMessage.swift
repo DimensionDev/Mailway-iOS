@@ -19,7 +19,7 @@ final public class QuoteMessage: NSManagedObject {
     private(set) public var digestKind: ChatMessage.PayloadKind {
         get {
             guard let kind = ChatMessage.PayloadKind(rawValue: digestKindRawValue) else {
-                return .unknwon
+                return .unknown
             }
             
             return kind

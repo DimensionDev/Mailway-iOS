@@ -13,7 +13,7 @@ final public class ChatMemberNameStub: NSManagedObject {
     
     @NSManaged public private(set) var id: UUID
     @NSManaged public private(set) var name: String?
-    @NSManaged public private(set) var i18nNames: [String:String]
+    @NSManaged public private(set) var i18nNames: [String:String]?
     @NSManaged public private(set) var publicKey: String
     @NSManaged public private(set) var keyID: String
     
@@ -23,6 +23,27 @@ final public class ChatMemberNameStub: NSManagedObject {
     // many-to-many relationship
     @NSManaged public private(set) var chats: Set<Chat>
     
+}
+
+extension ChatMemberNameStub {
+    public var i18nName: String? {
+        var i18nName: String?
+        let i18nNames = self.i18nNames ?? [:]
+        if !i18nNames.isEmpty {
+            let preferredLanguages = Locale.preferredLanguages
+            for language in preferredLanguages {
+                let locale = Locale(identifier: language)
+                guard let languageCode = locale.languageCode else {
+                    continue
+                }
+                
+                i18nName = i18nNames[languageCode]
+                break
+            }
+        }
+        
+        return i18nName
+    }
 }
 
 extension ChatMemberNameStub {
@@ -51,11 +72,11 @@ extension ChatMemberNameStub {
 extension ChatMemberNameStub {
     public struct Property {
         public let name: String?
-        public let i18nNames: [String: String]
+        public let i18nNames: [String: String]?
         public let publicKey: String
         public let keyID: String
         
-        public init(name: String?, i18nNames: [String: String] = [:], publicKey: String, keyID: String) {
+        public init(name: String?, i18nNames: [String: String]?, publicKey: String, keyID: String) {
             self.name = name
             self.i18nNames = i18nNames
             self.publicKey = publicKey
@@ -70,4 +91,10 @@ extension ChatMemberNameStub: Managed {
     }
 }
 
+extension ChatMemberNameStub {
+    
+    public static func predicate(publicKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(ChatMemberNameStub.publicKey), publicKey)
+    }
+}
 

@@ -25,7 +25,7 @@ final public class ChatMessage: NSManagedObject {
     private(set) public var payloadKind: PayloadKind {
         get {
             guard let kind = PayloadKind(rawValue: payloadKindRawValue) else {
-                return .unknwon
+                return .unknown
             }
             
             return kind
@@ -53,7 +53,7 @@ final public class ChatMessage: NSManagedObject {
 
 extension ChatMessage {
     public enum PayloadKind: String {
-        case unknwon
+        case unknown
         case plaintext
         case image
         case video
@@ -74,9 +74,23 @@ extension ChatMessage {
         updatedAt = now
     }
     
-    public static func insert(into context: NSManagedObjectContext, property: Property) -> ChatMessage {
+    public static func insert(into context: NSManagedObjectContext, property: Property, chat: Chat?, quoteMessage: QuoteMessage?) -> ChatMessage {
         let chatMessage: ChatMessage = context.insertObject()
-        // TODO:
+        
+        chatMessage.senderPublicKey = property.senderPublicKey
+        chatMessage.recipientPublicKeys = property.recipientPublicKeys
+        chatMessage.version = property.version
+        chatMessage.armoredMessage = property.armoredMessage
+        chatMessage.payload = property.payload
+        chatMessage.payloadKind = property.payloadKind
+        chatMessage.messageTimestamp = property.messageTimestamp
+        chatMessage.composeTimestamp = property.composeTimestamp
+        chatMessage.receiveTimestamp = property.receiveTimestamp
+        chatMessage.shareTimestamp = property.shareTimestamp
+        
+        chatMessage.chat = chat
+        chatMessage.quoteMessage = quoteMessage
+        
         return chatMessage
     }
     
@@ -124,3 +138,16 @@ extension ChatMessage: Managed {
     }
 }
 
+extension ChatMessage {
+    public static var latestFirstSortFetchRequest: NSFetchRequest<ChatMessage> {
+        let request = NSFetchRequest<ChatMessage>(entityName: entityName)
+        request.sortDescriptors =  [NSSortDescriptor(keyPath: \ChatMessage.receiveTimestamp, ascending: false)]
+        return request
+    }
+}
+
+extension ChatMessage {
+    public static func predicate(chat: Chat) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(ChatMessage.chat), chat)
+    }
+}

@@ -10,22 +10,49 @@ import os
 import UIKit
 import SwiftUI
 import Combine
+import CoreData
+import CoreDataStack
+import NtgeCore
 
 final class CreateChatViewModel: NSObject {
     
     var disposeBag = Set<AnyCancellable>()
     
+    let fetchedResultsController: NSFetchedResultsController<Contact>
+
     // input
     let context: AppContext
-//    let selectContact = CurrentValueSubject<Contact?, Never>(nil)
+    weak var tableView: UITableView?
+    let selectedContacts = CurrentValueSubject<Set<Contact>, Never>([])
     
     // output
-//    let contacts = CurrentValueSubject<[Contact], Never>([])
+    let isDoneBarButtonEnabled = CurrentValueSubject<Bool, Never>(false)
     
     init(context: AppContext) {
+        self.fetchedResultsController = {
+            let fetchRequest = Contact.sortedFetchRequest
+            fetchRequest.returnsObjectsAsFaults = false
+            fetchRequest.fetchBatchSize = 20
+            let controller = NSFetchedResultsController(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context.managedObjectContext,
+                sectionNameKeyPath: #keyPath(Contact.nameFirstInitial),
+                cacheName: nil
+            )
+            
+            return controller
+        }()
         self.context = context
         super.init()
 
+        fetchedResultsController.delegate = self
+
+        
+        selectedContacts
+            .map { !$0.isEmpty }
+            .assign(to: \.value, on: isDoneBarButtonEnabled)
+            .store(in: &disposeBag)
+        
 //        context.documentStore.$contacts
 //            .assign(to: \.value, on: self.contacts)
 //            .store(in: &disposeBag)
@@ -33,52 +60,97 @@ final class CreateChatViewModel: NSObject {
     
 }
 
-extension CreateChatViewModel {
-    enum Section: CaseIterable {
-        case createChatGroup
-        case contacts
+//extension CreateChatViewModel {
+//    enum Section: CaseIterable {
+//        case createChatGroup
+//        case contacts
+//    }
+//}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension CreateChatViewModel: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.beginUpdates()
     }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView?.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .update:
+            break
+        case .move:
+            break
+        case .delete:
+            tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else { fatalError("Index Path should be not nil") }
+            tableView?.insertRows(at: [newIndexPath], with: .fade)
+            
+        case .update:
+            guard let indexPath = indexPath else {
+                fatalError("Index Path should be not nil")
+            }
+            let identity = fetchedResultsController.object(at: indexPath)
+            guard let cell = tableView?.cellForRow(at: indexPath) as? IdentityListIdentityTableViewCell else {
+                assertionFailure()
+                return
+            }
+            IdentityListViewModel.configure(cell: cell, with: identity)
+            
+        case .move:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
+            
+            tableView?.deleteRows(at: [indexPath], with: .fade)
+            tableView?.insertRows(at: [newIndexPath], with: .fade)
+            
+        case .delete:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            tableView?.deleteRows(at: [indexPath], with: .fade)
+            
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.endUpdates()
+    }
+    
 }
+
 
 // MARK: - UITableViewDataSource
 extension CreateChatViewModel: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return CreateChatViewModel.Section.allCases.count
+        return fetchedResultsController.sections?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
-//        let section = CreateChatViewModel.Section.allCases[section]
-//        switch section {
-//        case .createChatGroup:
-//            return 1
-//        case .contacts:
-//            return contacts.value.count
-//        }
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-//        let section = Section.allCases[indexPath.section]
-//        var cell: UITableViewCell
-//
-//        switch section {
-//        case .createChatGroup:
-//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: CreateChatGroupTableViewCell.self), for: indexPath) as! CreateChatGroupTableViewCell
-//            cell = _cell
-//
-//
-//        case .contacts:
-//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListContactTableViewCell.self), for: indexPath) as! ContactListContactTableViewCell
-//            cell = _cell
-//
-//            guard indexPath.row < contacts.value.count else { break }
-//            let contact = contacts.value[indexPath.row]
-//            _cell.nameLabel.text = contact.name
-//        }
-//
-//        return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ContactListContactTableViewCell.self), for: indexPath) as! ContactListContactTableViewCell
+        
+        guard indexPath.section < fetchedResultsController.sections?.count ?? 0,
+        indexPath.row < fetchedResultsController.sections?[indexPath.section].numberOfObjects ?? 0 else {
+            return cell
+        }
+        let contact = fetchedResultsController.object(at: indexPath)
+        ContactListViewModel.configure(cell: cell, with: contact)
+        
+        return cell
     }
     
 }
@@ -89,13 +161,23 @@ final class CreateChatViewController: UIViewController, NeedsDependency {
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
-    private lazy var cancelBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(CreateChatViewController.cancelBarButtonItemPressed(_:)))
+    private lazy var closeBarButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem()
+        item.image = Asset.NavigationBar.close.image
+        item.tintColor = Asset.Color.Tint.barButtonItem.color
+        item.target = self
+        item.action = #selector(CreateChatViewController.closeBarButtonItemPressed(_:))
+        return item
+    }()
+    
+    private lazy var doneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(CreateChatViewController.doneBarButtonItemPressed(_:)))
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(CreateChatGroupTableViewCell.self, forCellReuseIdentifier: String(describing: CreateChatGroupTableViewCell.self))
         tableView.register(ContactListContactTableViewCell.self, forCellReuseIdentifier: String(describing: ContactListContactTableViewCell.self))
         tableView.tableFooterView = UIView()
+        tableView.separatorStyle = .none
+        tableView.allowsMultipleSelection = true
         return tableView
     }()
     
@@ -108,9 +190,30 @@ final class CreateChatViewController: UIViewController, NeedsDependency {
 }
 
 extension CreateChatViewController {
-    @objc private func cancelBarButtonItemPressed(_ sender: UIBarButtonItem) {
+    
+    @objc private func closeBarButtonItemPressed(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }
+    
+    @objc private func doneBarButtonItemPressed(_ sender: UIBarButtonItem) {
+        guard !viewModel.selectedContacts.value.isEmpty else {
+            assertionFailure()
+            return
+        }
+        
+        let recipientPublicKeys: [Ed25519.PublicKey] = Array(viewModel.selectedContacts.value)
+            .compactMap { contact in
+                guard let publicKeyText = contact.keypair?.publicKey,
+                let publicKey = Ed25519.PublicKey.deserialize(serialized: publicKeyText) else {
+                    return nil
+                }
+                
+                return publicKey
+            }
+        let composeMessageViewModel = ComposeMessageViewModel(context: context, recipientPublicKeys: recipientPublicKeys)
+        coordinator.present(scene: .composeMessage(viewModel: composeMessageViewModel), from: self, transition: .show)
+    }
+    
 }
 
 extension CreateChatViewController {
@@ -118,8 +221,9 @@ extension CreateChatViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "New Message"
-        navigationItem.leftBarButtonItem = cancelBarButtonItem
+        title = "Add Contacts"
+        navigationItem.leftBarButtonItem = closeBarButtonItem
+        navigationItem.rightBarButtonItem = doneBarButtonItem
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -130,15 +234,19 @@ extension CreateChatViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        viewModel.tableView = tableView
         tableView.delegate = self
+        do {
+            try viewModel.fetchedResultsController.performFetch()
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
         tableView.dataSource = viewModel
+        tableView.reloadData()
         
-//        viewModel.contacts
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] _ in
-//                self?.tableView.reloadData()
-//            }
-//            .store(in: &disposeBag)
+        viewModel.isDoneBarButtonEnabled
+            .assign(to: \.isEnabled, on: doneBarButtonItem)
+            .store(in: &disposeBag)
     }
 
 }
@@ -146,13 +254,38 @@ extension CreateChatViewController {
 // MARK: - UITableViewDelegate
 extension CreateChatViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+    
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: true)
-//
-//        if tableView.cellForRow(at: indexPath) is ContactListContactTableViewCell, indexPath.row < viewModel.contacts.value.count {
-//            viewModel.selectContact.value = viewModel.contacts.value[indexPath.row]
-//            coordinator.present(scene: .selectChatIdentity(delegate: self), from: self, transition: .show)
-//        }
+        os_log("%{public}s[%{public}ld], %{public}s: didSelectRowAt: %s", ((#file as NSString).lastPathComponent), #line, #function, indexPath.debugDescription)
+
+        guard indexPath.section < viewModel.fetchedResultsController.sections?.count ?? 0,
+        indexPath.row < viewModel.fetchedResultsController.sections?[indexPath.section].numberOfObjects ?? 0 else {
+            return
+        }
+        let contact = viewModel.fetchedResultsController.object(at: indexPath)
+        var contacts = viewModel.selectedContacts.value
+        contacts.insert(contact)
+        viewModel.selectedContacts.value = contacts
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        os_log("%{public}s[%{public}ld], %{public}s: didSelectRowAt: %s", ((#file as NSString).lastPathComponent), #line, #function, indexPath.debugDescription)
+
+        guard indexPath.section < viewModel.fetchedResultsController.sections?.count ?? 0,
+            indexPath.row < viewModel.fetchedResultsController.sections?[indexPath.section].numberOfObjects ?? 0 else {
+                return
+        }
+        let contact = viewModel.fetchedResultsController.object(at: indexPath)
+        var contacts = viewModel.selectedContacts.value
+        contacts.remove(contact)
+        viewModel.selectedContacts.value = contacts
     }
     
 }

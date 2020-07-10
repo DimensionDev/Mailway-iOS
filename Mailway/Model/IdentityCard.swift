@@ -17,6 +17,11 @@ struct IdentityCard: Codable, Equatable {
     let info: IdentityInfo
     let supplementation: IdentitySupplementation?
     
+    init(info: IdentityInfo, supplementation: IdentitySupplementation) {
+        self.info = info
+        self.supplementation = supplementation.isEmpty ? nil : supplementation
+    }
+    
 }
 
 extension IdentityCard {
@@ -74,13 +79,13 @@ extension IdentityCard {
     // cannot deny key replacement attack
     // make sure user doule check the KeyID is trusted
     func validate() -> Result<Void, ValidationError> {
-        guard let publicKey = Ed25519.PublicKey.deserialize(serialized: info.public_key_armor) else {
+        guard let publicKey = Ed25519.PublicKey.deserialize(serialized: info.publicKeyArmor) else {
             return .failure(.keyRestoreFailed)
         }
         
         guard let mac = IdentityInfo.calculateMac(
             use: publicKey,
-            public_key_armor: info.public_key_armor,
+            publicKeyArmor: info.publicKeyArmor,
             name: info.name,
             i18nNames: info.i18nNames,
             channels: info.channels,
@@ -166,7 +171,7 @@ struct IdentityChannel: Codable, Equatable {
 
 struct IdentityInfo: Codable, Equatable {
     
-    let public_key_armor: String
+    let publicKeyArmor: String
     let name: String
     let i18nNames: [String: String]?
     let channels: [IdentityChannel]?
@@ -174,16 +179,26 @@ struct IdentityInfo: Codable, Equatable {
     let mac: Data
     let signature: Data
     
+    enum CodingKeys: String, CodingKey {
+        case publicKeyArmor = "public_key_armor"
+        case name
+        case i18nNames = "i18n_names"
+        case channels
+        case updatedAt = "updated_at"
+        case mac
+        case signature
+    }
+    
     init?(privateKey: Ed25519.PrivateKey, name: String, i18nNames: [String : String] = [:], channels: [IdentityChannel] = []) {
-        let public_key_armor = privateKey.publicKey.serialize()
-        self.public_key_armor = public_key_armor
+        let publicKeyArmor = privateKey.publicKey.serialize()
+        self.publicKeyArmor = publicKeyArmor
         self.name = name
         self.i18nNames = i18nNames
         self.channels = channels
         let updatedAt = ISO8601DateFormatter.fractionalSeconds.string(from: Date())
         self.updatedAt = updatedAt
     
-        guard let mac = IdentityInfo.calculateMac(use: privateKey.publicKey, public_key_armor: public_key_armor, name: name, i18nNames: i18nNames, channels: channels, updatedAt: updatedAt) else {
+        guard let mac = IdentityInfo.calculateMac(use: privateKey.publicKey, publicKeyArmor: publicKeyArmor, name: name, i18nNames: i18nNames, channels: channels, updatedAt: updatedAt) else {
             return nil
         }
         self.mac = mac
@@ -194,10 +209,10 @@ struct IdentityInfo: Codable, Equatable {
         self.signature = signature
     }
     
-    static func calculateMac(use publicKey: Ed25519.PublicKey, public_key_armor: String, name: String, i18nNames: [String: String]?, channels: [IdentityChannel]?, updatedAt: String) -> Data? {
+    static func calculateMac(use publicKey: Ed25519.PublicKey, publicKeyArmor: String, name: String, i18nNames: [String: String]?, channels: [IdentityChannel]?, updatedAt: String) -> Data? {
         let data: Data = {
             var bytes = Data()
-            bytes.append(Data(public_key_armor.utf8))
+            bytes.append(Data(publicKeyArmor.utf8))
             bytes.append(Data(name.utf8))
             for (key, value) in i18nNames ?? [:] {
                 bytes.append(Data(key.utf8))
@@ -218,16 +233,27 @@ struct IdentityInfo: Codable, Equatable {
 
 struct IdentitySupplementation: Codable, Equatable {
     
-    let name: String
-    let i18nNames: [String: String]
-    let channels: [IdentityChannel]
+    let name: String?
+    let i18nNames: [String: String]?
+    let channels: [IdentityChannel]?
     let updatedAt: String
     
-    init(name: String, i18nNames: [String : String], channels: [IdentityChannel]) {
+    enum CodingKeys: String, CodingKey {
+        case name
+        case i18nNames = "i18n_names"
+        case channels
+        case updatedAt = "updated_at"
+    }
+    
+    init(name: String? = nil, i18nNames: [String : String]? = nil, channels: [IdentityChannel]? = nil) {
         self.name = name
         self.i18nNames = i18nNames
         self.channels = channels
         self.updatedAt = ISO8601DateFormatter.fractionalSeconds.string(from: Date())
+    }
+    
+    var isEmpty: Bool {
+        return name == nil && (i18nNames?.isEmpty ?? true) && (channels?.isEmpty ?? true)
     }
     
 }

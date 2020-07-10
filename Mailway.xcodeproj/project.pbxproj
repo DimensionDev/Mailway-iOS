@@ -29,6 +29,11 @@
 		DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB19388824778D3E00E24AFB /* CommonNames.swift */; };
 		DB1938912477E4CD00E24AFB /* IdentityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1938902477E4CD00E24AFB /* IdentityDetailView.swift */; };
 		DB1938952477E8BA00E24AFB /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1938942477E8BA00E24AFB /* ContactListViewController.swift */; };
+		DB1997A524B2F87300C1A293 /* ComposeMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1997A424B2F87300C1A293 /* ComposeMessageViewController.swift */; };
+		DB1997A824B302CE00C1A293 /* KeyboardResponderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1997A724B302CE00C1A293 /* KeyboardResponderService.swift */; };
+		DB1997AA24B42A5B00C1A293 /* CryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1997A924B42A5B00C1A293 /* CryptoService.swift */; };
+		DB1997B024B5D82100C1A293 /* CreateChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498CE247D1AE900EFBACD /* CreateChatViewController.swift */; };
+		DB1997B224B6BD7100C1A293 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1997B124B6BD7100C1A293 /* AvatarView.swift */; };
 		DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1B0135247D09E700098254 /* UIViewPreview.swift */; };
 		DB1E85D924A079A500B1558B /* MainTabTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85D824A079A500B1558B /* MainTabTransitionController.swift */; };
 		DB1E85DD24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1E85DB24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift */; };
@@ -60,7 +65,6 @@
 		DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB28139F2484F64A001CDD19 /* NSLayoutConstraint.swift */; };
 		DB3050E6249B6FC700F361FC /* QuoteMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB3050E5249B6FC700F361FC /* QuoteMessage.swift */; };
 		DB4B9CA82480C3B1009F06BE /* MessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B9CA72480C3B1009F06BE /* MessageInputView.swift */; };
-		DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */; };
 		DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF11247527D80001F9C0 /* FileStorage.swift */; };
 		DB60BF16247528E20001F9C0 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB60BF15247528E10001F9C0 /* FileHelper.swift */; };
 		DB65474F24AC39970039AFE5 /* ViewState+AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65474E24AC39970039AFE5 /* ViewState+AddIdentityView.swift */; };
@@ -95,7 +99,6 @@
 		DBB358762492128300803C98 /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358752492128300803C98 /* NSManagedObjectContext.swift */; };
 		DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */; };
 		DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498CC247D17A600EFBACD /* ChatListViewController.swift */; };
-		DBB498CF247D1AE900EFBACD /* CreateChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB498CE247D1AE900EFBACD /* CreateChatViewController.swift */; };
 		DBB981162486452C00FB2FE8 /* RootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB981152486452C00FB2FE8 /* RootSplitViewController.swift */; };
 		DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */; };
 		DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC9931A249788B9004C1264 /* ContactChannel.swift */; };
@@ -221,6 +224,11 @@
 		DB19388D2477BD1D00E24AFB /* IdentitiesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesListView.swift; sourceTree = "<group>"; };
 		DB1938902477E4CD00E24AFB /* IdentityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityDetailView.swift; sourceTree = "<group>"; };
 		DB1938942477E8BA00E24AFB /* ContactListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
+		DB1997A424B2F87300C1A293 /* ComposeMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeMessageViewController.swift; sourceTree = "<group>"; };
+		DB1997A724B302CE00C1A293 /* KeyboardResponderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponderService.swift; sourceTree = "<group>"; };
+		DB1997A924B42A5B00C1A293 /* CryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoService.swift; sourceTree = "<group>"; };
+		DB1997AF24B452A800C1A293 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		DB1997B124B6BD7100C1A293 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		DB1B0135247D09E700098254 /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
 		DB1E85D824A079A500B1558B /* MainTabTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabTransitionController.swift; sourceTree = "<group>"; };
 		DB1E85DB24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerAnimatedTransitioning.swift; sourceTree = "<group>"; };
@@ -482,27 +490,21 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		DB1191F524A890B400C1342E /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				DB1191F624A890B900C1342E /* View */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		DB1191F624A890B900C1342E /* View */ = {
+		DB1191F624A890B900C1342E /* ButtonStyle */ = {
 			isa = PBXGroup;
 			children = (
 				DB1191F324A890AD00C1342E /* EditableAvatarButtonStyle.swift */,
 			);
-			path = View;
+			path = ButtonStyle;
 			sourceTree = "<group>";
 		};
 		DB193885247693D400E24AFB /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DB970CA424A86DB200DE481C /* EditableAvatarView.swift */,
+				DB1191F624A890B900C1342E /* ButtonStyle */,
+				DB1997B124B6BD7100C1A293 /* AvatarView.swift */,
 				DB193883247693D000E24AFB /* AutoFocusTextField.swift */,
+				DB970CA424A86DB200DE481C /* EditableAvatarView.swift */,
 				DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */,
 			);
 			path = View;
@@ -533,6 +535,14 @@
 				DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		DB1997A624B2FB7D00C1A293 /* ComposeMessage */ = {
+			isa = PBXGroup;
+			children = (
+				DB1997A424B2F87300C1A293 /* ComposeMessageViewController.swift */,
+			);
+			path = ComposeMessage;
 			sourceTree = "<group>";
 		};
 		DB1E85DA24A079B300B1558B /* Transition */ = {
@@ -602,7 +612,9 @@
 		DB1EC2E12488EB4F002379A1 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				DB1997A924B42A5B00C1A293 /* CryptoService.swift */,
 				DB1EC2DF2488EB4C002379A1 /* ShareService.swift */,
+				DB1997A724B302CE00C1A293 /* KeyboardResponderService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -646,14 +658,6 @@
 				DB65475424AD897C0039AFE5 /* UIView.swift */,
 			);
 			path = Extension;
-			sourceTree = "<group>";
-		};
-		DB553F03247D22760043285A /* View */ = {
-			isa = PBXGroup;
-			children = (
-				DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		DB60BF13247527DC0001F9C0 /* Vender */ = {
@@ -753,6 +757,7 @@
 		DB7E1E54247CF0E8002FC90E /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */,
 				DB6DEC7E247F59E00040C817 /* Key.swift */,
 				DBA5F9E9247F832900C9B552 /* ChatMessage.swift */,
 				DB26C81B24A87E8000845265 /* EditableAvatarTableViewCell.swift */,
@@ -829,7 +834,6 @@
 		DBB498D0247D1AED00EFBACD /* CreateChat */ = {
 			isa = PBXGroup;
 			children = (
-				DB553F03247D22760043285A /* View */,
 				DBB498CE247D1AE900EFBACD /* CreateChatViewController.swift */,
 			);
 			path = CreateChat;
@@ -967,7 +971,6 @@
 				DBE306DC2474EDD000EB7193 /* Contracts */,
 				DB772FF724A84E4B00558F37 /* Identitys */,
 				DBE306DE2474EDDD00EB7193 /* Settings */,
-				DB1191F524A890B400C1342E /* Common */,
 				DB772FF324A83BA000558F37 /* SplitDemo */,
 			);
 			path = Scene;
@@ -1011,6 +1014,7 @@
 				DBB498D1247D1AF400EFBACD /* ChatList */,
 				DB6DEC7A247E5FD10040C817 /* Chat */,
 				DBB498D0247D1AED00EFBACD /* CreateChat */,
+				DB1997A624B2FB7D00C1A293 /* ComposeMessage */,
 				DB6DEC7D247E6D330040C817 /* SelectChatIdentity */,
 				DB1EC2DC2488D8D2002379A1 /* MessageInbox */,
 			);
@@ -1220,6 +1224,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = DBE306992474DF7B00EB7193;
 			packageReferences = (
@@ -1512,16 +1517,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DBB498CF247D1AE900EFBACD /* CreateChatViewController.swift in Sources */,
+				DB1997B024B5D82100C1A293 /* CreateChatViewController.swift in Sources */,
 				DB7E1E40247BC73B002FC90E /* IdentityListViewController.swift in Sources */,
 				DBE306A62474DF7B00EB7193 /* AppDelegate.swift in Sources */,
 				DB1EC2D924879936002379A1 /* SettingsViewController.swift in Sources */,
 				DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */,
 				DBE306E0247515C000EB7193 /* DocumentStore.swift in Sources */,
+				DB1997A524B2F87300C1A293 /* ComposeMessageViewController.swift in Sources */,
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
 				DB65474F24AC39970039AFE5 /* ViewState+AddIdentityView.swift in Sources */,
 				DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */,
 				DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */,
+				DB1997A824B302CE00C1A293 /* KeyboardResponderService.swift in Sources */,
 				DBB498CD247D17A600EFBACD /* ChatListViewController.swift in Sources */,
 				DBB498CA247D129F00EFBACD /* IdentityBannerView.swift in Sources */,
 				DB970CA224A8660D00DE481C /* AddIdentityViewController.swift in Sources */,
@@ -1552,7 +1559,6 @@
 				DBE306D62474ED0700EB7193 /* AppCommand.swift in Sources */,
 				DB970CA024A8518700DE481C /* UIColor.swift in Sources */,
 				DB1E85D924A079A500B1558B /* MainTabTransitionController.swift in Sources */,
-				DB553F02247D20AC0043285A /* CreateChatGroupTableViewCell.swift in Sources */,
 				DB65475324ACA6BB0039AFE5 /* String.swift in Sources */,
 				DBE040072492413600C5184D /* ContactDetailView.swift in Sources */,
 				DBE306CD2474E19200EB7193 /* SettingsView.swift in Sources */,
@@ -1569,6 +1575,7 @@
 				DB6DEC81247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift in Sources */,
 				DB1E85DE24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift in Sources */,
 				DB1EC2E02488EB4C002379A1 /* ShareService.swift in Sources */,
+				DB1997B224B6BD7100C1A293 /* AvatarView.swift in Sources */,
 				DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */,
 				DB1EDEBF24AAF89A000C5E58 /* IdentityCard.swift in Sources */,
 				DB1E860224A1FB2B00B1558B /* Assets.swift in Sources */,
@@ -1583,6 +1590,7 @@
 				DB1191F424A890AD00C1342E /* EditableAvatarButtonStyle.swift in Sources */,
 				DB1191EF24A887A400C1342E /* AddIdentityView.swift in Sources */,
 				DB1938952477E8BA00E24AFB /* ContactListViewController.swift in Sources */,
+				DB1997AA24B42A5B00C1A293 /* CryptoService.swift in Sources */,
 				DB1191F124A887CD00C1342E /* EditableAvatarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1651,6 +1659,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DB1E85F924A1F24D00B1558B /* en */,
+				DB1997AF24B452A800C1A293 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1730,6 +1739,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2040,6 +2050,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2100,6 +2111,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

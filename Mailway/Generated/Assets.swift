@@ -24,6 +24,8 @@ internal enum Asset {
   internal enum Color {
     internal enum Background {
       internal static let blue = ColorAsset(name: "Color/Background/blue")
+      internal static let greenLight = ColorAsset(name: "Color/Background/green.light")
+      internal static let tealLight = ColorAsset(name: "Color/Background/teal.light")
     }
     internal enum Tint {
       internal static let barButtonItem = ColorAsset(name: "Color/Tint/bar.button.item")
@@ -32,6 +34,8 @@ internal enum Asset {
   internal enum Communication {
     internal static let listBubble = ImageAsset(name: "Communication/list.bubble")
     internal static let mail = ImageAsset(name: "Communication/mail")
+    internal static let paperplane = ImageAsset(name: "Communication/paperplane")
+    internal static let trayAndArrowDown = ImageAsset(name: "Communication/tray.and.arrow.down")
   }
   internal enum Editing {
     internal static let close = ImageAsset(name: "Editing/close")
