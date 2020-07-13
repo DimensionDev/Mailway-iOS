@@ -40,6 +40,8 @@ final class ContactListContactTableViewCell: UITableViewCell {
 extension ContactListContactTableViewCell {
     
     private func _init() {
+        backgroundColor = .clear
+        
         avatarViewContainer.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(avatarViewContainer)
         NSLayoutConstraint.activate([

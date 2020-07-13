@@ -58,6 +58,13 @@ internal enum Asset {
   internal enum NavigationBar {
     internal static let close = ImageAsset(name: "NavigationBar/close")
   }
+  internal enum Placeholder {
+    internal static let document = ImageAsset(name: "Placeholder/document")
+    internal static let inbox = ImageAsset(name: "Placeholder/inbox")
+    internal static let message = ImageAsset(name: "Placeholder/message")
+    internal static let search = ImageAsset(name: "Placeholder/search")
+    internal static let task = ImageAsset(name: "Placeholder/task")
+  }
   internal enum Sidebar {
     internal static let contacts = ImageAsset(name: "Sidebar/contacts")
     internal static let drafts = ImageAsset(name: "Sidebar/drafts")
