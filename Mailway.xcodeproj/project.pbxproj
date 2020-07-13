@@ -95,7 +95,6 @@
 		DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */; };
 		DB7E1E40247BC73B002FC90E /* IdentityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3F247BC73B002FC90E /* IdentityListViewController.swift */; };
 		DB7E1E43247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E42247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift */; };
-		DB8B48042484DA9F002D4912 /* ContactInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8B48032484DA9F002D4912 /* ContactInfoView.swift */; };
 		DB970C9E24A84FF300DE481C /* IdentityListAddIdentityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970C9D24A84FF300DE481C /* IdentityListAddIdentityTableViewCell.swift */; };
 		DB970CA024A8518700DE481C /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970C9F24A8518700DE481C /* UIColor.swift */; };
 		DB970CA224A8660D00DE481C /* AddIdentityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970CA124A8660D00DE481C /* AddIdentityViewController.swift */; };
@@ -817,7 +816,6 @@
 			children = (
 				DBA5F9EB247F90B700C9B552 /* ChatMessageTableViewCell.swift */,
 				DB4B9CA72480C3B1009F06BE /* MessageInputView.swift */,
-				DB8B48032484DA9F002D4912 /* ContactInfoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -834,6 +832,7 @@
 		DB7E1E54247CF0E8002FC90E /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				DB8B48032484DA9F002D4912 /* ContactInfoView.swift */,
 				DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */,
 				DBB498C9247D129F00EFBACD /* IdentityBannerView.swift */,
 				DB553F01247D20AC0043285A /* CreateChatGroupTableViewCell.swift */,
@@ -1622,7 +1621,6 @@
 				DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */,
 				DBE306D72474ED0700EB7193 /* AppError.swift in Sources */,
 				DB1E860124A1FB2B00B1558B /* strings.swift in Sources */,
-				DB8B48042484DA9F002D4912 /* ContactInfoView.swift in Sources */,
 				DB65475124AC66460039AFE5 /* UIAlertController.swift in Sources */,
 				DB1E85E324A0858600B1558B /* CGPoint.swift in Sources */,
 				DB1EDED024AB0D3F000C5E58 /* DateFormatter.swift in Sources */,

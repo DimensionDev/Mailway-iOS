@@ -72,7 +72,7 @@ extension ChatListViewModel {
                 
                 let text = names.sorted().joined(separator: ", ")
                 guard !text.isEmpty else {
-                    return "<Empty>"
+                    return "<Unknown>"
                 }
                 return text
             }
@@ -207,14 +207,6 @@ final class ChatListViewController: UIViewController, NeedsDependency, MainTabTr
         return item
     }()
     
-//    private lazy var composeBarButtonItem: UIBarButtonItem = {
-//        let item = UIBarButtonItem()
-//        item.image = UIImage(systemName: "square.and.pencil")
-//        item.target = self
-//        item.action = #selector(ChatListViewController.composeBarButtonItemPressed(_:))
-//        return item
-//    }()
-    
     private lazy var floatyButton: Floaty = {
         let button = Floaty()
         button.plusColor = .white
@@ -341,21 +333,15 @@ extension ChatListViewController {
 extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: true)
-//        guard let cell = tableView.cellForRow(at: indexPath) else  { return }
-//        
-//        if cell is ChatListInboxBannerTableViewCell {
-//            coordinator.present(scene: .inbox, from: self, transition: .modal(animated: true, completion: nil))
-//        }
-//    
-//        if cell is ChatListChatRoomTableViewCell, indexPath.row < viewModel.chats.value.count {
-//            let chat = viewModel.chats.value[indexPath.row]
-//            let chatViewModel = ChatViewModel(context: context, chat: chat)
-//            chatViewModel.items.value = context.documentStore.chatMessages
-//                .filter { chat.contains(message: $0) }
-//                .map { ChatViewModel.Item.chatMessage($0) }
-//            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
-//        }
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) else { return }
+
+        if cell is ChatListChatRoomTableViewCell {
+            let chat = viewModel.fetchedResultsController.object(at: indexPath)
+            let chatViewModel = ChatViewModel(context: context, chat: chat)
+
+            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
+        }
     }
     
 }

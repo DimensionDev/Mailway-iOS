@@ -32,6 +32,8 @@ internal enum Asset {
     }
   }
   internal enum Communication {
+    internal static let arrowshapeTurnUpLeft2Fill = ImageAsset(name: "Communication/arrowshape.turn.up.left.2.fill")
+    internal static let arrowshapeTurnUpLeftFill = ImageAsset(name: "Communication/arrowshape.turn.up.left.fill")
     internal static let listBubble = ImageAsset(name: "Communication/list.bubble")
     internal static let mail = ImageAsset(name: "Communication/mail")
     internal static let paperplane = ImageAsset(name: "Communication/paperplane")

@@ -281,7 +281,13 @@ extension ComposeMessageViewController {
                     switch result {
                     case .success(let chatMessage):
                         self?.dismiss(animated: true) {
-                            // TODO: open chat
+                            guard let `self` = self else { return }
+                            guard let chat = chatMessage.chat else {
+                                assertionFailure()
+                                return
+                            }
+                            let chatRoomViewModel = ChatViewModel(context: self.context, chat: chat)
+                            self.coordinator.present(scene: .chatRoom(viewModel: chatRoomViewModel), from: nil, transition: .showDetail)
                         }
                     case .failure(let error):
                         let alertController = UIAlertController.standardAlert(of: error)

@@ -154,12 +154,10 @@ extension SceneCoordinator {
         case .contactDetail(let viewModel):
             let _viewController = ContactDetailViewController()
             _viewController.viewModel = viewModel
-            // _viewController.hidesBottomBarWhenPushed = true
             viewController = _viewController
         case .chatRoom(let viewModel):
             let _viewController = ChatViewController()
             _viewController.viewModel = viewModel
-            // _viewController.hidesBottomBarWhenPushed = true
             viewController = _viewController
         case .identityList:
             viewController = IdentityListViewController()
