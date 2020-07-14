@@ -145,6 +145,20 @@ extension Contact: Managed {
 }
 
 extension Contact {
+    public static var createdAtAscendingSortedFetchRequest: NSFetchRequest<Contact> {
+        let request = NSFetchRequest<Contact>(entityName: entityName)
+        request.sortDescriptors =  [NSSortDescriptor(keyPath: \Contact.createdAt, ascending: true)]
+        return request
+    }
+    
+    public static var createdAtDescendingSortedFetchRequest: NSFetchRequest<Contact> {
+        let request = NSFetchRequest<Contact>(entityName: entityName)
+        request.sortDescriptors =  [NSSortDescriptor(keyPath: \Contact.createdAt, ascending: false)]
+        return request
+    }
+}
+
+extension Contact {
     
     public static var notIdentityPredicate: NSPredicate {
         return NSPredicate(format: "%K != nil AND %K.%K == nil", #keyPath(Contact.keypair), #keyPath(Contact.keypair), #keyPath(Keypair.privateKey))

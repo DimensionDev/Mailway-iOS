@@ -62,6 +62,18 @@ extension ContactChannel {
             case discord
             case custom(String)
             
+            public init(name: String) {
+                let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+                switch name {
+                case ChannelName.email.text:        self = .email
+                case ChannelName.twitter.text:      self = .twitter
+                case ChannelName.facebook.text:     self = .facebook
+                case ChannelName.telegram.text:     self = .telegram
+                case ChannelName.discord.text:      self = .discord
+                default:                            self = .custom(name)
+                }
+            }
+            
             public var text: String {
                 switch self {
                 case .email:                return "email"

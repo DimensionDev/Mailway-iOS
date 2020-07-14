@@ -127,7 +127,7 @@ struct AddIdentityView: View {
                                 self.addContactInfoInputEntry(for: type)
                             }
                         }) {
-                            AddEntryView(iconImage: type.iconImage, entryName: type.typeName)
+                            AddEntryView(iconImage: type.iconImage, entryName: type.editSectionName)
                         }
                         ForEach(Array((self.context.viewStateStore.addIdentityView.contactInfos[type] ?? []).enumerated()), id: \.1.id) { index, info in
                             Group {
@@ -218,7 +218,7 @@ struct EditableContactInfoView: View {
     var valueInputPlaceholder: String {
         switch contactInfo.type {
         case .custom:   return "Custom ID"
-        default:        return "Input \(contactInfo.type.typeName)"
+        default:        return "Input \(contactInfo.type.editSectionName)"
         }
     }
     
@@ -338,7 +338,7 @@ struct SectionCellPaddingStyleModifier: ViewModifier {
     
 }
 
-struct TextSectionHeaderStyleModifier: ViewModifier {
+fileprivate struct TextSectionHeaderStyleModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         return content
