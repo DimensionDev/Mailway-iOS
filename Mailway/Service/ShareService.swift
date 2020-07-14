@@ -15,27 +15,6 @@ final class ShareService {
     
     private init() { }
     
-//    func share(chatMessage: ChatMessage, sender: UIViewController, sourceView: UIView?) {
-//        let activityViewController = UIActivityViewController(activityItems: [chatMessage.message], applicationActivities: [])
-//        activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
-//            // do nothing
-//        }
-//        
-//        if let presenter = activityViewController.popoverPresentationController {
-//            if let sourceView = sourceView {
-//                presenter.sourceView = sourceView
-//                presenter.sourceRect = sourceView.bounds
-//            } else {
-//                presenter.sourceView = sender.view
-//                presenter.sourceRect = CGRect(origin: sender.view.center, size: .zero)
-//                presenter.permittedArrowDirections = []
-//            }
-//        }
-//        DispatchQueue.main.async {
-//            sender.present(activityViewController, animated: true)
-//        }
-//    }
-    
     static func share(identity: Contact, from viewController: UIViewController, anchor view: UIView? = nil) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
@@ -55,16 +34,7 @@ final class ShareService {
                     os_log("%{public}s[%{public}ld], %{public}s: share activity complete: %s %s %s %s", ((#file as NSString).lastPathComponent), #line, #function, type.debugDescription, result.description, items?.debugDescription ?? "[]", error.debugDescription)
                     // do nothing
                 }
-                if let presenter = activityViewController.popoverPresentationController {
-                    if let view = view {
-                        presenter.sourceView = view
-                        presenter.sourceRect = view.bounds
-                    } else {
-                        presenter.sourceView = viewController.view
-                        presenter.sourceRect = CGRect(origin: viewController.view.center, size: .zero)
-                        presenter.permittedArrowDirections = []
-                    }
-                }
+                activityViewController.setupAnchor(viewController: viewController, view: view)
                 viewController.present(activityViewController, animated: true)
             } catch {
                 let errorAlertController = UIAlertController.standardAlert(of: error)
@@ -82,6 +52,7 @@ final class ShareService {
         let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         
+        alertController.setupAnchor(viewController: viewController, view: view)
         viewController.present(alertController, animated: true, completion: nil)
     }
     
@@ -101,6 +72,37 @@ final class ShareService {
     }
     
 }
+
+extension UIActivityViewController {
+    func setupAnchor(viewController: UIViewController, view: UIView?) {
+        if let presenter = popoverPresentationController {
+            if let view = view {
+                presenter.sourceView = view
+                presenter.sourceRect = view.bounds
+            } else {
+                presenter.sourceView = viewController.view
+                presenter.sourceRect = CGRect(origin: viewController.view.center, size: .zero)
+                presenter.permittedArrowDirections = []
+            }
+        }
+    }
+}
+
+extension UIAlertController {
+    func setupAnchor(viewController: UIViewController, view: UIView?) {
+        if let presenter = popoverPresentationController {
+            if let view = view {
+                presenter.sourceView = view
+                presenter.sourceRect = view.bounds
+            } else {
+                presenter.sourceView = viewController.view
+                presenter.sourceRect = CGRect(origin: viewController.view.center, size: .zero)
+                presenter.permittedArrowDirections = []
+            }
+        }
+    }
+}
+
 
 extension ShareService {
     enum ShareProfileError: Swift.Error, LocalizedError {

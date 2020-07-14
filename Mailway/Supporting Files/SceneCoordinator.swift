@@ -69,6 +69,7 @@ extension SceneCoordinator {
         case chatRoom(viewModel: ChatViewModel)
         
         // contacts
+        case createContact
         case contactDetail(viewModel: ContactDetailViewModel)
         
         // identities
@@ -151,6 +152,8 @@ extension SceneCoordinator {
 //            let _viewController = SelectChatIdentityViewController()
 //            _viewController.delegate = delegate
 //            viewController = _viewController
+        case .createContact:
+            viewController = CreateContactViewController()
         case .contactDetail(let viewModel):
             let _viewController = ContactDetailViewController()
             _viewController.viewModel = viewModel

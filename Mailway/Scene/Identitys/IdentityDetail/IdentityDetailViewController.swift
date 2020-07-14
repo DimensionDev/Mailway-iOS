@@ -12,6 +12,7 @@ import SwiftUI
 import Combine
 import CoreDataStack
 
+// TODO: refactor use UIKit
 final class IdentityDetailViewModel: ObservableObject {
     
     var disposeBag = Set<AnyCancellable>()
