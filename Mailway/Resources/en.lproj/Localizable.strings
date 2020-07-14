@@ -6,6 +6,8 @@
   Copyright © 2020 Dimension. All rights reserved.
 */
 
+"Common.Cancel" = "Cancel";
+"Common.Ok" = "OK";
 "ComposeMessage.Error.EmptyMessage.ErrorDescription" = "Message Format Invalid";
 "ComposeMessage.Error.EmptyMessage.FailureReason" = "Cannot compose empty message.";
 "ComposeMessage.Error.EmptyMessage.Message" = "Cannot compose empty message. Please input message and try again.";
@@ -21,4 +23,16 @@
 "ComposeMessage.Error.RecipientNotFound.Message" = "Cannot compose message without recipient. Please select recipient and try again.";
 "ComposeMessage.Error.RecipientNotFound.RecoverySuggestion" = "Please select recipient and try again.";
 "ComposeMessage.Error.RecipientNotFound.Title" = "Recipient Not Found";
+"ContactDetail.Alert.ShareProfile.ToFile" = "To File";
+"ContactDetail.Alert.ShareProfile.ToQrCode" = "To QR Code";
+"ContactDetail.Error.SignerKeyNotFound.ErrorDescription" = "Key Not Found";
+"ContactDetail.Error.SignerKeyNotFound.FailureReason" = "Cannot share profile because signer key of this profile not found.";
+"ContactDetail.Error.SignerKeyNotFound.Message" = "Cannot share profile because signer key of this profile not found. Please try again.";
+"ContactDetail.Error.SignerKeyNotFound.RecoverySuggestion" = "Please try again.";
+"ContactDetail.Error.SignerKeyNotFound.Title" = "Key Not Found";
+"Error.InternalError.ErrorDescription" = "Internal Error";
+"Error.InternalError.FailureReason" = "Unknown error.";
+"Error.InternalError.Message" = "Unknown error. Please try again.";
+"Error.InternalError.RecoverySuggestion" = "Please try again.";
+"Error.InternalError.Title" = "Internal Error";
 "Inbox.Title" = "Inbox";

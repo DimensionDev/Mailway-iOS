@@ -24,6 +24,7 @@ struct ContactDetailView: View {
             keyID: $viewModel.keyID,
             contactInfoDict: $viewModel.contactInfoDict,
             note: $viewModel.note,
+            isPlaceholderHidden: $viewModel.isPlaceholderHidden,
             shareProfileAction: { self.viewModel.shareProfileActionPublisher.send(()) },
             copyKeyIDAction: { self.viewModel.copyKeyIDActionPublisher.send(()) }
         )

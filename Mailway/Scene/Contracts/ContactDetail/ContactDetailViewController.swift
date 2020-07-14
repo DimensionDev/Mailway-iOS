@@ -29,6 +29,7 @@ final class ContactDetailViewModel: ObservableObject {
     @Published var keyID: String
     @Published var contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
     @Published var note: String
+    @Published var isPlaceholderHidden: Bool
 
     let contactDidRemovedPublisher = PassthroughSubject<Void, Never>()
     let error = PassthroughSubject<Error, Never>()
@@ -39,7 +40,7 @@ final class ContactDetailViewModel: ObservableObject {
         self.avatar = contact.avatar ?? UIImage.placeholder(color: .systemFill)
         self.name = contact.name
         self.keyID = contact.keypair?.keyID ?? "-"
-        self.contactInfoDict = {
+        let contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = {
             var infoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
             
             let infos = contact.channels?.compactMap { channel -> ContactInfo in
@@ -52,10 +53,10 @@ final class ContactDetailViewModel: ObservableObject {
             }
             return infoDict
         }()
-        self.note = contact.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        
-        // setup action
-        // TODO: Share Profile
+        self.contactInfoDict = contactInfoDict
+        let note = contact.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        self.note = note
+        self.isPlaceholderHidden = contactInfoDict.isEmpty && note.isEmpty
         
         copyKeyIDActionPublisher
             .sink { _ in
@@ -135,6 +136,27 @@ extension ContactDetailViewController {
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+        
+        viewModel.shareProfileActionPublisher
+            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: false)
+            .sink { [weak self] _ in
+                guard let `self` = self else { return }
+                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                let toFileAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toFile, style: .default) { _ in
+                    os_log("%{public}s[%{public}ld], %{public}s: share as file", ((#file as NSString).lastPathComponent), #line, #function)
+
+                }
+                alertController.addAction(toFileAction)
+                let toQRCodeAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toQrCode, style: .default) { _ in
+                    os_log("%{public}s[%{public}ld], %{public}s: share as QR Code", ((#file as NSString).lastPathComponent), #line, #function)
+                    
+                }
+                alertController.addAction(toQRCodeAction)
+                let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
+            .store(in: &disposeBag)
         
         viewModel.contactDidRemovedPublisher
             .sink { [weak self] _ in

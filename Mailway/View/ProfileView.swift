@@ -18,6 +18,8 @@ struct ProfileView: View {
     @Binding var contactInfoDict: [ContactInfo.InfoType: [ContactInfo]]
     @Binding var note: String
     
+    @Binding var isPlaceholderHidden: Bool
+    
     var shareProfileAction: () -> ()
     var copyKeyIDAction: () -> ()
     
@@ -57,10 +59,16 @@ struct ProfileView: View {
                 Group {
                     // key ID section
                     keyIDSection
-                    // info section
-                    infoSections
-                    // note section
-                    noteSection
+                    if isPlaceholderHidden {
+                        Image(uiImage: Asset.Placeholder.document.image)
+                            .resizable()
+                            .frame(width: 250, height: 200)
+                    } else {
+                        // info section
+                        infoSections
+                        // note section
+                        noteSection
+                    }
                 }
             }.frame(maxWidth: .infinity)
         }
@@ -212,17 +220,33 @@ struct ProfileView_Previews: PreviewProvider {
                 ContactInfo(type: .discord, key: "discord", value: "Alice#1234")
             ]
         ]
-        return ProfileView(
-            avatar: .constant(UIImage.placeholder(color: .systemFill)),
-            colorBarColor: .constant(.systemPurple),
-            name: .constant("Alice"),
-            isMyProfile: .constant(true),
-            keyID: .constant("0816fe6c1edebe9fbb83af9102ad9c899abec1a87a1d123bc24bf11945cc807c"),
-            contactInfoDict: .constant(contactInfoDict),
-            note: .constant("Alice in the Book\nPhone Number: +00 123-456-7890"),
-            shareProfileAction: { print("Share") },
-            copyKeyIDAction: { print("Copy") }
-        )
+        return Group {
+            ProfileView(
+                avatar: .constant(UIImage.placeholder(color: .systemFill)),
+                colorBarColor: .constant(.systemPurple),
+                name: .constant("Alice"),
+                isMyProfile: .constant(true),
+                keyID: .constant("0816fe6c1edebe9fbb83af9102ad9c899abec1a87a1d123bc24bf11945cc807c"),
+                contactInfoDict: .constant(contactInfoDict),
+                note: .constant("Alice in the Book\nPhone Number: +00 123-456-7890"),
+                isPlaceholderHidden: .constant(true),
+                shareProfileAction: { print("Share") },
+                copyKeyIDAction: { print("Copy") }
+            )
+            
+            ProfileView(
+                avatar: .constant(UIImage.placeholder(color: .systemFill)),
+                colorBarColor: .constant(.systemPurple),
+                name: .constant("Alice"),
+                isMyProfile: .constant(true),
+                keyID: .constant("0816fe6c1edebe9fbb83af9102ad9c899abec1a87a1d123bc24bf11945cc807c"),
+                contactInfoDict: .constant(contactInfoDict),
+                note: .constant("Alice in the Book\nPhone Number: +00 123-456-7890"),
+                isPlaceholderHidden: .constant(false),
+                shareProfileAction: { print("Share") },
+                copyKeyIDAction: { print("Copy") }
+            )
+        }
     }
 }
 #endif

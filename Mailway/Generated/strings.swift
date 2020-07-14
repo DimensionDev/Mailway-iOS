@@ -11,6 +11,13 @@ import Foundation
 // swiftlint:disable nesting type_body_length type_name
 internal enum L10n {
 
+  internal enum Common {
+    /// Cancel
+    internal static let cancel = L10n.tr("Localizable", "Common.Cancel")
+    /// OK
+    internal static let ok = L10n.tr("Localizable", "Common.Ok")
+  }
+
   internal enum ComposeMessage {
     internal enum Error {
       internal enum EmptyMessage {
@@ -49,6 +56,46 @@ internal enum L10n {
         /// Recipient Not Found
         internal static let title = L10n.tr("Localizable", "ComposeMessage.Error.RecipientNotFound.Title")
       }
+    }
+  }
+
+  internal enum ContactDetail {
+    internal enum Alert {
+      internal enum ShareProfile {
+        /// To File
+        internal static let toFile = L10n.tr("Localizable", "ContactDetail.Alert.ShareProfile.ToFile")
+        /// To QR Code
+        internal static let toQrCode = L10n.tr("Localizable", "ContactDetail.Alert.ShareProfile.ToQrCode")
+      }
+    }
+    internal enum Error {
+      internal enum SignerKeyNotFound {
+        /// Key Not Found
+        internal static let errorDescription = L10n.tr("Localizable", "ContactDetail.Error.SignerKeyNotFound.ErrorDescription")
+        /// Cannot share profile because signer key of this profile not found.
+        internal static let failureReason = L10n.tr("Localizable", "ContactDetail.Error.SignerKeyNotFound.FailureReason")
+        /// Cannot share profile because signer key of this profile not found. Please try again.
+        internal static let message = L10n.tr("Localizable", "ContactDetail.Error.SignerKeyNotFound.Message")
+        /// Please try again.
+        internal static let recoverySuggestion = L10n.tr("Localizable", "ContactDetail.Error.SignerKeyNotFound.RecoverySuggestion")
+        /// Key Not Found
+        internal static let title = L10n.tr("Localizable", "ContactDetail.Error.SignerKeyNotFound.Title")
+      }
+    }
+  }
+
+  internal enum Error {
+    internal enum InternalError {
+      /// Internal Error
+      internal static let errorDescription = L10n.tr("Localizable", "Error.InternalError.ErrorDescription")
+      /// Unknown error.
+      internal static let failureReason = L10n.tr("Localizable", "Error.InternalError.FailureReason")
+      /// Unknown error. Please try again.
+      internal static let message = L10n.tr("Localizable", "Error.InternalError.Message")
+      /// Please try again.
+      internal static let recoverySuggestion = L10n.tr("Localizable", "Error.InternalError.RecoverySuggestion")
+      /// Internal Error
+      internal static let title = L10n.tr("Localizable", "Error.InternalError.Title")
     }
   }
 

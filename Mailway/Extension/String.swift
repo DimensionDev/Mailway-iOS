@@ -13,3 +13,24 @@ extension String {
         return String(enumerated().map { $0 > 0 && $0 % stride == 0 ? [separator, $1] : [$1]}.joined())
     }
 }
+
+
+extension String {
+    
+    static var encryptionMessageFileExtension: String {
+        return "mem"
+    }
+    
+    static var contactProfileFileExtension: String {
+        return "mcp"
+    }
+    
+    static var identityProfileFileExtension: String {
+        return "mip"
+    }
+    
+    static var applicationBackupFileExtension: String {
+        return "mbackup"
+    }
+    
+}

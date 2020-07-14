@@ -8,6 +8,7 @@
 
 import Foundation
 import MessagePack
+import CoreDataStack
 import NtgeCore
 
 struct IdentityCard: Codable, Equatable {
@@ -167,6 +168,38 @@ extension IdentityCard {
 struct IdentityChannel: Codable, Equatable {
     let name: String
     let value: String
+    
+    static func convert(from channels: [ContactChannel]) -> [IdentityChannel] {
+        let properties = channels.map { channel -> ContactChannel.Property in
+            let name = ContactChannel.Property.ChannelName(name: channel.name)
+            return ContactChannel.Property(name: name, value: channel.value)
+        }
+        let group = Dictionary(grouping: properties, by: { $0.name })
+        
+        var sortedChannels: [IdentityChannel] = []
+        for name in ContactChannel.Property.ChannelName.fixed {
+            let row = group[name]?
+                .sorted(by: { $0.value < $1.value })
+                .map { IdentityChannel(name: $0.name.text, value: $0.value) } ?? []
+            
+            sortedChannels.append(contentsOf: row)
+        }
+            
+        let customRow = properties
+            .filter { $0.name.isCustom }
+            .map { IdentityChannel(name: $0.name.text, value: $0.value) }
+            .sorted(by: { lhs, rhs in
+                if lhs.name == rhs.name {
+                    return lhs.value < rhs.value
+                } else {
+                    return lhs.name < rhs.name
+                }
+            })
+        sortedChannels.append(contentsOf: customRow)
+        
+        return sortedChannels
+    }
+    
 }
 
 struct IdentityInfo: Codable, Equatable {
