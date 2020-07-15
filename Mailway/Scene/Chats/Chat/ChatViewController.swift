@@ -77,7 +77,8 @@ extension ChatViewModel {
             }
         }()
         // TODO: expand check
-        cell.messageLabel.numberOfLines = 3
+        // cell.messageLabel.numberOfLines = 3
+        cell.messageLabel.numberOfLines = 0
         cell.receiveTimestampLabel.text = {
             let dateFormatter = DateFormatter()
             // TODO: expand check
@@ -85,6 +86,9 @@ extension ChatViewModel {
             dateFormatter.timeStyle = .none
             return dateFormatter.string(from: chatMessage.receiveTimestamp)
         }()
+        
+        // FIXME: reply logic
+        cell.replyButton.isHidden = true
     }
     
 }
@@ -333,6 +337,13 @@ extension ChatViewController: ChatMessageTableViewCellDelegate {
     
     func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, moreButtonPressed button: UIButton) {
         os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+        
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        
+        let chatMessage = viewModel.fetchedResultsController.object(at: indexPath)
+        ShareService.share(chatMessage: chatMessage, from: self, anchor: cell.contentView)
     }
     
 }

@@ -317,7 +317,7 @@ extension ChatListViewController {
     }
     
     @objc private func receiveFloatyItemPressed(_ sender: FloatyItem) {
-        
+        coordinator.present(scene: .decryptMessage, from: self, transition: .modal(animated: true, completion: nil))
     }
     
 }

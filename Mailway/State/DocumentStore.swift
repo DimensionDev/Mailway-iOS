@@ -24,7 +24,7 @@ extension DocumentStore {
             DispatchQueue.global().async {
                 do {
                     // seal Message
-                    let message = try CryptoService.seal(plaintext: plaintext, recipients: recipients, signer: signer)
+                    let message = try CryptoService.seal(plaintext: plaintext, payloadKind: .plaintext, recipients: recipients, signer: signer)
                     let armoredMessage = try message.serialize()
                     
                     let signerPublicKey = signer.publicKey.serialize()

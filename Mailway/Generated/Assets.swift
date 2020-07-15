@@ -21,6 +21,9 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
+  internal enum Arrows {
+    internal static let arrowUp2 = ImageAsset(name: "Arrows/arrow.up.2")
+  }
   internal enum Banner {
     internal static let createContactEntry = ImageAsset(name: "Banner/create.contact.entry")
   }
@@ -48,6 +51,7 @@ internal enum Asset {
     internal static let moreVertical = ImageAsset(name: "Editing/more.vertical")
     internal static let pencil = ImageAsset(name: "Editing/pencil")
     internal static let plusCircleFill = ImageAsset(name: "Editing/plus.circle.fill")
+    internal static let plusCircle = ImageAsset(name: "Editing/plus.circle")
   }
   internal enum Human {
     internal static let personCropCircle = ImageAsset(name: "Human/person.crop.circle")
@@ -60,6 +64,7 @@ internal enum Asset {
   }
   internal enum NavigationBar {
     internal static let close = ImageAsset(name: "NavigationBar/close")
+    internal static let done = ImageAsset(name: "NavigationBar/done")
   }
   internal enum Objects {
     internal static let folder = ImageAsset(name: "Objects/folder")

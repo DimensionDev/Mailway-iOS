@@ -62,10 +62,9 @@ extension SceneCoordinator {
     
     enum Scene {
         // chats
-        case inbox
         case createChat
         case composeMessage(viewModel: ComposeMessageViewModel)
-        // case selectChatIdentity(delegate: SelectChatIdentityViewControllerDelegate)
+        case decryptMessage
         case chatRoom(viewModel: ChatViewModel)
         
         // contacts
@@ -138,20 +137,15 @@ extension SceneCoordinator {
 extension SceneCoordinator {
     private func get(scene: Scene) -> UIViewController {
         let viewController: UIViewController
-        
         switch scene {
-        case .inbox:
-            viewController = MessageInboxViewController()
         case .createChat:
             viewController = CreateChatViewController()
         case .composeMessage(let viewModel):
             let _viewController = ComposeMessageViewController()
             _viewController.viewModel = viewModel
             viewController = _viewController
-//        case .selectChatIdentity(let delegate):
-//            let _viewController = SelectChatIdentityViewController()
-//            _viewController.delegate = delegate
-//            viewController = _viewController
+        case .decryptMessage:
+            viewController = DecryptMessageViewController()
         case .addContact:
             viewController = AddContactViewController()
         case .contactDetail(let viewModel):

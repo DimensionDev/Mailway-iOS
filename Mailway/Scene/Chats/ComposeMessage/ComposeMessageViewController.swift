@@ -240,16 +240,28 @@ extension ComposeMessageViewController {
         .store(in: &disposeBag)
         
         messageTextView.delegate = self
-        messageTextView.becomeFirstResponder()
+        messageTextView.becomeFirstResponder()        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        updateLayoutMargin()
     }
     
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         
+        updateLayoutMargin()
+    }
+    
+}
+
+extension ComposeMessageViewController {
+    private func updateLayoutMargin() {
         messageTextView.contentInset.left = view.layoutMargins.left
         messageTextView.contentInset.right = view.layoutMargins.right
     }
-    
 }
 
 extension ComposeMessageViewController {

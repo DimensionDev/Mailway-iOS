@@ -50,6 +50,10 @@
 You can export any Bizcard from the contact list";
 "CreateContact.ScanQrCode" = "Scan the Bizcard QR code";
 "CreateContact.Title" = "Add Contact";
+"DecryptMessage.DecryptFileButton" = "Decrypt a file";
+"DecryptMessage.DecryptResultPlaceholder" = "Decrypted Text";
+"DecryptMessage.InputPlaceholder" = "MsgBegin…";
+"DecryptMessage.Title" = "Decrypting";
 "Error.InternalError.ErrorDescription" = "Internal Error";
 "Error.InternalError.FailureReason" = "Unknown error.";
 "Error.InternalError.Message" = "Unknown error. Please try again.";

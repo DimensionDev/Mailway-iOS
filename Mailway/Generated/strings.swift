@@ -133,6 +133,17 @@ internal enum L10n {
     }
   }
 
+  internal enum DecryptMessage {
+    /// Decrypt a file
+    internal static let decryptFileButton = L10n.tr("Localizable", "DecryptMessage.DecryptFileButton")
+    /// Decrypted Text
+    internal static let decryptResultPlaceholder = L10n.tr("Localizable", "DecryptMessage.DecryptResultPlaceholder")
+    /// MsgBegin…
+    internal static let inputPlaceholder = L10n.tr("Localizable", "DecryptMessage.InputPlaceholder")
+    /// Decrypting
+    internal static let title = L10n.tr("Localizable", "DecryptMessage.Title")
+  }
+
   internal enum Error {
     internal enum InternalError {
       /// Internal Error

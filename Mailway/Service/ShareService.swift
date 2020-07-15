@@ -15,6 +15,29 @@ final class ShareService {
     
     private init() { }
     
+}
+
+extension ShareService {
+ 
+    static func share(chatMessage: ChatMessage, from viewController: UIViewController, anchor view: UIView? = nil) {
+        guard let armor = chatMessage.armoredMessage else {
+            assertionFailure()
+            return
+        }
+        
+        let activityViewController = UIActivityViewController(activityItems: [armor], applicationActivities: [])
+        activityViewController.completionWithItemsHandler = { type, result, items, error in
+            os_log("%{public}s[%{public}ld], %{public}s: share activity complete: %s %s %s %s", ((#file as NSString).lastPathComponent), #line, #function, type.debugDescription, result.description, items?.debugDescription ?? "[]", error.debugDescription)
+            // do nothing
+        }
+        activityViewController.setupAnchor(viewController: viewController, view: view)
+        viewController.present(activityViewController, animated: true)
+    }
+    
+}
+ 
+extension ShareService {
+    
     static func share(identity: Contact, from viewController: UIViewController, anchor view: UIView? = nil) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
