@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import CoreDataStack
 
-final class CreateContractViewModel: ObservableObject {
+final class CreateIdentityViewModel: ObservableObject {
     
     var disposeBag = Set<AnyCancellable>()
     
@@ -50,7 +50,7 @@ final class CreateContractViewModel: ObservableObject {
 
 struct CreateIdentityView: View {
     
-    @ObservedObject var viewModel = CreateContractViewModel()
+    @ObservedObject var viewModel = CreateIdentityViewModel()
     @State var nameTextFieldDidBecomeFirstResponder = false
     
     var body: some View {

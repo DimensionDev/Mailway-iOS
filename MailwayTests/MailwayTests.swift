@@ -64,7 +64,7 @@ extension MailwayTests {
             ]
         )
         
-        let card = IdentityCard(info: info, supplementation: supplementation)
+        let card = Bizcard(info: info, supplementation: supplementation)
         let serialized = try card.serialize()
         let validateResult = card.validate()
         do {
@@ -73,7 +73,7 @@ extension MailwayTests {
             XCTFail()
         }
         
-        let cards = try IdentityCard.deserialize(text: serialized)
+        let cards = try Bizcard.deserialize(text: serialized)
         XCTAssertEqual(cards.count, 1)
         XCTAssertEqual(cards.first, card)
         
@@ -88,7 +88,7 @@ extension MailwayTests {
         
         var deserializeError: Error?
         do {
-            _ = try IdentityCard.deserialize(text: tampered)
+            _ = try Bizcard.deserialize(text: tampered)
         } catch {
             // should catch error here
             deserializeError = error
@@ -101,7 +101,7 @@ extension MailwayTests {
     func testIdentityCardSerialization_tampered_modify_info() {
         let tampered = serializedSampleCard_PropertyTamperAttact
         var deserializeError: Error?
-        let cards = (try? IdentityCard.deserialize(text: tampered)) ?? []
+        let cards = (try? Bizcard.deserialize(text: tampered)) ?? []
         XCTAssertEqual(cards.count, 1)
         
         do {

@@ -51,7 +51,7 @@ struct IdentityDetailView_Previews: PreviewProvider {
             ContactChannel.insert(into: managedObjectContext, property: .init(name: .discord, value: "Alice#1234")),
             ContactChannel.insert(into: managedObjectContext, property: .init(name: .custom("about.me"), value: "Alice.about.me")),
         ]
-        let identity = Contact.insert(into: managedObjectContext, property: identityProperty, keypair: keypair, channels: channels)
+        let identity = Contact.insert(into: managedObjectContext, property: identityProperty, keypair: keypair, channels: channels, businessCard: nil)
         
         let viewModel = IdentityDetailViewModel(context: AppContext.shared, identity: identity)
         return IdentityDetailView(viewModel: viewModel)

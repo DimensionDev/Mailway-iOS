@@ -46,6 +46,7 @@ final class MessageInboxViewController: UIViewController, NeedsDependency {
         picker.modalPresentationStyle = .currentContext
         return picker
     }()
+    
 }
 
 extension MessageInboxViewController {

@@ -30,6 +30,26 @@
 "ContactDetail.Error.SignerKeyNotFound.Message" = "Cannot share profile because signer key of this profile not found. Please try again.";
 "ContactDetail.Error.SignerKeyNotFound.RecoverySuggestion" = "Please try again.";
 "ContactDetail.Error.SignerKeyNotFound.Title" = "Key Not Found";
+"CreateContact.Error.BizcardValidateFail.ErrorDescription" = "Bizcard Invalid";
+"CreateContact.Error.BizcardValidateFail.FailureReason" = "Bizcard signature broken.";
+"CreateContact.Error.BizcardValidateFail.Message" = "Bizcard signature broken. Please select valid bizcard and try again.";
+"CreateContact.Error.BizcardValidateFail.RecoverySuggestion" = "Please select valid bizcard and try again.";
+"CreateContact.Error.BizcardValidateFail.Title" = "Bizcard Invalid";
+"CreateContact.Error.DuplicateContact.ErrorDescription" = "Duplicate Contact";
+"CreateContact.Error.DuplicateContact.FailureReason" = "Contact already exists.";
+"CreateContact.Error.DuplicateContact.Message" = "Contact already exists. Please select another bizcard and try again.";
+"CreateContact.Error.DuplicateContact.RecoverySuggestion" = "Please select another bizcard and try again.";
+"CreateContact.Error.DuplicateContact.Title" = "Duplicate Contact";
+"CreateContact.Error.NotBizcard.ErrorDescription" = "Bizcard Invalid";
+"CreateContact.Error.NotBizcard.FailureReason" = "Cannot read bizcard from this file.";
+"CreateContact.Error.NotBizcard.Message" = "Cannot read bizcard from this file. Please select valid bizcard and try again.";
+"CreateContact.Error.NotBizcard.RecoverySuggestion" = "Please select valid bizcard and try again.";
+"CreateContact.Error.NotBizcard.Title" = "Bizcard Invalid";
+"CreateContact.ImportFile" = "Import a Bizcard file";
+"CreateContact.Prompt" = "Import a QR code or Bizcard file to add a contact.
+You can export any Bizcard from the contact list";
+"CreateContact.ScanQrCode" = "Scan the Bizcard QR code";
+"CreateContact.Title" = "Add Contact";
 "Error.InternalError.ErrorDescription" = "Internal Error";
 "Error.InternalError.FailureReason" = "Unknown error.";
 "Error.InternalError.Message" = "Unknown error. Please try again.";

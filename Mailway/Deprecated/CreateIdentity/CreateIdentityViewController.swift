@@ -84,7 +84,7 @@ extension CreateIdentityViewController {
         let managedObjectContext = context.managedObjectContext
         managedObjectContext.performChanges {
             let keypair = Keypair.insert(into: managedObjectContext, property: keypairProperty)
-            Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: [])
+            Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: [], businessCard: nil)
         }
         .sink { [weak self] result in
             switch result {

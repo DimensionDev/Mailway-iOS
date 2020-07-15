@@ -23,7 +23,7 @@ final class ShareService {
             do {
                 let card = try ShareService.identityCard(identity: identity)
                 let serialized = try card.serialize()
-                let filename = identity.name + "." + String.contactProfileFileExtension
+                let filename = identity.name + "." + String.bizcardFileExtension
                 guard let fileURL = createTempFile(filename: filename, data: Data(serialized.utf8)) else {
                     assertionFailure()
                     return
@@ -56,18 +56,18 @@ final class ShareService {
         viewController.present(alertController, animated: true, completion: nil)
     }
     
-    private static func identityCard(identity: Contact) throws -> IdentityCard {
+    private static func identityCard(identity: Contact) throws -> Bizcard {
         guard let keypair = identity.keypair, let privateKeyText = keypair.privateKey,
         let privateKey = Ed25519.PrivateKey.deserialize(from: privateKeyText) else {
             throw ShareProfileError.SignerKeyNotFound
         }
         
         let identityChannels = IdentityChannel.convert(from: Array(identity.channels ?? Set()))
-        guard let info = IdentityInfo(privateKey: privateKey, name: identity.name, i18nNames: identity.i18nNames ?? [:], channels: identityChannels) else {
+        guard let info = IdentityInfo(privateKey: privateKey, name: identity.name, channels: identityChannels) else {
             throw ShareProfileError.internal
         }
         
-        let card = IdentityCard(info: info, supplementation: IdentitySupplementation())
+        let card = Bizcard(info: info, supplementation: IdentitySupplementation())
         return card
     }
     

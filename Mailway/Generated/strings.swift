@@ -84,6 +84,55 @@ internal enum L10n {
     }
   }
 
+  internal enum CreateContact {
+    /// Import a Bizcard file
+    internal static let importFile = L10n.tr("Localizable", "CreateContact.ImportFile")
+    /// Import a QR code or Bizcard file to add a contact.\nYou can export any Bizcard from the contact list
+    internal static let prompt = L10n.tr("Localizable", "CreateContact.Prompt")
+    /// Scan the Bizcard QR code
+    internal static let scanQrCode = L10n.tr("Localizable", "CreateContact.ScanQrCode")
+    /// Add Contact
+    internal static let title = L10n.tr("Localizable", "CreateContact.Title")
+    internal enum Error {
+      internal enum BizcardValidateFail {
+        /// Bizcard Invalid
+        internal static let errorDescription = L10n.tr("Localizable", "CreateContact.Error.BizcardValidateFail.ErrorDescription")
+        /// Bizcard signature broken.
+        internal static let failureReason = L10n.tr("Localizable", "CreateContact.Error.BizcardValidateFail.FailureReason")
+        /// Bizcard signature broken. Please select valid bizcard and try again.
+        internal static let message = L10n.tr("Localizable", "CreateContact.Error.BizcardValidateFail.Message")
+        /// Please select valid bizcard and try again.
+        internal static let recoverySuggestion = L10n.tr("Localizable", "CreateContact.Error.BizcardValidateFail.RecoverySuggestion")
+        /// Bizcard Invalid
+        internal static let title = L10n.tr("Localizable", "CreateContact.Error.BizcardValidateFail.Title")
+      }
+      internal enum DuplicateContact {
+        /// Duplicate Contact
+        internal static let errorDescription = L10n.tr("Localizable", "CreateContact.Error.DuplicateContact.ErrorDescription")
+        /// Contact already exists.
+        internal static let failureReason = L10n.tr("Localizable", "CreateContact.Error.DuplicateContact.FailureReason")
+        /// Contact already exists. Please select another bizcard and try again.
+        internal static let message = L10n.tr("Localizable", "CreateContact.Error.DuplicateContact.Message")
+        /// Please select another bizcard and try again.
+        internal static let recoverySuggestion = L10n.tr("Localizable", "CreateContact.Error.DuplicateContact.RecoverySuggestion")
+        /// Duplicate Contact
+        internal static let title = L10n.tr("Localizable", "CreateContact.Error.DuplicateContact.Title")
+      }
+      internal enum NotBizcard {
+        /// Bizcard Invalid
+        internal static let errorDescription = L10n.tr("Localizable", "CreateContact.Error.NotBizcard.ErrorDescription")
+        /// Cannot read bizcard from this file.
+        internal static let failureReason = L10n.tr("Localizable", "CreateContact.Error.NotBizcard.FailureReason")
+        /// Cannot read bizcard from this file. Please select valid bizcard and try again.
+        internal static let message = L10n.tr("Localizable", "CreateContact.Error.NotBizcard.Message")
+        /// Please select valid bizcard and try again.
+        internal static let recoverySuggestion = L10n.tr("Localizable", "CreateContact.Error.NotBizcard.RecoverySuggestion")
+        /// Bizcard Invalid
+        internal static let title = L10n.tr("Localizable", "CreateContact.Error.NotBizcard.Title")
+      }
+    }
+  }
+
   internal enum Error {
     internal enum InternalError {
       /// Internal Error

@@ -21,8 +21,8 @@ extension String {
         return "mem"
     }
     
-    static var contactProfileFileExtension: String {
-        return "mcp"
+    static var bizcardFileExtension: String {
+        return "mbc"
     }
     
     static var identityProfileFileExtension: String {

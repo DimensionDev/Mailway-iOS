@@ -62,7 +62,7 @@ extension ChatViewModel {
                 return "<Unknown>"
             }
             
-            return senderStub.i18nName ?? senderStub.name ?? "<Unknown>"
+            return senderStub.name ?? "<Unknown>"
         }()
         cell.messageLabel.text = {
             switch chatMessage.payloadKind {

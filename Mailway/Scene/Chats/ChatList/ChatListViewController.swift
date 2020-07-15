@@ -68,7 +68,7 @@ extension ChatListViewModel {
             guard let title = chat.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
                 let names = chat.memberNameStubs?
                     .filter { $0.publicKey != chat.identityPublicKey }  // remove sender
-                    .compactMap { $0.i18nName ?? $0.name } ?? []
+                    .compactMap { $0.name } ?? []
                 
                 let text = names.sorted().joined(separator: ", ")
                 guard !text.isEmpty else {
@@ -264,6 +264,8 @@ extension ChatListViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        view.addSubview(floatyButton)
+        
         viewModel.tableView = tableView
         tableView.delegate = self
         do {
@@ -273,15 +275,6 @@ extension ChatListViewController {
         }
         tableView.dataSource = viewModel
         tableView.reloadData()
-        
-        view.addSubview(floatyButton)
-        
-//        viewModel.chats
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] _ in
-//                self?.tableView.reloadData()
-//            }
-//            .store(in: &disposeBag)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

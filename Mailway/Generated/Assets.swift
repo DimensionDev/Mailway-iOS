@@ -22,7 +22,7 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
   internal enum Banner {
-    internal static let bizcardEntry = ImageAsset(name: "Banner/bizcard.entry")
+    internal static let createContactEntry = ImageAsset(name: "Banner/create.contact.entry")
   }
   internal enum Color {
     internal enum Background {
@@ -60,6 +60,10 @@ internal enum Asset {
   }
   internal enum NavigationBar {
     internal static let close = ImageAsset(name: "NavigationBar/close")
+  }
+  internal enum Objects {
+    internal static let folder = ImageAsset(name: "Objects/folder")
+    internal static let qrcodeViewfinder = ImageAsset(name: "Objects/qrcode.viewfinder")
   }
   internal enum Placeholder {
     internal static let document = ImageAsset(name: "Placeholder/document")

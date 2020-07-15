@@ -1,5 +1,5 @@
 //
-//  IdentityCard.swift
+//  Bizcard.swift
 //  Mailway
 //
 //  Created by Cirno MainasuK on 2020-6-30.
@@ -11,7 +11,7 @@ import MessagePack
 import CoreDataStack
 import NtgeCore
 
-struct IdentityCard: Codable, Equatable {
+struct Bizcard: Codable, Equatable {
     static let armorHeader = "IdCardBeginII"
     static let armorFooter = "IIEndIdCard"
 
@@ -25,7 +25,7 @@ struct IdentityCard: Codable, Equatable {
     
 }
 
-extension IdentityCard {
+extension Bizcard {
     
     func serialize() throws -> String {
         // pack content
@@ -37,26 +37,26 @@ extension IdentityCard {
             throw Error.base58SerializeFailed
         }
         
-        return [IdentityCard.armorHeader, serialized, IdentityCard.armorFooter].joined()
+        return [Bizcard.armorHeader, serialized, Bizcard.armorFooter].joined()
     }
     
-    static func deserialize(text: String) throws -> [IdentityCard] {
+    static func deserialize(text: String) throws -> [Bizcard] {
         let scanner = Scanner(string: text)
         scanner.charactersToBeSkipped = nil
         
-        var cards: [IdentityCard] = []
+        var cards: [Bizcard] = []
         while !scanner.isAtEnd {
             // pin location to header
-            _ = scanner.scanUpToString(IdentityCard.armorHeader)
+            _ = scanner.scanUpToString(Bizcard.armorHeader)
             
             // consume header
-            guard scanner.scanString(IdentityCard.armorHeader) == IdentityCard.armorHeader else {
+            guard scanner.scanString(Bizcard.armorHeader) == Bizcard.armorHeader else {
                 // not found header
                 break
             }
             
             // pin location to footer and consume content
-            guard let serialized = scanner.scanUpToString(IdentityCard.armorFooter) else {
+            guard let serialized = scanner.scanUpToString(Bizcard.armorFooter) else {
                 // not found footer
                 break
             }
@@ -68,7 +68,7 @@ extension IdentityCard {
             }
             
             let decoder = MessagePackDecoder()
-            let card = try decoder.decode(IdentityCard.self, from: encoded)
+            let card = try decoder.decode(Bizcard.self, from: encoded)
 
             cards.append(card)
         }
@@ -88,7 +88,6 @@ extension IdentityCard {
             use: publicKey,
             publicKeyArmor: info.publicKeyArmor,
             name: info.name,
-            i18nNames: info.i18nNames,
             channels: info.channels,
             updatedAt: info.updatedAt
         ) else {
@@ -108,7 +107,7 @@ extension IdentityCard {
     
 }
 
-extension IdentityCard {
+extension Bizcard {
     enum Error: Swift.Error, LocalizedError {
         case base58SerializeFailed
         case base58DeserializeFailed
@@ -206,7 +205,6 @@ struct IdentityInfo: Codable, Equatable {
     
     let publicKeyArmor: String
     let name: String
-    let i18nNames: [String: String]?
     let channels: [IdentityChannel]?
     let updatedAt: String
     let mac: Data
@@ -215,23 +213,21 @@ struct IdentityInfo: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case publicKeyArmor = "public_key_armor"
         case name
-        case i18nNames = "i18n_names"
         case channels
         case updatedAt = "updated_at"
         case mac
         case signature
     }
     
-    init?(privateKey: Ed25519.PrivateKey, name: String, i18nNames: [String : String] = [:], channels: [IdentityChannel] = []) {
+    init?(privateKey: Ed25519.PrivateKey, name: String, channels: [IdentityChannel] = []) {
         let publicKeyArmor = privateKey.publicKey.serialize()
         self.publicKeyArmor = publicKeyArmor
         self.name = name
-        self.i18nNames = i18nNames
         self.channels = channels
         let updatedAt = ISO8601DateFormatter.fractionalSeconds.string(from: Date())
         self.updatedAt = updatedAt
     
-        guard let mac = IdentityInfo.calculateMac(use: privateKey.publicKey, publicKeyArmor: publicKeyArmor, name: name, i18nNames: i18nNames, channels: channels, updatedAt: updatedAt) else {
+        guard let mac = IdentityInfo.calculateMac(use: privateKey.publicKey, publicKeyArmor: publicKeyArmor, name: name, channels: channels, updatedAt: updatedAt) else {
             return nil
         }
         self.mac = mac
@@ -242,15 +238,11 @@ struct IdentityInfo: Codable, Equatable {
         self.signature = signature
     }
     
-    static func calculateMac(use publicKey: Ed25519.PublicKey, publicKeyArmor: String, name: String, i18nNames: [String: String]?, channels: [IdentityChannel]?, updatedAt: String) -> Data? {
+    static func calculateMac(use publicKey: Ed25519.PublicKey, publicKeyArmor: String, name: String, channels: [IdentityChannel]?, updatedAt: String) -> Data? {
         let data: Data = {
             var bytes = Data()
             bytes.append(Data(publicKeyArmor.utf8))
             bytes.append(Data(name.utf8))
-            for (key, value) in i18nNames ?? [:] {
-                bytes.append(Data(key.utf8))
-                bytes.append(Data(value.utf8))
-            }
             for channel in channels ?? [] {
                 bytes.append(Data(channel.name.utf8))
                 bytes.append(Data(channel.value.utf8))
@@ -267,26 +259,23 @@ struct IdentityInfo: Codable, Equatable {
 struct IdentitySupplementation: Codable, Equatable {
     
     let name: String?
-    let i18nNames: [String: String]?
     let channels: [IdentityChannel]?
     let updatedAt: String
     
     enum CodingKeys: String, CodingKey {
         case name
-        case i18nNames = "i18n_names"
         case channels
         case updatedAt = "updated_at"
     }
     
-    init(name: String? = nil, i18nNames: [String : String]? = nil, channels: [IdentityChannel]? = nil) {
+    init(name: String? = nil, channels: [IdentityChannel]? = nil) {
         self.name = name
-        self.i18nNames = i18nNames
         self.channels = channels
         self.updatedAt = ISO8601DateFormatter.fractionalSeconds.string(from: Date())
     }
     
     var isEmpty: Bool {
-        return name == nil && (i18nNames?.isEmpty ?? true) && (channels?.isEmpty ?? true)
+        return name == nil && (channels?.isEmpty ?? true)
     }
     
 }

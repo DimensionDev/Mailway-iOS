@@ -75,7 +75,7 @@ final class AddIdentityViewModel: NSObject {
         // TODO:
         
         // prepare database stuff
-        let contactProperty = Contact.Property(name: name,i18nNames: [:], note: note.isEmpty ? nil : note, avatar: nil)
+        let contactProperty = Contact.Property(name: name, note: note.isEmpty ? nil : note, avatar: nil)
         
         let ed25519Keypair = Ed25519.Keypair()
         let privateKey = ed25519Keypair.privateKey
@@ -90,7 +90,7 @@ final class AddIdentityViewModel: NSObject {
             let channels = channelProperties.map {
                 ContactChannel.insert(into: managedObjectContext, property: $0)
             }
-            let contact = Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: channels)
+            let contact = Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: channels, businessCard: nil)
             
             self?.insertedContact.send(contact)
         }

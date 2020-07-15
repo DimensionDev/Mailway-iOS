@@ -92,7 +92,7 @@ struct ContactDetailView_Previews: PreviewProvider {
             ContactChannel.insert(into: managedObjectContext, property: .init(name: .discord, value: "Alice#1234")),
             ContactChannel.insert(into: managedObjectContext, property: .init(name: .custom("about.me"), value: "Alice.about.me")),
         ]
-        let contact = Contact.insert(into: managedObjectContext, property: identityProperty, keypair: keypair, channels: channels)
+        let contact = Contact.insert(into: managedObjectContext, property: identityProperty, keypair: keypair, channels: channels, businessCard: nil)   // empty businessCard only when preview
         
         let viewModel = ContactDetailViewModel(context: AppContext.shared, contact: contact)
         return ContactDetailView(viewModel: viewModel)
