@@ -30,6 +30,7 @@
         <attribute name="composeTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="messageID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="messageTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="payload" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="payloadKind" optional="YES" transient="YES" attributeType="String"/>
@@ -87,7 +88,7 @@
         <element name="BusinessCard" positionX="-234" positionY="153" width="128" height="118"/>
         <element name="Chat" positionX="-54" positionY="63" width="128" height="148"/>
         <element name="ChatMemberNameStub" positionX="-62.14453125" positionY="332.484375" width="128" height="148"/>
-        <element name="ChatMessage" positionX="135.08984375" positionY="98.80859375" width="128" height="283"/>
+        <element name="ChatMessage" positionX="135.08984375" positionY="98.80859375" width="128" height="298"/>
         <element name="Contact" positionX="-257.73828125" positionY="213.62890625" width="128" height="193"/>
         <element name="ContactChannel" positionX="-213.74609375" positionY="41.3125" width="128" height="133"/>
         <element name="Keypair" positionX="-439.5078125" positionY="1.25390625" width="128" height="148"/>

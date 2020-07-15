@@ -12,6 +12,7 @@ import CoreData
 final public class ChatMessage: NSManagedObject {
     
     @NSManaged public private(set) var id: UUID
+    @NSManaged public private(set) var messageID: UUID
     
     @NSManaged public private(set) var senderPublicKey: String?
     @NSManaged public private(set) var recipientPublicKeys: [String]
@@ -77,6 +78,7 @@ extension ChatMessage {
     public static func insert(into context: NSManagedObjectContext, property: Property, chat: Chat?, quoteMessage: QuoteMessage?) -> ChatMessage {
         let chatMessage: ChatMessage = context.insertObject()
         
+        chatMessage.messageID = property.messageID
         chatMessage.senderPublicKey = property.senderPublicKey
         chatMessage.recipientPublicKeys = property.recipientPublicKeys
         chatMessage.version = property.version
@@ -98,6 +100,8 @@ extension ChatMessage {
 
 extension ChatMessage {
     public struct Property {
+        public let messageID: UUID
+        
         public let senderPublicKey: String?
         public let recipientPublicKeys: [String]
         
@@ -111,13 +115,16 @@ extension ChatMessage {
         public let receiveTimestamp: Date
         public let shareTimestamp: Date?
         
-        public init(senderPublicKey: String?,
-                    recipientPublicKeys: [String],
-                    version: Int,
-                    armoredMessage: String?,
-                    payload: Data,
-                    payloadKind: PayloadKind, messageTimestamp: Date?, composeTimestamp: Date?, receiveTimestamp: Date, shareTimestamp: Date?)
-        {
+        public init(
+            messageID: UUID,
+            senderPublicKey: String?,
+            recipientPublicKeys: [String],
+            version: Int,
+            armoredMessage: String?,
+            payload: Data,
+            payloadKind: PayloadKind, messageTimestamp: Date?, composeTimestamp: Date?, receiveTimestamp: Date, shareTimestamp: Date?
+        ) {
+            self.messageID = messageID
             self.senderPublicKey = senderPublicKey
             self.recipientPublicKeys = recipientPublicKeys
             self.version = Int64(version)
@@ -147,7 +154,13 @@ extension ChatMessage {
 }
 
 extension ChatMessage {
+    
     public static func predicate(chat: Chat) -> NSPredicate {
         return NSPredicate(format: "%K == %@", #keyPath(ChatMessage.chat), chat)
     }
+    
+    public static func predicate(messageID: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(ChatMessage.messageID), messageID)
+    }
+    
 }

@@ -19,11 +19,12 @@ final class DecryptMessageViewModel {
     
     // input
     let context: AppContext
-    let input = CurrentValueSubject<String, Never>("")
     let identities: [Contact]
+    let input = CurrentValueSubject<String, Never>("")
     
     // output
     let decryptStatus = CurrentValueSubject<DecryptStatus, Never>(.empty)
+    let isDoneBarButtonItemEnabled = CurrentValueSubject<Bool, Never>(false)
     
     init(context: AppContext) {
         self.context = context
@@ -51,6 +52,17 @@ final class DecryptMessageViewModel {
             .receive(on: DispatchQueue.main)
             .assign(to: \.value, on: decryptStatus)
             .store(in: &disposeBag)
+        
+        decryptStatus
+            .sink { [weak self] status in
+                switch status {
+                case .decryptSuccess:
+                    self?.isDoneBarButtonItemEnabled.value = true
+                default:
+                    self?.isDoneBarButtonItemEnabled.value = false
+                }
+            }
+            .store(in: &disposeBag)
     }
     
 }
@@ -68,6 +80,7 @@ extension DecryptMessageViewModel {
         case keyNotFound
         case payloadDecryptFail
         case signatureVerificationFail
+        case decryptResultNotFound
         
         var errorDescription: String? {
             switch self {
@@ -78,6 +91,8 @@ extension DecryptMessageViewModel {
             case .payloadDecryptFail:
                 return "Decrypt Fail"
             case .signatureVerificationFail:
+                return "Decrypt Fail"
+            case .decryptResultNotFound:
                 return "Decrypt Fail"
             }
         }
@@ -92,6 +107,8 @@ extension DecryptMessageViewModel {
                 return "Internal error when derypting."
             case .signatureVerificationFail:
                 return "Cannot verify message signature."
+            case .decryptResultNotFound:
+                return "Decrypt result not found."
             }
         }
         
@@ -105,11 +122,15 @@ extension DecryptMessageViewModel {
                 return "Please try again."
             case .signatureVerificationFail:
                 return "Please try again."
+            case .decryptResultNotFound:
+                return "Please save result until decrypt success."
             }
         }
     }
     
     struct DecryptResult {
+        let privateKeys: [Ed25519.PrivateKey?]
+        let fileKeys: [X25519.FileKey?]
         let payload: Data
         let extra: CryptoService.Extra
     }
@@ -186,13 +207,52 @@ extension DecryptMessageViewModel {
                     return
                 }
                 
-                let result = DecryptResult(payload: payloadData, extra: extra)
+                let result = DecryptResult(
+                    privateKeys: privateKeys,
+                    fileKeys: fileKeys,
+                    payload: payloadData,
+                    extra: extra
+                )
                 DispatchQueue.main.async {
                     promise(.success(DecryptStatus.decryptSuccess(result)))
                 }
             }   // end DispatchQueue.global()…
         }   // end Future
     }
+    
+    func preludeSaveMessage() -> Future<Result<ChatMessage, Swift.Error>, Never> {
+        guard case let DecryptStatus.decryptSuccess(result) = decryptStatus.value else {
+            return Future { promise in
+                promise(.success(Result.failure(Error.decryptResultNotFound)))
+            }
+        }
+        
+        let managedObjectContext = context.managedObjectContext
+        let request = ChatMessage.sortedFetchRequest
+        request.predicate = ChatMessage.predicate(messageID: result.extra.messageID)
+        request.fetchLimit = 1
+        
+        let chatMessage: ChatMessage?
+        do {
+            let chatMessages = try managedObjectContext.fetch(request)
+            chatMessage = chatMessages.first
+        } catch {
+            chatMessage = nil
+            assertionFailure(error.localizedDescription)
+        }
+        
+        fatalError()
+    }
+    
+//    func saveMessage() -> Future<Result<ChatMessage, Swift.Error>, Never> {
+//        guard case let DecryptStatus.decryptSuccess(result) = decryptStatus.value else {
+//            return Future { promise in
+//                promise(.success(Result.failure(Error.decryptResultNotFound)))
+//            }
+//        }
+//
+//
+//    }
     
 }
 
@@ -338,6 +398,8 @@ extension DecryptMessageViewController {
             selectFileButton.heightAnchor.constraint(equalToConstant: 32).priority(.defaultHigh),
         ])
         
+        inputTextView.delegate = self
+        
         // handle keyboard overlap
         Publishers.CombineLatest3(
             KeyboardResponderService.shared.isShow.eraseToAnyPublisher(),
@@ -397,8 +459,9 @@ extension DecryptMessageViewController {
             }
             .store(in: &disposeBag)
         
-        inputTextView.delegate = self
-        // inputTextView.becomeFirstResponder()
+        viewModel.isDoneBarButtonItemEnabled
+            .assign(to: \.isEnabled, on: doneBarButtonItem)
+            .store(in: &disposeBag)
     }
     
 }

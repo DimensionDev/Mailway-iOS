@@ -35,6 +35,7 @@ extension DocumentStore {
                     let timestamp = message.timestamp ?? Date()
                     
                     let chatMessageProperty = ChatMessage.Property(
+                        messageID: UUID(),
                         senderPublicKey: signerPublicKey,
                         recipientPublicKeys: recipientPublicKeys,
                         version: CryptoService.Version.current.rawValue,
@@ -141,6 +142,11 @@ extension DocumentStore {
             }   // end DispatchQueue.global().async
         }   // end Future
     }
+    
+//    static func saveChatMessage(into context: NSManagedObjectContext, plaintextData plaintext: Data, recipientPublicKeys recipients: [Ed25519.PublicKey], signerPrivateKey signer: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
+//
+//    }
+
     
 }
 
