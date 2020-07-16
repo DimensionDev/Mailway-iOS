@@ -12,8 +12,8 @@ import CoreDataStack
 import NtgeCore
 
 struct Bizcard: Codable, Equatable {
-    static let armorHeader = "IdCardBeginII"
-    static let armorFooter = "IIEndIdCard"
+    static let armorHeader = "BizcardBeginII"
+    static let armorFooter = "IIEndBizcard"
 
     let info: IdentityInfo
     let supplementation: IdentitySupplementation?

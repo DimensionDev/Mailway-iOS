@@ -9,22 +9,23 @@
 import os
 import UIKit
 import Combine
+import CoreDataStack
+
+protocol SelectChatIdentityViewControllerDelegate: class {
+    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact)
+}
 
 final class SelectChatIdentityViewModel: NSObject {
     
     var disposeBag = Set<AnyCancellable>()
     
     let context: AppContext
-//    let identities = CurrentValueSubject<[Contact], Never>([])
+    let identities: [Contact]
     
-    init(context: AppContext) {
+    init(context: AppContext, identities: [Contact]) {
         self.context = context
+        self.identities = identities
         super.init()
-        
-//        context.documentStore.$contacts
-//            .map { $0.filter { $0.isIdentity }}
-//            .assign(to: \.value, on: self.identities)
-//            .store(in: &disposeBag)
     }
     
 }
@@ -39,39 +40,19 @@ extension SelectChatIdentityViewModel {
 extension SelectChatIdentityViewModel: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.allCases.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
-//        let section = Section.allCases[section]
-//        switch section {
-//        case .identities:
-//            return identities.value.count
-//        }
+        return identities.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-//        let section = Section.allCases[indexPath.section]
-//        var cell: UITableViewCell
-//        switch section {
-//        case .identities:
-//            let _cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListIdentityTableViewCell.self), for: indexPath) as! IdentityListIdentityTableViewCell
-//            cell = _cell
-//
-//            guard indexPath.row < identities.value.count else { break }
-//            let identity = identities.value[indexPath.row]
-//
-//            _cell.nameLabel.text = identity.name
-//        }
-//
-//        return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: IdentityListIdentityTableViewCell.self), for: indexPath) as! IdentityListIdentityTableViewCell
+        let identity = identities[indexPath.row]
+        IdentityListViewModel.configure(cell: cell, with: identity)
+        return cell
     }
-}
-
-protocol SelectChatIdentityViewControllerDelegate: class {
-//    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact)
 }
 
 final class SelectChatIdentityViewController: UIViewController, NeedsDependency {
@@ -90,7 +71,7 @@ final class SelectChatIdentityViewController: UIViewController, NeedsDependency 
         return tableView
     }()
     
-    private(set) lazy var viewModel = SelectChatIdentityViewModel(context: context)
+    var viewModel: SelectChatIdentityViewModel!
     
     deinit {
         os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
@@ -116,13 +97,6 @@ extension SelectChatIdentityViewController {
         
         tableView.delegate = self
         tableView.dataSource = viewModel
-        
-//        viewModel.identities
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] _ in
-//                self?.tableView.reloadData()
-//            }
-//            .store(in: &disposeBag)
     }
     
 }
@@ -132,13 +106,13 @@ extension SelectChatIdentityViewController {
 extension SelectChatIdentityViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: true)
-//        
-//        if tableView.cellForRow(at: indexPath) is IdentityListIdentityTableViewCell,
-//        indexPath.row < viewModel.identities.value.count {
-//            let identity = viewModel.identities.value[indexPath.row]
-//            delegate?.selectChatIdentityViewController(self, didSelectIdentity: identity)
-//        }
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if tableView.cellForRow(at: indexPath) is IdentityListIdentityTableViewCell,
+        indexPath.row < viewModel.identities.count {
+            let identity = viewModel.identities[indexPath.row]
+            delegate?.selectChatIdentityViewController(self, didSelectIdentity: identity)
+        }
     }
     
 }

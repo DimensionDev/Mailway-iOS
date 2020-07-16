@@ -9,6 +9,7 @@
 import os
 import UIKit
 import Combine
+import CoreData
 import CoreDataStack
 import NtgeCore
 import UITextView_Placeholder
@@ -21,10 +22,15 @@ final class DecryptMessageViewModel {
     let context: AppContext
     let identities: [Contact]
     let input = CurrentValueSubject<String, Never>("")
+    let saveTriggerPublisher = PassthroughSubject<Contact, Never>()
     
     // output
     let decryptStatus = CurrentValueSubject<DecryptStatus, Never>(.empty)
+    var savePrelude: SavePrelude?
+    let isDecryptSuccess = CurrentValueSubject<Bool, Never>(false)
+    let isSaving = CurrentValueSubject<Bool, Never>(false)
     let isDoneBarButtonItemEnabled = CurrentValueSubject<Bool, Never>(false)
+    let saveChatMessageResult = PassthroughSubject<Result<ChatMessage, Swift.Error>, Never>()
     
     init(context: AppContext) {
         self.context = context
@@ -47,21 +53,43 @@ final class DecryptMessageViewModel {
             .handleEvents(receiveOutput: { [weak self] _ in
                 self?.decryptStatus.value = .decrypting
             })
-            .map { DecryptMessageViewModel.decrypt(message: $0, identities: self.identities) }
+            .map { DecryptMessageViewModel.decrypt(armoredMessage: $0, identities: self.identities) }
             .switchToLatest()
             .receive(on: DispatchQueue.main)
             .assign(to: \.value, on: decryptStatus)
             .store(in: &disposeBag)
         
+        saveTriggerPublisher
+            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: false)
+            .filter { _ in !self.isSaving.value }
+            .handleEvents(receiveOutput: { _ in
+                self.isSaving.value = true
+            })
+            .map { identity in self.saveMessage(identity: identity) }
+            .switchToLatest()
+            .subscribe(saveChatMessageResult)
+            .store(in: &disposeBag)
+        
+        saveChatMessageResult
+            .handleEvents(receiveOutput: { _ in
+                self.isSaving.value = false
+            })
+            .sink(receiveValue: { _ in
+                // do nothing
+            })
+            .store(in: &disposeBag)
+        
         decryptStatus
-            .sink { [weak self] status in
-                switch status {
-                case .decryptSuccess:
-                    self?.isDoneBarButtonItemEnabled.value = true
-                default:
-                    self?.isDoneBarButtonItemEnabled.value = false
-                }
+            .map { status in
+                guard case DecryptStatus.decryptSuccess = status else { return false }
+                return true
             }
+            .assign(to: \.value, on: isDecryptSuccess)
+            .store(in: &disposeBag)
+        
+        Publishers.CombineLatest(isDecryptSuccess.eraseToAnyPublisher(), isSaving.eraseToAnyPublisher())
+            .map { $0 && !$1 }
+            .assign(to: \.value, on: isDoneBarButtonItemEnabled)
             .store(in: &disposeBag)
     }
     
@@ -129,16 +157,23 @@ extension DecryptMessageViewModel {
     }
     
     struct DecryptResult {
+        let armoredMessage: String
+        let messageTimestamp: Date?
         let privateKeys: [Ed25519.PrivateKey?]
         let fileKeys: [X25519.FileKey?]
         let payload: Data
         let extra: CryptoService.Extra
     }
+    
+    struct SavePrelude {
+        let existMessages: [ChatMessage]
+        let decryptableIdentities: [Contact]
+    }
 }
 
 extension DecryptMessageViewModel {
     
-    static func decrypt(message: String, identities: [Contact]) -> Future<DecryptStatus, Never> {
+    static func decrypt(armoredMessage: String, identities: [Contact]) -> Future<DecryptStatus, Never> {
         let privateKeys: [Ed25519.PrivateKey?] = identities
             .map { $0.keypair?.privateKey }
             .map { privateKey in
@@ -152,7 +187,7 @@ extension DecryptMessageViewModel {
         
         return Future { promise in
             DispatchQueue.global().async {
-                guard let message = Message.deserialize(from: message.trimmingCharacters(in: .whitespacesAndNewlines)) else {
+                guard let message = Message.deserialize(from: armoredMessage.trimmingCharacters(in: .whitespacesAndNewlines)) else {
                     DispatchQueue.main.async {
                         promise(.success(DecryptStatus.decryptFail(Error.invalidMessage)))
                     }
@@ -208,6 +243,8 @@ extension DecryptMessageViewModel {
                 }
                 
                 let result = DecryptResult(
+                    armoredMessage: armoredMessage,
+                    messageTimestamp: message.timestamp,
                     privateKeys: privateKeys,
                     fileKeys: fileKeys,
                     payload: payloadData,
@@ -220,39 +257,73 @@ extension DecryptMessageViewModel {
         }   // end Future
     }
     
-    func preludeSaveMessage() -> Future<Result<ChatMessage, Swift.Error>, Never> {
+    func saveMessagePrelude() -> Future<Result<SavePrelude, Swift.Error>, Never> {
         guard case let DecryptStatus.decryptSuccess(result) = decryptStatus.value else {
             return Future { promise in
                 promise(.success(Result.failure(Error.decryptResultNotFound)))
             }
         }
         
-        let managedObjectContext = context.managedObjectContext
-        let request = ChatMessage.sortedFetchRequest
-        request.predicate = ChatMessage.predicate(messageID: result.extra.messageID)
-        request.fetchLimit = 1
-        
-        let chatMessage: ChatMessage?
-        do {
-            let chatMessages = try managedObjectContext.fetch(request)
-            chatMessage = chatMessages.first
-        } catch {
-            chatMessage = nil
-            assertionFailure(error.localizedDescription)
+        return Future { promise in
+            // TODO: background fetch
+            let managedObjectContext = self.context.managedObjectContext
+            
+            let request = ChatMessage.sortedFetchRequest
+            request.predicate = ChatMessage.predicate(messageID: result.extra.messageID)
+            
+            let existMessages: [ChatMessage]
+            do {
+                existMessages = try managedObjectContext.fetch(request)
+            } catch {
+                existMessages = []
+                assertionFailure(error.localizedDescription)
+            }
+            
+            let decryptablePrivateKeys: [String] = zip(result.privateKeys, result.fileKeys).compactMap { privateKey, fileKey in
+                guard let privateKey = privateKey, fileKey != nil else {
+                    return nil
+                }
+                
+                return privateKey.serialize()
+            }
+            let decryptableIdentities = self.identities.filter { identity in
+                decryptablePrivateKeys.contains(where: { identity.keypair?.privateKey == $0 })
+            }
+            
+            let savePrelude = SavePrelude(existMessages: existMessages, decryptableIdentities: decryptableIdentities)
+            promise(.success(Result.success(savePrelude)))
         }
-        
-        fatalError()
     }
     
-//    func saveMessage() -> Future<Result<ChatMessage, Swift.Error>, Never> {
-//        guard case let DecryptStatus.decryptSuccess(result) = decryptStatus.value else {
-//            return Future { promise in
-//                promise(.success(Result.failure(Error.decryptResultNotFound)))
-//            }
-//        }
-//
-//
-//    }
+    private func saveMessage(identity: Contact) -> Future<Result<ChatMessage, Swift.Error>, Never> {
+        guard case let DecryptStatus.decryptSuccess(result) = decryptStatus.value else {
+            return Future { promise in
+                promise(.success(Result.failure(Error.decryptResultNotFound)))
+            }
+        }
+        
+        guard let identityPrivateKeyText = identity.keypair?.privateKey, let identityPrivateKey = Ed25519.PrivateKey.deserialize(from: identityPrivateKeyText) else {
+            return Future { promise in
+                promise(.success(Result.failure(Error.decryptResultNotFound)))
+            }
+        }
+        
+        let chatMessageProperty = ChatMessage.Property(
+            messageID: result.extra.messageID,
+            senderPublicKey: result.extra.senderKey,
+            recipientPublicKeys: result.extra.recipientKeys,
+            version: result.extra.version,
+            armoredMessage: result.armoredMessage,
+            payload: result.payload,
+            payloadKind: ChatMessage.PayloadKind(rawValue: result.extra.payloadKind.rawValue) ?? .unknown,
+            messageTimestamp: result.messageTimestamp,
+            composeTimestamp: nil,
+            receiveTimestamp: Date(),
+            shareTimestamp: nil
+        )
+        
+        return DocumentStore.saveChatMessage(into: context.managedObjectContext, chatMessageProperty: chatMessageProperty, identityPrivateKey: identityPrivateKey)
+    }
     
 }
 
@@ -462,6 +533,27 @@ extension DecryptMessageViewController {
         viewModel.isDoneBarButtonItemEnabled
             .assign(to: \.isEnabled, on: doneBarButtonItem)
             .store(in: &disposeBag)
+        
+        viewModel.saveChatMessageResult
+            .sink { result in
+                switch result {
+                case .success(let chatMessage):
+                    // create success, present chat scene
+                    self.dismiss(animated: true) {
+                        guard let chat = chatMessage.chat else {
+                            assertionFailure()
+                            return
+                        }
+                        let chatViewModel = ChatViewModel(context: self.context, chat: chat)
+                        self.coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: nil, transition: .showDetail)
+                    }
+                case .failure(let error):
+                    // create failure
+                    let alertController = UIAlertController.standardAlert(of: error)
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+            .store(in: &self.disposeBag)
     }
     
 }
@@ -487,60 +579,76 @@ extension DecryptMessageViewController {
     }
     
     @objc private func doneBarButtonPressed(_ sender: UIBarButtonItem) {
-//        guard let ciphertext = inboxTextView.text, !ciphertext.isEmpty,
-//            let message = Message.deserialize(from: ciphertext) else {
-//                return
-//        }
-//
-//        let decryptor = Message.Decryptor(message: message)
-        
-        //        var identityKeys: [Key] = []
-//        var identityPrivateKeys: [Ed25519.PrivateKey] = []
-//        var identityFileKeys: [X25519.FileKey] = []
-//
-        //        for key in context.documentStore.keys where !key.privateKey.isEmpty {
-        //            guard let privateKey = Ed25519.PrivateKey.deserialize(from: key.privateKey) else {
-        //                continue
-        //            }
-        //
-        //            guard let fileKey = decryptor.decryptFileKey(privateKey: privateKey.x25519) else {
-        //                continue
-        //            }
-        //
-        //            identityKeys.append(key)
-        //            identityPrivateKeys.append(privateKey)
-        //            identityFileKeys.append(fileKey)
-        //        }
-        //
-        //        guard !identityKeys.isEmpty, let filekey = identityFileKeys.first else {
-        //            let alertController = UIAlertController(title: "Decrypt Fail", message: "Can not find available key", preferredStyle: .alert)
-        //            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        //            alertController.addAction(okAction)
-        //            present(alertController, animated: true, completion: nil)
-        //
-        //            return
-        //        }
-        //
-        //        guard let plaintextData = decryptor.decryptPayload(fileKey: filekey) else {
-        //            let alertController = UIAlertController(title: "Decrypt Fail", message: "Decrypt fail due to internal error", preferredStyle: .alert)
-        //            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        //            alertController.addAction(okAction)
-        //            present(alertController, animated: true, completion: nil)
-        //            return
-        //        }
-        //
-        //        let plaintext = String(data: plaintextData, encoding: .utf8) ?? "<nil>"
-        //
-        //        let alertController = UIAlertController(title: "Message Content", message: plaintext, preferredStyle: .alert)
-        //        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        //        alertController.addAction(okAction)
-        //        present(alertController, animated: true, completion: nil)
+        viewModel.saveMessagePrelude()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                guard let `self` = self else { return }
+                
+                do {
+                    let savePrelude = try result.get()
+                    self.viewModel.savePrelude = savePrelude
+                    
+                    guard !savePrelude.decryptableIdentities.isEmpty else {
+                        throw DecryptMessageViewModel.Error.keyNotFound
+                    }
+                    
+                    if savePrelude.decryptableIdentities.count == 1, let identity = savePrelude.decryptableIdentities.first {
+                        // one decryptor. if not exist then create new
+                        
+                        guard let publicKey = identity.keypair?.publicKey else {
+                            throw DecryptMessageViewModel.Error.keyNotFound
+                        }
+                        
+                        if let existMessage = savePrelude.existMessages.first(where: { $0.chat?.identityPublicKey == publicKey }) {
+                            // use exist message
+                            self.viewModel.saveChatMessageResult.send(.success(existMessage))
+                        } else {
+                            // save new message
+                            self.viewModel.saveTriggerPublisher.send(identity)
+                        }
+                        
+                    } else {
+                        // multiple decryptors. select identity then check exist or create new
+                        let selectChatIdentityViewModel = SelectChatIdentityViewModel(context: self.context, identities: savePrelude.decryptableIdentities)
+                        self.coordinator.present(scene: .selectChatIdentity(viewModel: selectChatIdentityViewModel, delegate: self), from: self, transition: .modal(animated: true, completion: nil))
+                    }
+                    
+                } catch {
+                    self.viewModel.savePrelude = nil
+                    let alertController = UIAlertController.standardAlert(of: error)
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+            .store(in: &disposeBag)
     }
     
     @objc private func selectFileButtonPressed(_ sender: UIButton) {
         present(documentPickerViewController, animated: true, completion: nil)
     }
     
+}
+
+// MARK: - SelectChatIdentityViewControllerDelegate
+extension DecryptMessageViewController: SelectChatIdentityViewControllerDelegate {
+    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
+        viewController.dismiss(animated: true) {
+            // identity selected. check exist
+            guard let savePrelude = self.viewModel.savePrelude else {
+                assertionFailure()
+                return
+            }
+            guard let identityPublicKey = identity.keypair?.publicKey else {
+                assertionFailure()
+                return
+            }
+            
+            if let existMessage = savePrelude.existMessages.first(where: { $0.chat?.identityPublicKey == identityPublicKey }) {
+                self.viewModel.saveChatMessageResult.send(.success(existMessage))
+            } else {
+                self.viewModel.saveTriggerPublisher.send(identity)
+            }
+        }
+    }
 }
 
 // MARK: - UIDocumentPickerDelegate

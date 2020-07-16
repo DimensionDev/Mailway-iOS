@@ -12,7 +12,7 @@ import CoreData
 final public class ChatMessage: NSManagedObject {
     
     @NSManaged public private(set) var id: UUID
-    @NSManaged public private(set) var messageID: UUID
+    @NSManaged public private(set) var messageID: String
     
     @NSManaged public private(set) var senderPublicKey: String?
     @NSManaged public private(set) var recipientPublicKeys: [String]
@@ -100,7 +100,7 @@ extension ChatMessage {
 
 extension ChatMessage {
     public struct Property {
-        public let messageID: UUID
+        public let messageID: String
         
         public let senderPublicKey: String?
         public let recipientPublicKeys: [String]
@@ -116,7 +116,7 @@ extension ChatMessage {
         public let shareTimestamp: Date?
         
         public init(
-            messageID: UUID,
+            messageID: String,
             senderPublicKey: String?,
             recipientPublicKeys: [String],
             version: Int,

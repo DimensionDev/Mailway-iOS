@@ -29,13 +29,12 @@ extension DocumentStore {
                     
                     let signerPublicKey = signer.publicKey.serialize()
                     let recipientPublicKeys = Array(Set(recipients)).map { $0.serialize() }.filter { $0 != signerPublicKey }
-                    let memberPublicKeys = Array(Set(recipientPublicKeys + [signerPublicKey]))
                     
                     assert(message.timestamp != nil)
                     let timestamp = message.timestamp ?? Date()
                     
                     let chatMessageProperty = ChatMessage.Property(
-                        messageID: UUID(),
+                        messageID: UUID().uuidString,
                         senderPublicKey: signerPublicKey,
                         recipientPublicKeys: recipientPublicKeys,
                         version: CryptoService.Version.current.rawValue,
@@ -48,91 +47,14 @@ extension DocumentStore {
                         shareTimestamp: nil
                     )
                     
-                    var chatMessage: ChatMessage?
                     var subscription: AnyCancellable?
-                    subscription = context.performChanges {
-                        // query chat if exist
-                        let request = Chat.sortedFetchRequest
-                        request.predicate = Chat.predicate(identityPublicKey: signerPublicKey, memberPublicKeys: memberPublicKeys)
-                        request.fetchLimit = 1
-                        var chat: Chat? = try? context.fetch(request).first
-
-                        var memberNameStubProperty: [ChatMemberNameStub.Property] = []
-                        var memberNameStub: [ChatMemberNameStub] = []
-                        
-                        // A. create chat if no exist
-                        if chat == nil {
-                            // A.1. query stub and create stub properties
-                            for memberPublicKey in memberPublicKeys {
-                                // get KeyID
-                                guard let keyID = Ed25519.PublicKey.deserialize(serialized: memberPublicKey)?.keyID else {
-                                    continue
-                                }
-
-                                // query stub if exist
-                                let stubRequest = ChatMemberNameStub.sortedFetchRequest
-                                stubRequest.predicate = ChatMemberNameStub.predicate(publicKey: memberPublicKey)
-                                stubRequest.fetchLimit = 1
-                                if let stub = try? context.fetch(stubRequest).first {
-                                    memberNameStub.append(stub)
-                                    continue
-                                }
-                                
-                                // fetch contact to retrieve stub property infos
-                                let contactRequest = Contact.sortedFetchRequest
-                                contactRequest.predicate = Contact.predicate(publicKey: memberPublicKey)
-                                contactRequest.fetchLimit = 1
-                                guard let contact = try? context.fetch(contactRequest).first else {
-                                    continue
-                                }
-                                
-                                let property = ChatMemberNameStub.Property(name: contact.name, publicKey: memberPublicKey, keyID: keyID)
-                                
-                                // append property
-                                memberNameStubProperty.append(property)
-                            }
-                            
-                            // A.2 validate and create stub from properties
-                            guard memberNameStub.count + memberNameStubProperty.count == memberPublicKeys.count else {
-                                // error occurred, interrupt operation
-                                return
-                            }
-                            let newStubs = memberNameStubProperty.map { property in
-                                ChatMemberNameStub.insert(into: context, property: property)
-                            }
-                            memberNameStub.append(contentsOf: newStubs)
-                            
-                            // A.3 create chat
-                            let property = Chat.Property(title: nil, identityPublicKey: signerPublicKey)
-                            chat = Chat.insert(into: context, property: property, memberNameStubs: memberNameStub, chatMessages: [])
-                        }
-                        
-                        assert(chat != nil)
-                        
-                        // TODO: QuoteMessage
-                        
-                        // B. create chat message
-                        chatMessage = ChatMessage.insert(into: context, property: chatMessageProperty, chat: chat, quoteMessage: nil)
-                    }
-                    .sink(receiveCompletion: { _ in
-                        os_log("%{public}s[%{public}ld], %{public}s: complete subscription", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
-                        subscription = nil
-                    }, receiveValue: { result in
-                        DispatchQueue.main.async {
-                            switch result {
-                            case .success:
-                                guard let chatMessage = chatMessage else {
-                                    // return error when output not found
-                                    promise(.success(Result.failure(DocumentStoreError.internal)))
-                                    return
-                                }
-                                promise(.success(Result.success(chatMessage)))
-                                
-                            case .failure(let error):
-                                promise(.success(Result.failure(error)))
-                            }
-                        }
-                    })
+                    subscription = DocumentStore.saveChatMessage(into: context, chatMessageProperty: chatMessageProperty, identityPrivateKey: signer)
+                        .sink(receiveCompletion: { _ in
+                            os_log("%{public}s[%{public}ld], %{public}s: complete subscription: %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+                            subscription = nil
+                        }, receiveValue: { result in
+                            promise(.success(result))
+                        })
                     
                 } catch {
                     DispatchQueue.main.async {
@@ -143,17 +65,142 @@ extension DocumentStore {
         }   // end Future
     }
     
-//    static func saveChatMessage(into context: NSManagedObjectContext, plaintextData plaintext: Data, recipientPublicKeys recipients: [Ed25519.PublicKey], signerPrivateKey signer: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
-//
-//    }
-
+    static func saveChatMessage(into context: NSManagedObjectContext, chatMessageProperty: ChatMessage.Property, identityPrivateKey identity: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
+        Future { promise in
+            DispatchQueue.global().async {
+                let identityPublicKey = identity.publicKey.serialize()
+                let memberPublicKeys = Array(
+                    Set(chatMessageProperty.recipientPublicKeys + [chatMessageProperty.senderPublicKey].compactMap { $0 })
+                )
+                
+                guard memberPublicKeys.contains(identityPublicKey) else {
+                    DispatchQueue.main.async {
+                        promise(.success(Result.failure(DocumentStoreError.internal)))
+                    }
+                    return
+                }
+                
+                var chatMessage: ChatMessage?
+                var subscription: AnyCancellable?
+                subscription = context.performChanges {
+                    // query chat if exist
+                    let request = Chat.sortedFetchRequest
+                    request.predicate = Chat.predicate(identityPublicKey: identityPublicKey, memberPublicKeys: memberPublicKeys)
+                    request.fetchLimit = 1
+                    var chat: Chat? = try? context.fetch(request).first
+                    
+                    var memberNameStubProperty: [ChatMemberNameStub.Property] = []
+                    var memberNameStubs: [ChatMemberNameStub] = []
+                    
+                    // A. create chat if no exist
+                    if chat == nil {
+                        // A.1. query stub and create stub properties
+                        for memberPublicKey in memberPublicKeys {
+                            // get KeyID
+                            guard let keyID = Ed25519.PublicKey.deserialize(serialized: memberPublicKey)?.keyID else {
+                                assertionFailure()
+                                continue
+                            }
+                            
+                            // query stub if exist
+                            let stubRequest = ChatMemberNameStub.sortedFetchRequest
+                            stubRequest.predicate = ChatMemberNameStub.predicate(publicKey: memberPublicKey)
+                            stubRequest.fetchLimit = 1
+                            if let stub = try? context.fetch(stubRequest).first {
+                                memberNameStubs.append(stub)
+                                continue
+                            }
+                            
+                            // fetch contact to retrieve stub property infos if possible
+                            let contactRequest = Contact.sortedFetchRequest
+                            contactRequest.predicate = Contact.predicate(publicKey: memberPublicKey)
+                            contactRequest.fetchLimit = 1
+                            let name: String? = {
+                                guard let contact = try? context.fetch(contactRequest).first else { return nil }
+                                return contact.name
+                            }()
+                            
+                            let property = ChatMemberNameStub.Property(name: name, publicKey: memberPublicKey, keyID: keyID)
+                            
+                            // append property
+                            memberNameStubProperty.append(property)
+                        }
+                        
+                        // A.2 validate and create stub from properties
+                        guard memberNameStubs.count + memberNameStubProperty.count == memberPublicKeys.count else {
+                            // error occurred, break operation
+                            assertionFailure()
+                            return
+                        }
+                        let newStubs = memberNameStubProperty.map { property in
+                            ChatMemberNameStub.insert(into: context, property: property)
+                        }
+                        memberNameStubs.append(contentsOf: newStubs)
+                        
+                        // A.3 create chat
+                        let property = Chat.Property(title: nil, identityPublicKey: identityPublicKey)
+                        chat = Chat.insert(into: context, property: property, memberNameStubs: memberNameStubs, chatMessages: [])
+                    }
+                    
+                    assert(chat != nil)
+                    
+                    // TODO: QuoteMessage
+                    
+                    // B. create chat message
+                    chatMessage = ChatMessage.insert(into: context, property: chatMessageProperty, chat: chat, quoteMessage: nil)
+                }
+                .sink(receiveCompletion: { _ in
+                    os_log("%{public}s[%{public}ld], %{public}s: complete subscription", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+                    subscription = nil
+                }, receiveValue: { result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success:
+                            guard let chatMessage = chatMessage else {
+                                // return error when output not found
+                                promise(.success(Result.failure(DocumentStoreError.internal)))
+                                return
+                            }
+                            promise(.success(Result.success(chatMessage)))
+                            
+                        case .failure(let error):
+                            promise(.success(Result.failure(error)))
+                        }
+                    }
+                })
+                
+            }   // end DispatchQueue.global().async
+        }   // end Future
+    }
     
 }
 
 extension DocumentStore {
 
-    enum DocumentStoreError: Swift.Error {
+    enum DocumentStoreError: Swift.Error, LocalizedError {
         case `internal`
+        
+        var errorDescription: String? {
+            switch self {
+            case .internal:
+                return L10n.Error.InternalError.errorDescription
+            }
+        }
+        
+        var failureReason: String? {
+            switch self {
+            case .internal:
+                return L10n.Error.InternalError.failureReason
+            }
+        }
+        
+        var recoverySuggestion: String? {
+            switch self {
+            case .internal:
+                return L10n.Error.InternalError.recoverySuggestion
+            }
+        }
+        
     }
 
 }
