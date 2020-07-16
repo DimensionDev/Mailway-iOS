@@ -18,7 +18,8 @@ final class ChatMessageTableViewCell: UITableViewCell {
     
     weak var delegate: ChatMessageTableViewCellDelegate?
     
-    let avatarView = AvatarView()
+    private lazy var avatarView = AvatarView(viewModel: avatarViewModel)
+    let avatarViewModel = AvatarViewModel()
     
     let nameLabel: UILabel = {
         let label = UILabel()

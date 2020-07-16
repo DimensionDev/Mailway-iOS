@@ -46,7 +46,6 @@ extension MailwayTests {
         guard let info = IdentityInfo(
             privateKey: privateKey,
             name: "Alice",
-            i18nNames: ["zh": "爱丽丝"],
             channels: [
                 IdentityChannel(name: "twitter", value: "@alice"),
                 IdentityChannel(name: "facebook", value: "NotRealAlice"),
@@ -58,7 +57,6 @@ extension MailwayTests {
         
         let supplementation = IdentitySupplementation(
             name: "Alice or not Alice?",
-            i18nNames: ["zh": "心罪爱丽丝"],
             channels: [
                 IdentityChannel(name: "discord", value: "Alice#1234"),
             ]

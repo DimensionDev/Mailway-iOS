@@ -61,6 +61,7 @@ extension ContactListViewModel {
     
     static func configure(cell: ContactListContactTableViewCell, with contact: Contact) {
         cell.nameLabel.text = contact.name
+        cell.avatarViewModel.infos = [AvatarViewModel.Info(name: contact.name, image: contact.avatar)]
     }
     
 }

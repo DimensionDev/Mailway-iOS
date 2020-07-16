@@ -56,24 +56,28 @@ final class ChatViewModel: NSObject {
 extension ChatViewModel {
     
     static func configure(cell: ChatMessageTableViewCell, with chatMessage: ChatMessage) {
-        cell.nameLabel.text = {
-            let chat = chatMessage.chat
-            guard let senderStub = chat?.memberNameStubs?.first(where: { $0.publicKey == chatMessage.senderPublicKey }) else {
-                return "<Unknown>"
+        let senderStub = chatMessage.chat?.memberNameStubs?.first(where: { $0.publicKey == chatMessage.senderPublicKey })
+        let sender: Contact? = {
+            guard let publicKey = senderStub?.publicKey else { return nil }
+            let request = Contact.sortedFetchRequest
+            request.predicate = Contact.predicate(publicKey: publicKey)
+            request.fetchLimit = 1
+            do {
+                return try chatMessage.managedObjectContext?.fetch(request).first
+            } catch {
+                assertionFailure(error.localizedDescription)
+                return nil
             }
-            
-            return senderStub.name ?? "<Unknown>"
         }()
+        
+        cell.avatarViewModel.infos = [AvatarViewModel.Info(name: senderStub?.name ?? "A", image: sender?.avatar)]
+        cell.nameLabel.text = senderStub?.name ?? "<Unknown>"
         cell.messageLabel.text = {
             switch chatMessage.payloadKind {
             case .plaintext:
-                guard let text = String(data: chatMessage.payload, encoding: .utf8) else {
-                    return "<Empty>"
-                }
-                return text
-            
+                return String(data: chatMessage.payload, encoding: .utf8) ?? "<Empty>"
             default:
-                return "<Empty>"
+                return "<Raw Data>"
             }
         }()
         // TODO: expand check

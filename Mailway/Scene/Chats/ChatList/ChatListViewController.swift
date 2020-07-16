@@ -64,16 +64,39 @@ extension ChatListViewModel {
 extension ChatListViewModel {
     
     static func configure(cell: ChatListChatRoomTableViewCell, with chat: Chat) {
+        let recipientStubs = chat.memberNameStubs?
+            .filter { $0.publicKey != chat.identityPublicKey }  // remove sender
+            .sorted(by: { lhs, rhs in
+                switch (lhs.name, rhs.name) {
+                case (.some(let l), .some(let r)):      return l < r
+                case (.some, .none):                    return true
+                case (.none, .some):                    return false
+                case (.none, .none):                    return true
+                }
+            }) ?? []
+        let recipients: [Contact?] = recipientStubs.map { stub in
+            let request = Contact.sortedFetchRequest
+            request.predicate = Contact.predicate(publicKey: stub.publicKey)
+            request.fetchLimit = 1
+            do {
+                return try chat.managedObjectContext?.fetch(request).first
+            } catch {
+                assertionFailure(error.localizedDescription)
+                return nil
+            }
+        }
+        
+        cell.avatarViewModel.infos = zip(recipientStubs, recipients).map { stub, recipient in
+            let name = stub.name ?? "A"
+            let image = recipient?.avatar
+            return AvatarViewModel.Info(name: name, image: image)
+        }
+        
         cell.titleLabel.text = {
             guard let title = chat.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                let names = chat.memberNameStubs?
-                    .filter { $0.publicKey != chat.identityPublicKey }  // remove sender
-                    .compactMap { $0.name } ?? []
-                
+                let names = recipientStubs.compactMap { $0.name }
                 let text = names.sorted().joined(separator: ", ")
-                guard !text.isEmpty else {
-                    return "<Unknown>"
-                }
+                guard !text.isEmpty else { return "<Unknown>" }
                 return text
             }
             

@@ -12,10 +12,9 @@ import SwiftUI
 
 final class ContactListContactTableViewCell: UITableViewCell {
     
-    let avatarView = AvatarView()
-    
-    private let avatarViewContainer = UIView()
-    
+    private lazy var avatarView = AvatarView(viewModel: avatarViewModel)
+    let avatarViewModel = AvatarViewModel()
+        
     let nameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
@@ -41,35 +40,25 @@ extension ContactListContactTableViewCell {
     
     private func _init() {
         backgroundColor = .clear
-        
-        avatarViewContainer.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(avatarViewContainer)
-        NSLayoutConstraint.activate([
-            avatarViewContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            avatarViewContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            contentView.bottomAnchor.constraint(equalTo: avatarViewContainer.bottomAnchor, constant: 16),
-            avatarViewContainer.widthAnchor.constraint(equalToConstant: 40),
-            avatarViewContainer.heightAnchor.constraint(equalToConstant: 40).priority(.defaultHigh),
-        ])
 
         let hostingController = UIHostingController(rootView: avatarView)
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        avatarViewContainer.addSubview(hostingController.view)
+        contentView.addSubview(hostingController.view)
         NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: avatarViewContainer.topAnchor),
-            hostingController.view.leadingAnchor.constraint(equalTo: avatarViewContainer.leadingAnchor),
-            hostingController.view.trailingAnchor.constraint(equalTo: avatarViewContainer.trailingAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: avatarViewContainer.bottomAnchor),
+            hostingController.view.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            hostingController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            contentView.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor, constant: 16),
+            hostingController.view.widthAnchor.constraint(equalToConstant: 40).priority(.defaultHigh),
+            hostingController.view.heightAnchor.constraint(equalToConstant: 40).priority(.defaultHigh),
         ])
-        
         hostingController.view.backgroundColor = .clear
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(nameLabel)
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: avatarViewContainer.trailingAnchor, constant: 32),
+            nameLabel.leadingAnchor.constraint(equalTo: hostingController.view.trailingAnchor, constant: 32),
             nameLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-            nameLabel.centerYAnchor.constraint(equalTo: avatarViewContainer.centerYAnchor),
+            nameLabel.centerYAnchor.constraint(equalTo: hostingController.view.centerYAnchor),
         ])
                 
         separatorLine.translatesAutoresizingMaskIntoConstraints = false

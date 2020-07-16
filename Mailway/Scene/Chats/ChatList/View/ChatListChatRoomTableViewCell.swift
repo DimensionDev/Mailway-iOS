@@ -11,8 +11,9 @@ import SwiftUI
 
 final class ChatListChatRoomTableViewCell: UITableViewCell {
     
-    let avatarView = AvatarView()
-    
+    private lazy var avatarView = AvatarView(viewModel: avatarViewModel)
+    let avatarViewModel = AvatarViewModel()
+
     let colorBarView: UIView = {
         let bar = UIView()
         bar.backgroundColor = .systemPurple
