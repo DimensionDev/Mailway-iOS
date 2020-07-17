@@ -31,7 +31,7 @@ final class ContactListViewModel: NSObject {
             let fetchRequest = Contact.sortedFetchRequest
             fetchRequest.returnsObjectsAsFaults = false
             fetchRequest.fetchBatchSize = 20
-            // fetchRequest.predicate = Contact.notIdentityPredicate
+            fetchRequest.predicate = Contact.notIdentityPredicate
             let controller = NSFetchedResultsController(
                 fetchRequest: fetchRequest,
                 managedObjectContext: context.managedObjectContext,
