@@ -43,11 +43,6 @@ final class IdentityListViewModel: NSObject {
         super.init()
         
         fetchedResultsController.delegate = self
-        
-//        context.documentStore.$contacts
-//            .map { $0.filter { $0.isIdentity }}
-//            .assign(to: \.value, on: self.identities)
-//            .store(in: &disposeBag)
     }
     
 }

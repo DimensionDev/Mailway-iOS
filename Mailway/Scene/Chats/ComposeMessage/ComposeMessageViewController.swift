@@ -6,6 +6,7 @@
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
+import os
 import UIKit
 import Combine
 import CoreData
@@ -25,7 +26,7 @@ final class ComposeMessageViewModel: NSObject {
     
     // output
     let isComposeBarButtonEnabled = CurrentValueSubject<Bool, Never>(false)
-    
+    let selectedIdentity = CurrentValueSubject<Contact?, Never>(nil)
     let selectedIdentityPrivateKey = CurrentValueSubject<Ed25519.PrivateKey?, Never>(nil)
     
     init(context: AppContext, recipientPublicKeys: [Ed25519.PublicKey]) {
@@ -54,6 +55,19 @@ final class ComposeMessageViewModel: NSObject {
         message
             .map { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
             .assign(to: \.value, on: isComposeBarButtonEnabled)
+            .store(in: &disposeBag)
+        
+        selectedIdentity
+            .map { identity in
+                identity.flatMap { identity in
+                    guard let privateKeyText = identity.keypair?.privateKey,
+                        let privateKey = Ed25519.PrivateKey.deserialize(from: privateKeyText) else {
+                            return nil
+                    }
+                    return privateKey
+                }
+            }
+            .assign(to: \.value, on: selectedIdentityPrivateKey)
             .store(in: &disposeBag)
     }
     
@@ -138,13 +152,7 @@ extension ComposeMessageViewModel: NSFetchedResultsControllerDelegate {
         
         if selectedIdentityPrivateKey.value == nil {
             let identities = fetchedResultsController.sections?.first?.objects as? [Contact] ?? []
-            selectedIdentityPrivateKey.value = identities.first.flatMap { identity in
-                guard let privateKeyText = identity.keypair?.privateKey,
-                    let privateKey = Ed25519.PrivateKey.deserialize(from: privateKeyText) else {
-                        return nil
-                }
-                return privateKey
-            }
+            selectedIdentity.value = identities.first
         }
     }
     
@@ -157,6 +165,13 @@ final class ComposeMessageViewController: UIViewController, NeedsDependency {
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     var viewModel: ComposeMessageViewModel!
+    
+    let identitySelectionNavigationItemTitleViewTapGestureRecognizer = UITapGestureRecognizer()
+    private lazy var identitySelectionNavigationItemTitleView: IdentitySelectionNavigationItemTitleView = {
+        let titleView = IdentitySelectionNavigationItemTitleView()
+        titleView.addGestureRecognizer(identitySelectionNavigationItemTitleViewTapGestureRecognizer)
+        return titleView
+    }()
     
     private lazy var closeBarButtonItem: UIBarButtonItem = {
         let item = UIBarButtonItem()
@@ -179,6 +194,7 @@ final class ComposeMessageViewController: UIViewController, NeedsDependency {
     let messageTextView: UITextView = {
         let textView = UITextView()
         textView.font = .systemFont(ofSize: 17)
+        textView.showsVerticalScrollIndicator = false
         return textView
     }()
     
@@ -192,13 +208,16 @@ extension ComposeMessageViewController {
         view.backgroundColor = .systemBackground
         navigationItem.leftBarButtonItem = closeBarButtonItem
         navigationItem.rightBarButtonItem = composeBarButtonItem
+        navigationItem.titleView = identitySelectionNavigationItemTitleView
+        
+        identitySelectionNavigationItemTitleViewTapGestureRecognizer.addTarget(self, action: #selector(ComposeMessageViewController.tapGestureRecognizerHandler(_:)))
         
         messageTextView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(messageTextView)
         NSLayoutConstraint.activate([
             messageTextView.topAnchor.constraint(equalTo: view.topAnchor),
-            messageTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            messageTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            messageTextView.leadingAnchor.constraint(equalTo: view.readableContentGuide.leadingAnchor),
+            messageTextView.trailingAnchor.constraint(equalTo: view.readableContentGuide.trailingAnchor),
             messageTextView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
@@ -239,30 +258,22 @@ extension ComposeMessageViewController {
         })
         .store(in: &disposeBag)
         
+        viewModel.selectedIdentity
+            .sink { [weak self] identity in
+                guard let `self` = self else { return }
+                let entryView = self.identitySelectionNavigationItemTitleView.entryView
+                entryView.avatarImageView.image = identity?.avatar ?? UIImage.placeholder(color: .systemFill)
+                entryView.nameLabel.text = identity?.name ?? "-"
+                entryView.shortKeyIDLabel.text = identity?.keypair.flatMap { String($0.keyID.suffix(8)).separate(every: 4, with: " ") } ?? "-"
+            }
+            .store(in: &disposeBag)
+        
         messageTextView.delegate = self
         messageTextView.becomeFirstResponder()        
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        updateLayoutMargin()
-    }
-    
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        
-        updateLayoutMargin()
-    }
-    
 }
 
-extension ComposeMessageViewController {
-    private func updateLayoutMargin() {
-        messageTextView.contentInset.left = view.layoutMargins.left
-        messageTextView.contentInset.right = view.layoutMargins.right
-    }
-}
 
 extension ComposeMessageViewController {
     
@@ -310,6 +321,17 @@ extension ComposeMessageViewController {
             .store(in: &disposeBag)
     }
     
+    @objc private func tapGestureRecognizerHandler(_ sender: UITapGestureRecognizer) {
+        os_log("%{public}s[%{public}ld], %{public}s: sender: %s", ((#file as NSString).lastPathComponent), #line, #function, sender.debugDescription)
+
+        guard sender === identitySelectionNavigationItemTitleViewTapGestureRecognizer else {
+            return
+        }
+            
+        let selectChatIdentityViewModel = SelectChatIdentityViewModel(context: context, identities: [])
+        coordinator.present(scene: .selectChatIdentity(viewModel: selectChatIdentityViewModel, delegate: self), from: self, transition: .modal(animated: true, completion: nil))
+    }
+    
 }
 
 // MARK: - UITextViewDelegate
@@ -321,6 +343,16 @@ extension ComposeMessageViewController: UITextViewDelegate {
         }
         
         viewModel.message.value = textView.text ?? ""
+    }
+    
+}
+
+
+// MARK: - SelectChatIdentityViewControllerDelegate
+extension ComposeMessageViewController: SelectChatIdentityViewControllerDelegate {
+    
+    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
+        
     }
     
 }

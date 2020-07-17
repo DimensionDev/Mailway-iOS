@@ -23,6 +23,7 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 internal enum Asset {
   internal enum Arrows {
     internal static let arrowUp2 = ImageAsset(name: "Arrows/arrow.up.2")
+    internal static let arrowtriangleDownFill = ImageAsset(name: "Arrows/arrowtriangle.down.fill")
   }
   internal enum Banner {
     internal static let createContactEntry = ImageAsset(name: "Banner/create.contact.entry")

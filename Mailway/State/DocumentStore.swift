@@ -218,11 +218,11 @@ extension DocumentStore {
                 os_log("%{public}s[%{public}ld], %{public}s: skip alice & bob setup", ((#file as NSString).lastPathComponent), #line, #function)
             }
             
-            if try context.count(for: Chat.sortedFetchRequest) == 0 {
-                setupChat(for: context)
-            } else {
-                os_log("%{public}s[%{public}ld], %{public}s: skip chat setup", ((#file as NSString).lastPathComponent), #line, #function)
-            }
+//            if try context.count(for: Chat.sortedFetchRequest) == 0 {
+//                setupChat(for: context)
+//            } else {
+//                os_log("%{public}s[%{public}ld], %{public}s: skip chat setup", ((#file as NSString).lastPathComponent), #line, #function)
+//            }
         } catch {
             assertionFailure()
             return
@@ -236,7 +236,7 @@ extension DocumentStore {
         subscription = context.performChanges {
             let keypair = Keypair.insert(into: context, property: keypairProperty)
             let twitterContactChannel = ContactChannel.insert(into: context, property: ContactChannel.Property(name: .twitter, value: "@alice"))
-            Contact.insert(into: context, property: contactProperty, keypair: keypair, channels: [twitterContactChannel])
+            Contact.insert(into: context, property: contactProperty, keypair: keypair, channels: [twitterContactChannel], businessCard: nil)
         }
         .sink(receiveCompletion: { _ in
             os_log("%{public}s[%{public}ld], %{public}s: finish subscription: %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
@@ -253,7 +253,7 @@ extension DocumentStore {
         subscription = context.performChanges {
             let keypair = Keypair.insert(into: context, property: keypairProperty)
             let twitterContactChannel = ContactChannel.insert(into: context, property: ContactChannel.Property(name: .twitter, value: "@bob"))
-            Contact.insert(into: context, property: contactProperty, keypair: keypair, channels: [twitterContactChannel])
+            Contact.insert(into: context, property: contactProperty, keypair: keypair, channels: [twitterContactChannel], businessCard: nil)
         }
         .sink(receiveCompletion: { _ in
             os_log("%{public}s[%{public}ld], %{public}s: finish subscription: %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
