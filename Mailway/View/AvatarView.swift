@@ -39,8 +39,24 @@ struct AvatarView: View {
                         .foregroundColor(.white)
                 }
             }
-            if viewModel.infos.count == 2 {
-                EmptyView()
+            if viewModel.infos.count > 1 {
+                DiagonalStack(data: viewModel.infos, scale: 0.7) { item in
+                    ZStack {
+                        Circle()
+                            .foregroundColor(Color(Asset.Color.Background.blue.color))
+                        Text(String((item.name).prefix(1)))
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.white)
+                    }
+                    .overlay(
+                        GeometryReader { proxy in
+                            Circle()
+                                .strokeBorder(Color.white, lineWidth: 2, antialiased: true)         // use .strokeBorder to add border inside
+                                .frame(width: proxy.size.width + 4, height: proxy.size.height + 4)  // add spacing for border
+                        }
+                    )
+                }
+                // .border(Color.black)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -49,19 +65,20 @@ struct AvatarView: View {
 
 #if DEBUG
 struct AvatarView_Previews: PreviewProvider {
+    
+    static let colors: [Color] = [.red, .green, .blue]
+    
     static var previews: some View {
         Group {
             AvatarView(viewModel: AvatarViewModel(infos: [
                 AvatarViewModel.Info(name: "Alice", image: nil)
             ]))
-            .previewLayout(.fixed(width: 40, height: 40))
             .previewDisplayName("Single")
             
             AvatarView(viewModel: AvatarViewModel(infos: [
                 AvatarViewModel.Info(name: "Alice", image: nil),
                 AvatarViewModel.Info(name: "Bob", image: nil),
             ]))
-            .previewLayout(.fixed(width: 40, height: 40))
             .previewDisplayName("Double")
             
             AvatarView(viewModel: AvatarViewModel(infos: [
@@ -69,9 +86,21 @@ struct AvatarView_Previews: PreviewProvider {
                 AvatarViewModel.Info(name: "Bob", image: nil),
                 AvatarViewModel.Info(name: "Eve", image: nil),
             ]))
-            .previewLayout(.fixed(width: 40, height: 40))
             .previewDisplayName("Multiple")
+            
+            DiagonalStack(data: colors) { item in
+                Rectangle()
+                    .fill(item)
+            }
+            .frame(width: 100, height: 100)
+            .border(Color.black)
+            .previewDisplayName("DiagonalStack")
+        
         }
+        .frame(width: 40, height: 40)
+        .previewLayout(.fixed(width: 100, height: 100))
     }
 }
 #endif
+
+

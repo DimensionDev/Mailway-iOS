@@ -66,6 +66,7 @@
 		DB1EDEBF24AAF89A000C5E58 /* Bizcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EDEBE24AAF89A000C5E58 /* Bizcard.swift */; };
 		DB1EDEC524AAFB21000C5E58 /* MessagePack in Frameworks */ = {isa = PBXBuildFile; productRef = DB1EDEC424AAFB21000C5E58 /* MessagePack */; };
 		DB1EDED024AB0D3F000C5E58 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EDECF24AB0D3F000C5E58 /* DateFormatter.swift */; };
+		DB255F6524C18922000958CE /* DiagonalStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB255F6424C18922000958CE /* DiagonalStack.swift */; };
 		DB25C75324B7236800813755 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75224B7236800813755 /* ProfileView.swift */; };
 		DB25C75524B725A400813755 /* LargeRoundedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75424B725A400813755 /* LargeRoundedButtonStyle.swift */; };
 		DB25C75724B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25C75624B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift */; };
@@ -99,6 +100,7 @@
 		DB970C9E24A84FF300DE481C /* IdentityListAddIdentityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970C9D24A84FF300DE481C /* IdentityListAddIdentityTableViewCell.swift */; };
 		DB970CA024A8518700DE481C /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970C9F24A8518700DE481C /* UIColor.swift */; };
 		DB970CA224A8660D00DE481C /* AddIdentityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970CA124A8660D00DE481C /* AddIdentityViewController.swift */; };
+		DB9D6DB924C15C9F00785BF1 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9D6DB824C15C9F00785BF1 /* EmptyStateView.swift */; };
 		DBA5F9EC247F90B700C9B552 /* ChatMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA5F9EB247F90B700C9B552 /* ChatMessageTableViewCell.swift */; };
 		DBB358642491EC8D00803C98 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358632491EC8D00803C98 /* URL.swift */; };
 		DBB3586A2491ED9B00803C98 /* DarwinNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB358692491ED8A00803C98 /* DarwinNotificationCenter.swift */; };
@@ -275,6 +277,7 @@
 		DB1EC3752491E945002379A1 /* Mailway.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mailway.entitlements; sourceTree = "<group>"; };
 		DB1EDEBE24AAF89A000C5E58 /* Bizcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bizcard.swift; sourceTree = "<group>"; };
 		DB1EDECF24AB0D3F000C5E58 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		DB255F6424C18922000958CE /* DiagonalStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagonalStack.swift; sourceTree = "<group>"; };
 		DB25C75224B7236800813755 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		DB25C75424B725A400813755 /* LargeRoundedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeRoundedButtonStyle.swift; sourceTree = "<group>"; };
 		DB25C75624B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListIdentityCardCollectionTableViewCell.swift; sourceTree = "<group>"; };
@@ -319,6 +322,7 @@
 		DB970C9F24A8518700DE481C /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		DB970CA124A8660D00DE481C /* AddIdentityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityViewController.swift; sourceTree = "<group>"; };
 		DB970CA424A86DB200DE481C /* EditableAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableAvatarView.swift; sourceTree = "<group>"; };
+		DB9D6DB824C15C9F00785BF1 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		DBA5F9E9247F832900C9B552 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		DBA5F9EB247F90B700C9B552 /* ChatMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageTableViewCell.swift; sourceTree = "<group>"; };
 		DBB358632491EC8D00803C98 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
@@ -588,6 +592,8 @@
 				DB1EC2DD2488E591002379A1 /* HitTestExpandedButton.swift */,
 				DB25C75C24B8225C00813755 /* HidingViews.swift */,
 				DB25C75224B7236800813755 /* ProfileView.swift */,
+				DB9D6DB824C15C9F00785BF1 /* EmptyStateView.swift */,
+				DB255F6424C18922000958CE /* DiagonalStack.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1635,6 +1641,7 @@
 				DB1997B024B5D82100C1A293 /* CreateChatViewController.swift in Sources */,
 				DB7E1E40247BC73B002FC90E /* IdentityListViewController.swift in Sources */,
 				DBE306A62474DF7B00EB7193 /* AppDelegate.swift in Sources */,
+				DB255F6524C18922000958CE /* DiagonalStack.swift in Sources */,
 				DB1EC2D924879936002379A1 /* SettingsViewController.swift in Sources */,
 				DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */,
 				DBE306E0247515C000EB7193 /* DocumentStore.swift in Sources */,
@@ -1654,6 +1661,7 @@
 				DB6DEC79247E4E270040C817 /* SceneCoordinator.swift in Sources */,
 				DB65475524AD897C0039AFE5 /* UIView.swift in Sources */,
 				DBB981162486452C00FB2FE8 /* RootSplitViewController.swift in Sources */,
+				DB9D6DB924C15C9F00785BF1 /* EmptyStateView.swift in Sources */,
 				DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */,
 				DB25C75524B725A400813755 /* LargeRoundedButtonStyle.swift in Sources */,
 				DB1E860424A2189200B1558B /* SidebarPresentationController.swift in Sources */,
