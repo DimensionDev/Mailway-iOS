@@ -30,6 +30,8 @@ internal enum Asset {
   internal enum Color {
     internal enum Background {
       internal static let blue = ColorAsset(name: "Color/Background/blue")
+      internal static let blue300 = ColorAsset(name: "Color/Background/blue300")
+      internal static let blue400 = ColorAsset(name: "Color/Background/blue400")
       internal static let greenLight = ColorAsset(name: "Color/Background/green.light")
       internal static let tealLight = ColorAsset(name: "Color/Background/teal.light")
     }

@@ -91,11 +91,13 @@ extension ChatListViewModel {
         }
         
         cell.avatarViewModel.infos = {
-            let infos: [AvatarViewModel.Info] = zip(recipientStubs, recipients).map { stub, recipient in
+            let infos: [AvatarViewModel.Info] = zip(recipientStubs, recipients).lazy.map { stub, recipient in
                 let name = stub.name ?? "A"
                 let image = recipient?.avatar
                 return AvatarViewModel.Info(name: name, image: image)
-            }.reversed()
+            }
+            .prefix(3)
+            .reversed()
             
             guard !infos.isEmpty else {
                 let avatar: UIImage? = {

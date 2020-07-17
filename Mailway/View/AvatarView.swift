@@ -10,10 +10,25 @@ import Foundation
 import SwiftUI
 
 final class AvatarViewModel: ObservableObject {
+    
+    static let backgroundColors: [Color]  = [
+        Color(Asset.Color.Background.blue.color),
+        Color(Asset.Color.Background.blue400.color),
+        Color(Asset.Color.Background.blue300.color),
+    ]
+    
     @Published var infos: [Info] = []
     
     init(infos: [Info] = []) {
         self.infos = infos
+    }
+    
+    static func backgroundColor(at index: Int, total: Int) -> Color {
+        guard index < total, index < backgroundColors.count else {
+            return backgroundColors.first!
+        }
+        
+        return backgroundColors.prefix(total).reversed()[index]
     }
 }
 
@@ -40,10 +55,10 @@ struct AvatarView: View {
                 }
             }
             if viewModel.infos.count > 1 {
-                DiagonalStack(data: viewModel.infos, scale: 0.7) { item in
+                DiagonalStack(data: Array(viewModel.infos.enumerated()), scale: 0.7) { i, item in
                     ZStack {
                         Circle()
-                            .foregroundColor(Color(Asset.Color.Background.blue.color))
+                            .foregroundColor(AvatarViewModel.backgroundColor(at: i, total: self.viewModel.infos.count))
                         Text(String((item.name).prefix(1)))
                             .font(.system(size: 16, weight: .medium))
                             .foregroundColor(.white)
