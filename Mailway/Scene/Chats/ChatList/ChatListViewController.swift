@@ -64,8 +64,10 @@ extension ChatListViewModel {
 extension ChatListViewModel {
     
     static func configure(cell: ChatListChatRoomTableViewCell, with chat: Chat) {
+        // do not display identity when not only identity in the chat
+        
         let recipientStubs = chat.memberNameStubs?
-            .filter { $0.publicKey != chat.identityPublicKey }  // remove sender
+            .filter { $0.publicKey != chat.identityPublicKey }  // remove self
             .sorted(by: { lhs, rhs in
                 switch (lhs.name, rhs.name) {
                 case (.some(let l), .some(let r)):      return l < r
@@ -74,6 +76,8 @@ extension ChatListViewModel {
                 case (.none, .none):                    return true
                 }
             }) ?? []
+        let identityStub = chat.memberNameStubs?.first(where: { $0.publicKey == chat.identityPublicKey })
+        
         let recipients: [Contact?] = recipientStubs.map { stub in
             let request = Contact.sortedFetchRequest
             request.predicate = Contact.predicate(publicKey: stub.publicKey)
@@ -86,17 +90,42 @@ extension ChatListViewModel {
             }
         }
         
-        cell.avatarViewModel.infos = zip(recipientStubs, recipients).map { stub, recipient in
-            let name = stub.name ?? "A"
-            let image = recipient?.avatar
-            return AvatarViewModel.Info(name: name, image: image)
-        }
+        cell.avatarViewModel.infos = {
+            let infos: [AvatarViewModel.Info] = zip(recipientStubs, recipients).map { stub, recipient in
+                let name = stub.name ?? "A"
+                let image = recipient?.avatar
+                return AvatarViewModel.Info(name: name, image: image)
+            }.reversed()
+            
+            guard !infos.isEmpty else {
+                let avatar: UIImage? = {
+                    guard let stub = identityStub else {
+                        return nil
+                    }
+                    let request = Contact.sortedFetchRequest
+                    request.predicate = Contact.predicate(publicKey: stub.publicKey)
+                    request.fetchLimit = 1
+                    do {
+                        return try chat.managedObjectContext?.fetch(request).first?.avatar
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                        return nil
+                    }
+                }()
+                
+                return [AvatarViewModel.Info(name: identityStub?.name ?? "A", image: avatar)]
+            }
+            return infos
+        }()
         
         cell.titleLabel.text = {
             guard let title = chat.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
                 let names = recipientStubs.compactMap { $0.name }
                 let text = names.sorted().joined(separator: ", ")
-                guard !text.isEmpty else { return "<Unknown>" }
+                guard !text.isEmpty else {
+                    // no recipients but only sender
+                    return chat.memberNameStubs?.first?.name ?? "<Empty>"
+                }
                 return text
             }
             
