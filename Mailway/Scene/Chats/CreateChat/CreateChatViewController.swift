@@ -32,6 +32,7 @@ final class CreateChatViewModel: NSObject {
         self.fetchedResultsController = {
             let fetchRequest = Contact.sortedFetchRequest
             fetchRequest.returnsObjectsAsFaults = false
+            fetchRequest.predicate = Contact.notIdentityPredicate
             fetchRequest.fetchBatchSize = 20
             let controller = NSFetchedResultsController(
                 fetchRequest: fetchRequest,
@@ -46,26 +47,14 @@ final class CreateChatViewModel: NSObject {
         super.init()
 
         fetchedResultsController.delegate = self
-
         
         selectedContacts
             .map { !$0.isEmpty }
             .assign(to: \.value, on: isDoneBarButtonEnabled)
             .store(in: &disposeBag)
-        
-//        context.documentStore.$contacts
-//            .assign(to: \.value, on: self.contacts)
-//            .store(in: &disposeBag)
     }
     
 }
-
-//extension CreateChatViewModel {
-//    enum Section: CaseIterable {
-//        case createChatGroup
-//        case contacts
-//    }
-//}
 
 // MARK: - NSFetchedResultsControllerDelegate
 extension CreateChatViewModel: NSFetchedResultsControllerDelegate {
@@ -289,30 +278,3 @@ extension CreateChatViewController: UITableViewDelegate {
     }
     
 }
-
-// MARK: - SelectChatIdentityViewControllerDelegate
-//extension CreateChatViewController: SelectChatIdentityViewControllerDelegate {
-//
-//    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
-//
-//        guard let recipent = viewModel.selectContact.value else {
-//            return
-//        }
-//        let chatMembers = Set([recipent, identity])
-//        var chat = Chat()
-//        chat.identityKeyID = identity.keyID
-//        chat.identityName = identity.name
-//        chat.memberKeyIDs = chatMembers.map { $0.keyID }
-//        chat.memberNames = chatMembers.map { $0.name }
-//        chat.title = chat.memberNames.joined(separator: ", ")
-//        
-//        let targetChat = context.documentStore.queryExists(chat: chat) ?? chat
-//        let chatRoomViewModel = ChatViewModel(context: context, chat: targetChat)
-//        chatRoomViewModel.shouldEnterEditModeAtAppear = true
-//        
-//        dismiss(animated: true) { [weak self] in
-//            self?.coordinator.present(scene: .chatRoom(viewModel: chatRoomViewModel), from: nil, transition: .showDetail)
-//        }
-//    }
-//
-//}
