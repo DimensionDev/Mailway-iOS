@@ -18,14 +18,18 @@ final class ComposeMessageViewModel: NSObject {
     var disposeBag = Set<AnyCancellable>()
     
     let fetchedResultsController: NSFetchedResultsController<Contact>
-    
+
     // input
     let context: AppContext
     let recipientPublicKeys: [Ed25519.PublicKey]
     let message = CurrentValueSubject<String, Never>("")
     
     // output
-    let isComposeBarButtonEnabled = CurrentValueSubject<Bool, Never>(false)
+    let isComposeBarButtonEnabled = CurrentValueSubject<
+        Bool, Never>(false)
+    let titleViewContentInset = CurrentValueSubject<UIEdgeInsets, Never>(UIEdgeInsets())
+    let titleViewHeight = CurrentValueSubject<CGFloat, Never>(.zero)
+    let identities = CurrentValueSubject<[Contact], Never>([])
     let selectedIdentity = CurrentValueSubject<Contact?, Never>(nil)
     let selectedIdentityPrivateKey = CurrentValueSubject<Ed25519.PrivateKey?, Never>(nil)
     
@@ -55,6 +59,24 @@ final class ComposeMessageViewModel: NSObject {
         message
             .map { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
             .assign(to: \.value, on: isComposeBarButtonEnabled)
+            .store(in: &disposeBag)
+        
+        identities
+            .sink { identities in
+                if let selectedIdentity = self.selectedIdentity.value {
+                    guard identities.contains(selectedIdentity) else {
+                        // update selection if old removed
+                        self.selectedIdentity.value = identities.first
+                        return
+                    }
+
+                    // do nothing
+
+                } else {
+                    // fulfill if nil
+                    self.selectedIdentity.value = identities.first
+                }
+            }
             .store(in: &disposeBag)
         
         selectedIdentity
@@ -148,28 +170,29 @@ extension ComposeMessageViewModel {
 extension ComposeMessageViewModel: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        // let snapshot = snapshot as NSDiffableDataSourceSnapshot<Contact, NSManagedObjectID>
-        
-        if selectedIdentityPrivateKey.value == nil {
-            let identities = fetchedResultsController.sections?.first?.objects as? [Contact] ?? []
-            selectedIdentity.value = identities.first
-        }
+        let identities = fetchedResultsController.sections?.first?.objects as? [Contact] ?? []
+        self.identities.value = identities
     }
     
 }
 
-final class ComposeMessageViewController: UIViewController, NeedsDependency {
+final class ComposeMessageViewController: UIViewController, NeedsDependency, ComposeMessageTransitionableViewController {
     
     var disposeBag = Set<AnyCancellable>()
+    var observations = Set<NSKeyValueObservation>()
+    
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     var viewModel: ComposeMessageViewModel!
     
+    private(set) var transitionController: ComposeMessageTransitionController!
+    
     let identitySelectionNavigationItemTitleViewTapGestureRecognizer = UITapGestureRecognizer()
     private lazy var identitySelectionNavigationItemTitleView: IdentitySelectionNavigationItemTitleView = {
         let titleView = IdentitySelectionNavigationItemTitleView()
         titleView.addGestureRecognizer(identitySelectionNavigationItemTitleViewTapGestureRecognizer)
+        titleView.entryView.disclosureButton.isHidden = false
         return titleView
     }()
     
@@ -209,6 +232,18 @@ extension ComposeMessageViewController {
         navigationItem.leftBarButtonItem = closeBarButtonItem
         navigationItem.rightBarButtonItem = composeBarButtonItem
         navigationItem.titleView = identitySelectionNavigationItemTitleView
+        
+        identitySelectionNavigationItemTitleView.observe(\.frame) { [weak self] titleView, change in
+            guard let `self` = self else { return }
+
+            let margin = titleView.frame.origin.y
+            let left = titleView.frame.origin.x
+            let right = left
+            self.viewModel.titleViewContentInset.value = UIEdgeInsets(top: margin, left: left, bottom: margin, right: right)
+            self.viewModel.titleViewHeight.value = titleView.frame.height
+        }.store(in: &observations)
+        
+        transitionController = ComposeMessageTransitionController(viewController: self)
         
         identitySelectionNavigationItemTitleViewTapGestureRecognizer.addTarget(self, action: #selector(ComposeMessageViewController.tapGestureRecognizerHandler(_:)))
         
@@ -327,9 +362,20 @@ extension ComposeMessageViewController {
         guard sender === identitySelectionNavigationItemTitleViewTapGestureRecognizer else {
             return
         }
+        let identities = viewModel.identities.value
+        guard !identities.isEmpty else {
+            return
+        }
+        
+        guard let selectIdentity = viewModel.selectedIdentity.value,
+        let selectIndex = identities.firstIndex(of: selectIdentity) else {
+            return
+        }
             
-        let selectChatIdentityViewModel = SelectChatIdentityViewModel(context: context, identities: [])
-        coordinator.present(scene: .selectChatIdentity(viewModel: selectChatIdentityViewModel, delegate: self), from: self, transition: .modal(animated: true, completion: nil))
+        let selectIdentityDropdownMenuViewModel = SelectIdentityDropdownMenuViewModel(context: context, identities: identities, selectIndex: selectIndex)
+        viewModel.titleViewContentInset.assign(to: \.value, on: selectIdentityDropdownMenuViewModel.cellContentInset).store(in: &selectIdentityDropdownMenuViewModel.disposeBag)
+        viewModel.titleViewHeight.assign(to: \.value, on: selectIdentityDropdownMenuViewModel.cellEntryViewHeight).store(in: &disposeBag)
+        coordinator.present(scene: .selectIdentityDropdownMenu(viewModel: selectIdentityDropdownMenuViewModel, delegate: self), from: self, transition: .custom(transitioningDelegate: transitionController))
     }
     
 }
@@ -348,11 +394,11 @@ extension ComposeMessageViewController: UITextViewDelegate {
 }
 
 
-// MARK: - SelectChatIdentityViewControllerDelegate
-extension ComposeMessageViewController: SelectChatIdentityViewControllerDelegate {
+// MARK: - SelectIdentityDropdownMenuViewControllerDelegate
+extension ComposeMessageViewController: SelectIdentityDropdownMenuViewControllerDelegate {
     
-    func selectChatIdentityViewController(_ viewController: SelectChatIdentityViewController, didSelectIdentity identity: Contact) {
-        
+    func selectIdentityDropdownMenuViewController(_ controller: SelectIdentityDropdownMenuViewController, didSelectIdentity identity: Contact) {
+        viewModel.selectedIdentity.value = identity
     }
     
 }

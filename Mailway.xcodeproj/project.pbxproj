@@ -19,6 +19,10 @@
 		DB0A9057249B43B200FE0AFC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB0A9055249B43B200FE0AFC /* Main.storyboard */; };
 		DB0A9059249B43B300FE0AFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB0A9058249B43B300FE0AFC /* Assets.xcassets */; };
 		DB0A905C249B43B300FE0AFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB0A905A249B43B300FE0AFC /* LaunchScreen.storyboard */; };
+		DB0E6DD224C543C3000396C3 /* ComposeMessageTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E6DD124C543C3000396C3 /* ComposeMessageTransitionController.swift */; };
+		DB0E6DD524C54943000396C3 /* SelectIdentityDropdownMenuAnimationTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E6DD424C54943000396C3 /* SelectIdentityDropdownMenuAnimationTransitioning.swift */; };
+		DB0E6DD724C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E6DD624C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift */; };
+		DB0E6DD924C58855000396C3 /* NSKeyValueObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E6DD824C58855000396C3 /* NSKeyValueObservation.swift */; };
 		DB1191EF24A887A400C1342E /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1191EE24A887A400C1342E /* AddIdentityView.swift */; };
 		DB1191F124A887CD00C1342E /* EditableAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970CA424A86DB200DE481C /* EditableAvatarView.swift */; };
 		DB1191F424A890AD00C1342E /* EditableAvatarButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1191F324A890AD00C1342E /* EditableAvatarButtonStyle.swift */; };
@@ -231,6 +235,10 @@
 		DB0A905D249B43B300FE0AFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB0A9064249B446A00FE0AFC /* CoreDataStackTestsHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoreDataStackTestsHost.entitlements; sourceTree = "<group>"; };
 		DB0A9065249B45E800FE0AFC /* UnitTestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = UnitTestsPlan.xctestplan; path = /Users/MainasuK/Developer/Swift/SujiTech/Mailway/CoreDataStackTestsHost/UnitTestsPlan.xctestplan; sourceTree = "<absolute>"; };
+		DB0E6DD124C543C3000396C3 /* ComposeMessageTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeMessageTransitionController.swift; sourceTree = "<group>"; };
+		DB0E6DD424C54943000396C3 /* SelectIdentityDropdownMenuAnimationTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectIdentityDropdownMenuAnimationTransitioning.swift; sourceTree = "<group>"; };
+		DB0E6DD624C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectIdentityDropdownMenuViewController.swift; sourceTree = "<group>"; };
+		DB0E6DD824C58855000396C3 /* NSKeyValueObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSKeyValueObservation.swift; sourceTree = "<group>"; };
 		DB1191EE24A887A400C1342E /* AddIdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityView.swift; sourceTree = "<group>"; };
 		DB1191F324A890AD00C1342E /* EditableAvatarButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableAvatarButtonStyle.swift; sourceTree = "<group>"; };
 		DB17252D24B8420E0090DFA9 /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
@@ -519,6 +527,15 @@
 			path = CoreDataStackTestsHost;
 			sourceTree = "<group>";
 		};
+		DB0E6DD324C54577000396C3 /* ComposeMessage-SelectChatIdentity */ = {
+			isa = PBXGroup;
+			children = (
+				DB0E6DD124C543C3000396C3 /* ComposeMessageTransitionController.swift */,
+				DB0E6DD424C54943000396C3 /* SelectIdentityDropdownMenuAnimationTransitioning.swift */,
+			);
+			path = "ComposeMessage-SelectChatIdentity";
+			sourceTree = "<group>";
+		};
 		DB1191F024A887A800C1342E /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -636,6 +653,7 @@
 			children = (
 				DB255F6824C1A1CB000958CE /* View */,
 				DB1997A424B2F87300C1A293 /* ComposeMessageViewController.swift */,
+				DB0E6DD624C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift */,
 			);
 			path = ComposeMessage;
 			sourceTree = "<group>";
@@ -654,6 +672,7 @@
 				DB1E85DB24A0808F00B1558B /* ViewControllerAnimatedTransitioning.swift */,
 				DB1E85DC24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift */,
 				DB1E85E124A082BD00B1558B /* MainTab-Sidebar */,
+				DB0E6DD324C54577000396C3 /* ComposeMessage-SelectChatIdentity */,
 			);
 			path = Transition;
 			sourceTree = "<group>";
@@ -770,6 +789,7 @@
 				DB970C9F24A8518700DE481C /* UIColor.swift */,
 				DB65475424AD897C0039AFE5 /* UIView.swift */,
 				DB65475224ACA6BB0039AFE5 /* String.swift */,
+				DB0E6DD824C58855000396C3 /* NSKeyValueObservation.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1664,6 +1684,7 @@
 				DBE306E0247515C000EB7193 /* DocumentStore.swift in Sources */,
 				DB1997A524B2F87300C1A293 /* ComposeMessageViewController.swift in Sources */,
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
+				DB0E6DD724C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift in Sources */,
 				DB255F6A24C1BA7A000958CE /* IdentitySelectionEntryTableViewCell.swift in Sources */,
 				DB65474F24AC39970039AFE5 /* ViewState+AddIdentityView.swift in Sources */,
 				DB58E66D24BD932D0072FED2 /* CreateContactEntryTableViewCell.swift in Sources */,
@@ -1707,6 +1728,7 @@
 				DB970CA024A8518700DE481C /* UIColor.swift in Sources */,
 				DB1E85D924A079A500B1558B /* MainTabTransitionController.swift in Sources */,
 				DB65475324ACA6BB0039AFE5 /* String.swift in Sources */,
+				DB0E6DD524C54943000396C3 /* SelectIdentityDropdownMenuAnimationTransitioning.swift in Sources */,
 				DBE040072492413600C5184D /* ContactDetailView.swift in Sources */,
 				DBE306CD2474E19200EB7193 /* SettingsView.swift in Sources */,
 				DB772FF524A8423800558F37 /* SettingEntryTableViewCell.swift in Sources */,
@@ -1714,10 +1736,12 @@
 				DB25C75724B732FF00813755 /* ContactListIdentityCardCollectionTableViewCell.swift in Sources */,
 				DB17252E24B8420E0090DFA9 /* CALayer.swift in Sources */,
 				DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */,
+				DB0E6DD224C543C3000396C3 /* ComposeMessageTransitionController.swift in Sources */,
 				DB772FF224A8382E00558F37 /* SplitDemoViewController.swift in Sources */,
 				DB1E85E524A085A200B1558B /* CGVector.swift in Sources */,
 				DB7E1E43247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift in Sources */,
 				DB1997B424B6EB5400C1A293 /* IdentityDetailViewController.swift in Sources */,
+				DB0E6DD924C58855000396C3 /* NSKeyValueObservation.swift in Sources */,
 				DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */,
 				DB6DEC84247F745F0040C817 /* ChatListChatRoomTableViewCell.swift in Sources */,
 				DB6DEC81247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift in Sources */,

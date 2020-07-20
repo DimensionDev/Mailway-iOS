@@ -64,6 +64,7 @@ extension SceneCoordinator {
         // chats
         case createChat
         case composeMessage(viewModel: ComposeMessageViewModel)
+        case selectIdentityDropdownMenu(viewModel: SelectIdentityDropdownMenuViewModel, delegate: SelectIdentityDropdownMenuViewControllerDelegate)
         case decryptMessage
         case selectChatIdentity(viewModel: SelectChatIdentityViewModel, delegate: SelectChatIdentityViewControllerDelegate)
         case chatRoom(viewModel: ChatViewModel)
@@ -144,6 +145,11 @@ extension SceneCoordinator {
         case .composeMessage(let viewModel):
             let _viewController = ComposeMessageViewController()
             _viewController.viewModel = viewModel
+            viewController = _viewController
+        case .selectIdentityDropdownMenu(let viewModel, let delegate):
+            let _viewController = SelectIdentityDropdownMenuViewController()
+            _viewController.viewModel = viewModel
+            _viewController.delegate = delegate
             viewController = _viewController
         case .decryptMessage:
             viewController = DecryptMessageViewController()
