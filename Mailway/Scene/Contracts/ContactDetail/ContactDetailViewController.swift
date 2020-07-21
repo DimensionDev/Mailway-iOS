@@ -141,20 +141,7 @@ extension ContactDetailViewController {
             .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: false)
             .sink { [weak self] _ in
                 guard let `self` = self else { return }
-                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-                let toFileAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toFile, style: .default) { _ in
-                    os_log("%{public}s[%{public}ld], %{public}s: share as file", ((#file as NSString).lastPathComponent), #line, #function)
-
-                }
-                alertController.addAction(toFileAction)
-                let toQRCodeAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toQrCode, style: .default) { _ in
-                    os_log("%{public}s[%{public}ld], %{public}s: share as QR Code", ((#file as NSString).lastPathComponent), #line, #function)
-                    
-                }
-                alertController.addAction(toQRCodeAction)
-                let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                self.present(alertController, animated: true, completion: nil)
+                ShareService.share(contact: self.viewModel.contact, from: self)
             }
             .store(in: &disposeBag)
         

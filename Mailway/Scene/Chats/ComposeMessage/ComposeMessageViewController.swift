@@ -400,7 +400,7 @@ extension ComposeMessageViewController {
             .sink { [weak self] identity in
                 guard let `self` = self else { return }
                 let entryView = self.identitySelectionNavigationItemTitleView.entryView
-                // entryView.avatarImageView.image = identity?.avatar ?? UIImage.placeholder(color: .systemFill)
+                entryView.avatarViewModel.infos = [AvatarViewModel.Info(name: identity?.name ?? "A", image: identity?.avatar)]
                 entryView.nameLabel.text = identity?.name ?? "-"
                 entryView.shortKeyIDLabel.text = identity?.keypair.flatMap { String($0.keyID.suffix(8)).separate(every: 4, with: " ") } ?? "-"
             }

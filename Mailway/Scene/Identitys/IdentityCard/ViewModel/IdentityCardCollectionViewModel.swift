@@ -70,6 +70,7 @@ extension IdentityCardCollectionViewModel {
 extension IdentityCardCollectionViewModel {
     
     static func configure(cell: IdentityCardCollectionViewCell, with identity: Contact) {
+        cell.identityCardView.avatarViewModel.infos = [AvatarViewModel.Info(name: identity.name, image: identity.avatar)]
         cell.identityCardView.nameLabel.text = identity.name
         cell.identityCardView.shortKeyIDLabel.text = identity.keypair.flatMap { keypair in
             return String(keypair.keyID.suffix(8)).separate(every: 4, with: " ")

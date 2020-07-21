@@ -31,6 +31,11 @@
 "ComposeMessage.Error.RecipientNotFound.Title" = "Recipient Not Found";
 "ContactDetail.Alert.ShareProfile.ToFile" = "To File";
 "ContactDetail.Alert.ShareProfile.ToQrCode" = "To QR Code";
+"ContactDetail.Error.ContactBizcardNotFound.ErrorDescription" = "Bizcard Not Found";
+"ContactDetail.Error.ContactBizcardNotFound.FailureReason" = "Cannot share bizcard because bizcard of this contact not found.";
+"ContactDetail.Error.ContactBizcardNotFound.Message" = "Cannot share bizcard because bizcard of this contact not found. Please try again.";
+"ContactDetail.Error.ContactBizcardNotFound.RecoverySuggestion" = "Please try again.";
+"ContactDetail.Error.ContactBizcardNotFound.Title" = "Bizcard Not Found";
 "ContactDetail.Error.SignerKeyNotFound.ErrorDescription" = "Key Not Found";
 "ContactDetail.Error.SignerKeyNotFound.FailureReason" = "Cannot share profile because signer key of this profile not found.";
 "ContactDetail.Error.SignerKeyNotFound.Message" = "Cannot share profile because signer key of this profile not found. Please try again.";

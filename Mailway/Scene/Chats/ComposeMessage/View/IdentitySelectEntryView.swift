@@ -67,6 +67,7 @@ extension IdentitySelectEntryView {
             bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor, constant: 4),
             hostingController.view.widthAnchor.constraint(equalTo: hostingController.view.heightAnchor, multiplier: 1.0),
         ])
+        hostingController.view.backgroundColor = .clear
         
         colorBarView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(colorBarView)
@@ -118,13 +119,6 @@ extension IdentitySelectEntryView {
         ])
         
 
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        // avatarImageView.layer.masksToBounds = true
-        // avatarImageView.layer.cornerRadius = avatarImageView.frame.width * 0.5
     }
     
 }

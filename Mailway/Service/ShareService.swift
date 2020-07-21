@@ -44,7 +44,7 @@ extension ShareService {
         let toFileAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toFile, style: .default) { _ in
             os_log("%{public}s[%{public}ld], %{public}s: share as file", ((#file as NSString).lastPathComponent), #line, #function)
             do {
-                let card = try ShareService.identityCard(identity: identity)
+                let card = try ShareService.bizcard(identity: identity)
                 let serialized = try card.serialize()
                 let filename = identity.name + "." + String.bizcardFileExtension
                 guard let fileURL = createTempFile(filename: filename, data: Data(serialized.utf8)) else {
@@ -79,7 +79,49 @@ extension ShareService {
         viewController.present(alertController, animated: true, completion: nil)
     }
     
-    private static func identityCard(identity: Contact) throws -> Bizcard {
+    static func share(contact: Contact, from viewController: UIViewController, anchor view: UIView? = nil) {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let toFileAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toFile, style: .default) { _ in
+            os_log("%{public}s[%{public}ld], %{public}s: share as file", ((#file as NSString).lastPathComponent), #line, #function)
+            do {
+                guard let serialized = contact.businessCard?.businessCard else {
+                    throw ShareProfileError.bizcardNotFound
+                }
+                let filename = contact.name + "." + String.bizcardFileExtension
+                guard let fileURL = createTempFile(filename: filename, data: Data(serialized.utf8)) else {
+                    assertionFailure()
+                    return
+                }
+                
+                let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
+                activityViewController.completionWithItemsHandler = { type, result, items, error in
+                    os_log("%{public}s[%{public}ld], %{public}s: share activity complete: %s %s %s %s", ((#file as NSString).lastPathComponent), #line, #function, type.debugDescription, result.description, items?.debugDescription ?? "[]", error.debugDescription)
+                    // do nothing
+                }
+                activityViewController.setupAnchor(viewController: viewController, view: view)
+                viewController.present(activityViewController, animated: true)
+            } catch {
+                let errorAlertController = UIAlertController.standardAlert(of: error)
+                viewController.present(errorAlertController, animated: true, completion: nil)
+            }
+        }
+        alertController.addAction(toFileAction)
+        
+        let toQRCodeAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toQrCode, style: .default) { _ in
+            os_log("%{public}s[%{public}ld], %{public}s: share as QR Code", ((#file as NSString).lastPathComponent), #line, #function)
+            
+        }
+        alertController.addAction(toQRCodeAction)
+        
+        let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        alertController.setupAnchor(viewController: viewController, view: view)
+        viewController.present(alertController, animated: true, completion: nil)
+    }
+    
+    private static func bizcard(identity: Contact) throws -> Bizcard {
         guard let keypair = identity.keypair, let privateKeyText = keypair.privateKey,
         let privateKey = Ed25519.PrivateKey.deserialize(from: privateKeyText) else {
             throw ShareProfileError.SignerKeyNotFound
@@ -93,7 +135,7 @@ extension ShareService {
         let card = Bizcard(info: info, supplementation: IdentitySupplementation())
         return card
     }
-    
+
 }
 
 extension UIActivityViewController {
@@ -131,6 +173,7 @@ extension ShareService {
     enum ShareProfileError: Swift.Error, LocalizedError {
         case `internal`
         case SignerKeyNotFound
+        case bizcardNotFound
         
         var errorDescription: String? {
             switch self {
@@ -138,6 +181,8 @@ extension ShareService {
                 return L10n.Error.InternalError.errorDescription
             case .SignerKeyNotFound:
                 return L10n.ContactDetail.Error.SignerKeyNotFound.errorDescription
+            case .bizcardNotFound:
+                return L10n.ContactDetail.Error.ContactBizcardNotFound.errorDescription
             }
         }
         
@@ -147,6 +192,8 @@ extension ShareService {
                 return L10n.Error.InternalError.failureReason
             case .SignerKeyNotFound:
                 return L10n.ContactDetail.Error.SignerKeyNotFound.failureReason
+            case .bizcardNotFound:
+                return L10n.ContactDetail.Error.ContactBizcardNotFound.failureReason
             }
         }
         
@@ -156,6 +203,8 @@ extension ShareService {
                 return L10n.Error.InternalError.recoverySuggestion
             case .SignerKeyNotFound:
                 return L10n.ContactDetail.Error.SignerKeyNotFound.recoverySuggestion
+            case .bizcardNotFound:
+                return L10n.ContactDetail.Error.ContactBizcardNotFound.recoverySuggestion
             }
         }
     }

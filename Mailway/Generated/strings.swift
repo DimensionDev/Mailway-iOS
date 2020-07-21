@@ -85,6 +85,18 @@ internal enum L10n {
       }
     }
     internal enum Error {
+      internal enum ContactBizcardNotFound {
+        /// Bizcard Not Found
+        internal static let errorDescription = L10n.tr("Localizable", "ContactDetail.Error.ContactBizcardNotFound.ErrorDescription")
+        /// Cannot share bizcard because bizcard of this contact not found.
+        internal static let failureReason = L10n.tr("Localizable", "ContactDetail.Error.ContactBizcardNotFound.FailureReason")
+        /// Cannot share bizcard because bizcard of this contact not found. Please try again.
+        internal static let message = L10n.tr("Localizable", "ContactDetail.Error.ContactBizcardNotFound.Message")
+        /// Please try again.
+        internal static let recoverySuggestion = L10n.tr("Localizable", "ContactDetail.Error.ContactBizcardNotFound.RecoverySuggestion")
+        /// Bizcard Not Found
+        internal static let title = L10n.tr("Localizable", "ContactDetail.Error.ContactBizcardNotFound.Title")
+      }
       internal enum SignerKeyNotFound {
         /// Key Not Found
         internal static let errorDescription = L10n.tr("Localizable", "ContactDetail.Error.SignerKeyNotFound.ErrorDescription")

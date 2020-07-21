@@ -47,21 +47,43 @@ struct AvatarView: View {
         Group {
             if viewModel.infos.count <= 1 {
                 ZStack {
-                    Circle()
-                        .foregroundColor(Color(Asset.Color.Background.blue.color))
-                    Text(String((viewModel.infos.first?.name ?? "A").prefix(1)))
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(.white)
+                    if viewModel.infos.first?.image != nil {
+                        Circle()
+                            .overlay(
+                                GeometryReader { proxy in
+                                    Image(uiImage: self.viewModel.infos.first?.image ?? UIImage.placeholder(color: .systemFill))
+                                        .resizable()
+                                        .cornerRadius(proxy.size.width * 0.5)
+                                }
+                            )
+                    } else {
+                        Circle()
+                            .foregroundColor(Color(Asset.Color.Background.blue.color))
+                        Text(String((viewModel.infos.first?.name ?? "A").prefix(1)))
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(.white)
+                    }
                 }
             }
             if viewModel.infos.count > 1 {
                 DiagonalStack(data: Array(viewModel.infos.enumerated()), scale: 0.7) { i, item in
                     ZStack {
-                        Circle()
-                            .foregroundColor(AvatarViewModel.backgroundColor(at: i, total: self.viewModel.infos.count))
-                        Text(String((item.name).prefix(1)))
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.white)
+                        if self.viewModel.infos.first?.image != nil {
+                            Circle()
+                                .overlay(
+                                    GeometryReader { proxy in
+                                        Image(uiImage: self.viewModel.infos.first?.image ?? UIImage.placeholder(color: .systemFill))
+                                            .resizable()
+                                            .cornerRadius(proxy.size.width * 0.5)
+                                    }
+                                )
+                        } else {
+                            Circle()
+                                .foregroundColor(AvatarViewModel.backgroundColor(at: i, total: self.viewModel.infos.count))
+                            Text(String((item.name).prefix(1)))
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.white)
+                        }
                     }
                     .overlay(
                         GeometryReader { proxy in
