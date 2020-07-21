@@ -15,6 +15,7 @@ final public class Contact: NSManagedObject {
     @NSManaged public private(set) var name: String
     @NSManaged public private(set) var note: String?
     @NSManaged public private(set) var avatarData: Data?
+    @NSManaged public private(set) var color: UIColor
     
     @NSManaged public private(set) var createdAt: Date
     @NSManaged public private(set) var updatedAt: Date
@@ -85,6 +86,7 @@ extension Contact {
         contact.name = property.name
         contact.note = property.note
         contact.avatar = property.avatar
+        contact.color = property.color
         
         contact.keypair = keypair
         contact.businessCard = businessCard
@@ -92,6 +94,11 @@ extension Contact {
 //        contact.mutableSetValue(forKey: #keyPath(Contact.channels)).addObjects(from: channels)
         return contact
     }
+    
+    public func update(color: UIColor) {
+        self.color = color
+    }
+    
 }
 
 
@@ -100,11 +107,13 @@ extension Contact {
         public let name: String
         public let note: String?
         public let avatar: UIImage?
+        public let color: UIColor
         
-        public init(name: String, note: String? = nil, avatar: UIImage? = nil) {
+        public init(name: String, note: String? = nil, avatar: UIImage? = nil, color: UIColor) {
             self.name = name
             self.note = note
             self.avatar = avatar
+            self.color = color
         }
     }
 }

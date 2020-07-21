@@ -13,9 +13,6 @@ struct AddIdentityView: View {
     
     @EnvironmentObject var context: AppContext
     @ObservedObject var keyboard = KeyboardResponder()
-    
-//    @State var privateKeyArmor = "pri1q8gqt3uyktu92n0vf22vhff3psmtx76ufxwmtpy7n59sns3r4ulqp3ynhe-Ed25519"   // TODO:
-//    @State var publicKeyArmor = "pub17rae4d3fmzvndag07h3vaw9ecymm7x9y6ptvj6k0wfn4jf5ujq2q9dws07-Ed25519"    // TODO:
         
     var body: some View {
         ScrollView {

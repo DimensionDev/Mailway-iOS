@@ -75,7 +75,7 @@ final class AddIdentityViewModel: NSObject {
         // TODO:
         
         // prepare database stuff
-        let contactProperty = Contact.Property(name: name, note: note.isEmpty ? nil : note, avatar: nil)
+        let contactProperty = Contact.Property(name: name, note: note.isEmpty ? nil : note, avatar: nil, color: UIColor.pickPanelColors.randomElement()!)
         
         let ed25519Keypair = Ed25519.Keypair()
         let privateKey = ed25519Keypair.privateKey

@@ -82,7 +82,7 @@ struct ContactDetailView_Previews: PreviewProvider {
         let keypairProperty = Keypair.Property(privateKey: nil, publicKey: "", keyID: "0816fe6c1edebe9fbb83af9102ad9c899abec1a87a1d123bc24bf119035a2853")
         let keypair = Keypair.insert(into: managedObjectContext, property: keypairProperty)
         
-        let identityProperty = Contact.Property(name: "Alice", note: "Alice in the Book\nPhone Number: +00 123-456-7890")
+        let identityProperty = Contact.Property(name: "Alice", note: "Alice in the Book\nPhone Number: +00 123-456-7890", color: UIColor.pickPanelColors.randomElement()!)
         let channels: [ContactChannel] = [
             ContactChannel.insert(into: managedObjectContext, property: .init(name: .twitter, value: "@alice")),
             ContactChannel.insert(into: managedObjectContext, property: .init(name: .twitter, value: "@alice1")),

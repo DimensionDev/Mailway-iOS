@@ -4,6 +4,7 @@ PODS:
   - NtgeCore (0.1.0)
   - NtgeCore/Tests (0.1.0)
   - SwiftGen (6.2.0)
+  - TOCropViewController (2.5.4)
   - "UITextView+Placeholder (1.4.0)"
 
 DEPENDENCIES:
@@ -12,6 +13,7 @@ DEPENDENCIES:
   - NtgeCore (from `../ntge`)
   - NtgeCore/Tests (from `../ntge`)
   - SwiftGen (~> 6.2.0)
+  - TOCropViewController (~> 2.5.4)
   - "UITextView+Placeholder (~> 1.4.0)"
 
 SPEC REPOS:
@@ -19,6 +21,7 @@ SPEC REPOS:
     - Floaty
     - GrowingTextView
     - SwiftGen
+    - TOCropViewController
     - "UITextView+Placeholder"
 
 EXTERNAL SOURCES:
@@ -30,8 +33,9 @@ SPEC CHECKSUMS:
   GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
   NtgeCore: e0437e1167105ded1b91f4a4f5975f36a8c6a9b2
   SwiftGen: 77e88c8609381660cc1084c5ba8e1dc6065de692
+  TOCropViewController: 2a1ae1242600b1f2d996fd91a5268b2309a33b5c
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 6a91c39a6590f6db66aafedc09bbdf16c957f261
+PODFILE CHECKSUM: 83c980510575ef1716e9c6f183bf19af452c2099
 
 COCOAPODS: 1.9.3

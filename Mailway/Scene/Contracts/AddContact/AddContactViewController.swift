@@ -231,7 +231,7 @@ extension AddContactViewController: UIDocumentPickerDelegate {
                         channels.append(channel)
                     }
                     
-                    let contactProperty = Contact.Property(name: card.supplementation?.name ?? card.info.name, note: nil, avatar: nil)
+                    let contactProperty = Contact.Property(name: card.supplementation?.name ?? card.info.name, note: nil, avatar: nil, color: UIColor.pickPanelColors.randomElement()!)
                     Contact.insert(into: managedObjectContext, property: contactProperty, keypair: keypair, channels: channels, businessCard: businessCard)
                 }
                 .sink(receiveCompletion: { _ in

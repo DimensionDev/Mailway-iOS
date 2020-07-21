@@ -123,6 +123,7 @@
 		DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC9931A249788B9004C1264 /* ContactChannel.swift */; };
 		DBCB202B24C68D8900074F7A /* DraftListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB202A24C68D8900074F7A /* DraftListViewController.swift */; };
 		DBCB202F24C68F6D00074F7A /* DraftListMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB202E24C68F6D00074F7A /* DraftListMessageTableViewCell.swift */; };
+		DBCB203724C6D2ED00074F7A /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB203624C6D2ED00074F7A /* UIImage.swift */; };
 		DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040032492303000C5184D /* ContactDetailViewController.swift */; };
 		DBE040072492413600C5184D /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040062492413600C5184D /* ContactDetailView.swift */; };
 		DBE04010249343B000C5184D /* MailwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0400F249343B000C5184D /* MailwayUITests.swift */; };
@@ -358,6 +359,7 @@
 		DBC9931A249788B9004C1264 /* ContactChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactChannel.swift; sourceTree = "<group>"; };
 		DBCB202A24C68D8900074F7A /* DraftListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftListViewController.swift; sourceTree = "<group>"; };
 		DBCB202E24C68F6D00074F7A /* DraftListMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftListMessageTableViewCell.swift; sourceTree = "<group>"; };
+		DBCB203624C6D2ED00074F7A /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		DBE040032492303000C5184D /* ContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
 		DBE040062492413600C5184D /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		DBE0400D249343B000C5184D /* MailwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MailwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -791,6 +793,7 @@
 				DB28139F2484F64A001CDD19 /* NSLayoutConstraint.swift */,
 				DB65475024AC66460039AFE5 /* UIAlertController.swift */,
 				DB970C9F24A8518700DE481C /* UIColor.swift */,
+				DBCB203624C6D2ED00074F7A /* UIImage.swift */,
 				DB65475424AD897C0039AFE5 /* UIView.swift */,
 				DB65475224ACA6BB0039AFE5 /* String.swift */,
 				DB0E6DD824C58855000396C3 /* NSKeyValueObservation.swift */,
@@ -1714,6 +1717,7 @@
 				DBE306E0247515C000EB7193 /* DocumentStore.swift in Sources */,
 				DB1997A524B2F87300C1A293 /* ComposeMessageViewController.swift in Sources */,
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
+				DBCB203724C6D2ED00074F7A /* UIImage.swift in Sources */,
 				DB0E6DD724C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift in Sources */,
 				DB255F6A24C1BA7A000958CE /* IdentitySelectionEntryTableViewCell.swift in Sources */,
 				DB65474F24AC39970039AFE5 /* ViewState+AddIdentityView.swift in Sources */,

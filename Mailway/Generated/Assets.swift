@@ -36,6 +36,18 @@ internal enum Asset {
       internal static let greenLight = ColorAsset(name: "Color/Background/green.light")
       internal static let tealLight = ColorAsset(name: "Color/Background/teal.light")
     }
+    internal enum PickPanel {
+      internal static let blueLight = ColorAsset(name: "Color/PickPanel/blue.light")
+      internal static let disableLight = ColorAsset(name: "Color/PickPanel/disable.light")
+      internal static let greenLight = ColorAsset(name: "Color/PickPanel/green.light")
+      internal static let indigoLight = ColorAsset(name: "Color/PickPanel/indigo.light")
+      internal static let orangeLight = ColorAsset(name: "Color/PickPanel/orange.light")
+      internal static let pinkLight = ColorAsset(name: "Color/PickPanel/pink.light")
+      internal static let purpleLight = ColorAsset(name: "Color/PickPanel/purple.light")
+      internal static let redLight = ColorAsset(name: "Color/PickPanel/red.light")
+      internal static let tealLight = ColorAsset(name: "Color/PickPanel/teal.light")
+      internal static let yellowLight = ColorAsset(name: "Color/PickPanel/yellow.light")
+    }
     internal enum Tint {
       internal static let barButtonItem = ColorAsset(name: "Color/Tint/bar.button.item")
     }
