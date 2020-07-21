@@ -316,13 +316,14 @@ extension DecryptMessageViewModel {
             armoredMessage: result.armoredMessage,
             payload: result.payload,
             payloadKind: ChatMessage.PayloadKind(rawValue: result.extra.payloadKind.rawValue) ?? .unknown,
+            isDraft: false,
             messageTimestamp: result.messageTimestamp,
             composeTimestamp: nil,
             receiveTimestamp: Date(),
             shareTimestamp: nil
         )
         
-        return DocumentStore.saveChatMessage(into: context.managedObjectContext, chatMessageProperty: chatMessageProperty, identityPrivateKey: identityPrivateKey)
+        return DocumentStore.saveChatMessageAndCreateChat(into: context.managedObjectContext, chatMessageProperty: chatMessageProperty, identityPrivateKey: identityPrivateKey)
     }
     
 }

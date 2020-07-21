@@ -8,6 +8,12 @@
 
 "Common.Cancel" = "Cancel";
 "Common.Ok" = "OK";
+"ComposeMessage.Alert.DiscardCompose.Discard" = "Discard";
+"ComposeMessage.Alert.DiscardCompose.MessageComposeOrSaveDraft" = "Please confirm discard message composing or save as draft.";
+"ComposeMessage.Alert.DiscardCompose.MessageComposeOrUpdateDraft" = "Please confirm discard message composing or update draft.";
+"ComposeMessage.Alert.DiscardCompose.SaveDraft" = "Save Draft";
+"ComposeMessage.Alert.DiscardCompose.Title" = "Discard Compose";
+"ComposeMessage.Alert.DiscardCompose.UpdateDraft" = "Update Draft";
 "ComposeMessage.Error.EmptyMessage.ErrorDescription" = "Message Format Invalid";
 "ComposeMessage.Error.EmptyMessage.FailureReason" = "Cannot compose empty message.";
 "ComposeMessage.Error.EmptyMessage.Message" = "Cannot compose empty message. Please input message and try again.";

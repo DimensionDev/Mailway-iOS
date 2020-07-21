@@ -22,6 +22,7 @@ final class ComposeMessageViewModel: NSObject {
     // input
     let context: AppContext
     let recipientPublicKeys: [Ed25519.PublicKey]
+    let draft: ChatMessage?
     let message = CurrentValueSubject<String, Never>("")
     
     // output
@@ -29,17 +30,17 @@ final class ComposeMessageViewModel: NSObject {
         Bool, Never>(false)
     let titleViewContentInset = CurrentValueSubject<UIEdgeInsets, Never>(UIEdgeInsets())
     let titleViewHeight = CurrentValueSubject<CGFloat, Never>(.zero)
-    let identities = CurrentValueSubject<[Contact], Never>([])
+    let identities: CurrentValueSubject<[Contact], Never>
     let selectedIdentity = CurrentValueSubject<Contact?, Never>(nil)
     let selectedIdentityPrivateKey = CurrentValueSubject<Ed25519.PrivateKey?, Never>(nil)
     
-    init(context: AppContext, recipientPublicKeys: [Ed25519.PublicKey]) {
+    init(context: AppContext, recipientPublicKeys: [Ed25519.PublicKey], draft: ChatMessage? = nil) {
+        let fetchRequest = Contact.sortedFetchRequest
+        fetchRequest.returnsObjectsAsFaults = false
+        fetchRequest.fetchBatchSize = 20
+        fetchRequest.predicate = Contact.isIdentityPredicate
+
         self.fetchedResultsController = {
-            let fetchRequest = Contact.sortedFetchRequest
-            fetchRequest.returnsObjectsAsFaults = false
-            fetchRequest.fetchBatchSize = 20
-            fetchRequest.predicate = Contact.isIdentityPredicate
-            
             let controller = NSFetchedResultsController(
                 fetchRequest: fetchRequest,
                 managedObjectContext: context.managedObjectContext,
@@ -51,8 +52,42 @@ final class ComposeMessageViewModel: NSObject {
         }()
         self.context = context
         self.recipientPublicKeys = recipientPublicKeys
-        
+        self.draft = draft
+        self.identities = {
+            let identities = (try? context.managedObjectContext.fetch(fetchRequest)) ?? []
+            return CurrentValueSubject(identities)
+        }()
         super.init()
+        
+        if let draft = draft {
+            switch draft.payloadKind {
+            case .plaintext:
+                guard let text = String(data: draft.payload, encoding: .utf8) else {
+                    assertionFailure()
+                    break
+                }
+                message.value = text
+                
+            default:
+                break
+            }
+            
+            // set identity
+            if let senderPublicKey = draft.senderPublicKey {
+                let request = Contact.sortedFetchRequest
+                request.fetchLimit = 1
+                request.returnsObjectsAsFaults = false
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                    Contact.isIdentityPredicate,
+                    Contact.predicate(publicKey: senderPublicKey)
+                ])
+                if let identity = try? context.managedObjectContext.fetch(request).first {
+                    self.selectedIdentity.value = identity
+                } else {
+                    // TODO: alert error
+                }
+            }
+        }
         
         fetchedResultsController.delegate = self
         
@@ -97,7 +132,25 @@ final class ComposeMessageViewModel: NSObject {
 
 extension ComposeMessageViewModel {
     
-    func composeMessage() -> Future<Result<ChatMessage, Swift.Error>, Never> {
+    func composeMessage() -> AnyPublisher<Result<ChatMessage, Swift.Error>, Never> {
+        if let draft = draft {
+            return self.context.managedObjectContext.performChanges {
+                self.context.managedObjectContext.delete(draft)
+            }
+            .flatMap { result -> AnyPublisher<Result<ChatMessage, Swift.Error>, Never> in
+                switch result {
+                case .success:
+                    return self.createMessage().eraseToAnyPublisher()
+                case .failure(let error):
+                    return Future { promise in promise(.success(Result.failure(error))) }.eraseToAnyPublisher()
+                }
+            }.eraseToAnyPublisher()
+        } else {
+            return createMessage().eraseToAnyPublisher()
+        }
+    }
+    
+    func createMessage() -> Future<Result<ChatMessage, Swift.Error>, Never> {
         guard let signer = selectedIdentityPrivateKey.value else {
             return Future { promise in
                 promise(.success(.failure(Error.identityNotFound)))
@@ -117,8 +170,62 @@ extension ComposeMessageViewModel {
             }
         }
         let plaintextData = Data(plaintext.utf8)
-                
+        
         return DocumentStore.createChatMessage(into: context.managedObjectContext, plaintextData: plaintextData, recipientPublicKeys: recipientPublicKeys, signerPrivateKey: signer)
+    }
+    
+    func saveDraft() -> Future<Result<ChatMessage, Swift.Error>, Never> {
+        guard let signer = selectedIdentityPrivateKey.value else {
+            return Future { promise in
+                promise(.success(.failure(Error.identityNotFound)))
+            }
+        }
+        
+        guard !recipientPublicKeys.isEmpty else {
+            return Future { promise in
+                promise(.success(.failure(Error.recipientNotFound)))
+            }
+        }
+        
+        let plaintext = message.value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !plaintext.isEmpty else {
+            return Future { promise in
+                promise(.success(.failure(Error.emptyMessage)))
+            }
+        }
+        let plaintextData = Data(plaintext.utf8)
+        
+        return DocumentStore.createDraftChatMessage(into: context.managedObjectContext, plaintextData: plaintextData, recipientPublicKeys: recipientPublicKeys, signerPrivateKey: signer)
+    }
+    
+    func updateDraft() -> Future<Result<ChatMessage, Swift.Error>, Never> {
+        guard let draft = draft else {
+            return Future { promise in
+                promise(.success(.failure(Error.emptyMessage)))
+            }
+        }
+        
+        guard let signer = selectedIdentityPrivateKey.value else {
+            return Future { promise in
+                promise(.success(.failure(Error.identityNotFound)))
+            }
+        }
+        
+        guard !recipientPublicKeys.isEmpty else {
+            return Future { promise in
+                promise(.success(.failure(Error.recipientNotFound)))
+            }
+        }
+        
+        let plaintext = message.value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !plaintext.isEmpty else {
+            return Future { promise in
+                promise(.success(.failure(Error.emptyMessage)))
+            }
+        }
+        let plaintextData = Data(plaintext.utf8)
+        
+        return DocumentStore.updateDraftChatMessage(into: context.managedObjectContext, draft: draft, plaintextData: plaintextData, recipientPublicKeys: recipientPublicKeys, signerPrivateKey: signer)
     }
     
 }
@@ -233,14 +340,10 @@ extension ComposeMessageViewController {
         navigationItem.rightBarButtonItem = composeBarButtonItem
         navigationItem.titleView = identitySelectionNavigationItemTitleView
         
-        identitySelectionNavigationItemTitleView.observe(\.frame) { [weak self] titleView, change in
+        identitySelectionNavigationItemTitleView.observe(\.frame, options: [.initial, .new]) { [weak self] titleView, change in
             guard let `self` = self else { return }
-
-            let margin = titleView.frame.origin.y
-            let left = titleView.frame.origin.x
-            let right = left
-            self.viewModel.titleViewContentInset.value = UIEdgeInsets(top: margin, left: left, bottom: margin, right: right)
-            self.viewModel.titleViewHeight.value = titleView.frame.height
+            guard titleView.frame != .zero else { return }
+            self.updateTitleViewFrameObserve()
         }.store(in: &observations)
         
         transitionController = ComposeMessageTransitionController(viewController: self)
@@ -297,29 +400,94 @@ extension ComposeMessageViewController {
             .sink { [weak self] identity in
                 guard let `self` = self else { return }
                 let entryView = self.identitySelectionNavigationItemTitleView.entryView
-                entryView.avatarImageView.image = identity?.avatar ?? UIImage.placeholder(color: .systemFill)
+                // entryView.avatarImageView.image = identity?.avatar ?? UIImage.placeholder(color: .systemFill)
                 entryView.nameLabel.text = identity?.name ?? "-"
                 entryView.shortKeyIDLabel.text = identity?.keypair.flatMap { String($0.keyID.suffix(8)).separate(every: 4, with: " ") } ?? "-"
             }
             .store(in: &disposeBag)
         
         messageTextView.delegate = self
-        messageTextView.becomeFirstResponder()        
+        messageTextView.becomeFirstResponder()
+        
+        if let draft = viewModel.draft {
+            switch draft.payloadKind {
+            case .plaintext:
+                guard let text = String(data: draft.payload, encoding: .utf8) else {
+                    assertionFailure()
+                    break
+                }
+                messageTextView.text = text
+            default:
+                break
+            }
+        }
     }
     
 }
 
+extension ComposeMessageViewController {
+    private func updateTitleViewFrameObserve() {
+        let titleView = identitySelectionNavigationItemTitleView
+        
+        let margin = titleView.frame.origin.y
+        let left = titleView.frame.origin.x
+        let right = left
+        
+        self.viewModel.titleViewContentInset.value = UIEdgeInsets(top: margin, left: left, bottom: margin, right: right)
+        self.viewModel.titleViewHeight.value = titleView.frame.height
+    }
+}
 
 extension ComposeMessageViewController {
     
     @objc private func closeBarButtonItemPressed(_ sender: UIBarButtonItem) {
         guard viewModel.message.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            let alertController = UIAlertController(title: "Discard Compose", message: "Please confirm discard message composing.", preferredStyle: .alert)
-            let discardAction = UIAlertAction(title: "Confirm Discard", style: .destructive) { _ in
+            let message: String = {
+                return viewModel.draft == nil ? L10n.ComposeMessage.Alert.DiscardCompose.messageComposeOrSaveDraft : L10n.ComposeMessage.Alert.DiscardCompose.messageComposeOrUpdateDraft
+            }()
+            let alertController = UIAlertController(title: L10n.ComposeMessage.Alert.DiscardCompose.title, message: message, preferredStyle: .alert)
+            let discardAction = UIAlertAction(title: L10n.ComposeMessage.Alert.DiscardCompose.discard, style: .destructive) { _ in
                 self.dismiss(animated: true, completion: nil)
             }
             alertController.addAction(discardAction)
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            if viewModel.draft != nil {
+                let updateDraftAction = UIAlertAction(title: L10n.ComposeMessage.Alert.DiscardCompose.updateDraft, style: .default) { [weak self] _ in
+                    var subscription: AnyCancellable?
+                    subscription = self?.viewModel.updateDraft()
+                        .sink(receiveCompletion: { _ in
+                            os_log("%{public}s[%{public}ld], %{public}s: dispose subscription %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+                            subscription = nil
+                        }, receiveValue: { [weak self] result in
+                            switch result {
+                            case .success:
+                                self?.dismiss(animated: true, completion: nil)
+                            case .failure(let error):
+                                let alertController = UIAlertController.standardAlert(of: error)
+                                self?.present(alertController, animated: true, completion: nil)
+                            }
+                        })
+                }
+                alertController.addAction(updateDraftAction)
+            } else {
+                let saveDraftAction = UIAlertAction(title: L10n.ComposeMessage.Alert.DiscardCompose.saveDraft, style: .default) { _ in
+                    var subscription: AnyCancellable?
+                    subscription = self.viewModel.saveDraft()
+                        .sink(receiveCompletion: { _ in
+                            os_log("%{public}s[%{public}ld], %{public}s: dispose subscription %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+                            subscription = nil
+                        }, receiveValue: { [weak self] result in
+                            switch result {
+                            case .success:
+                                self?.dismiss(animated: true, completion: nil)
+                            case .failure(let error):
+                                let alertController = UIAlertController.standardAlert(of: error)
+                                self?.present(alertController, animated: true, completion: nil)
+                            }
+                        })
+                }
+                alertController.addAction(saveDraftAction)
+            }
+            let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .cancel, handler: nil)
             alertController.addAction(cancelAction)
             
             present(alertController, animated: true, completion: nil)
@@ -373,6 +541,7 @@ extension ComposeMessageViewController {
         }
             
         let selectIdentityDropdownMenuViewModel = SelectIdentityDropdownMenuViewModel(context: context, identities: identities, selectIndex: selectIndex)
+        updateTitleViewFrameObserve()
         viewModel.titleViewContentInset.assign(to: \.value, on: selectIdentityDropdownMenuViewModel.cellContentInset).store(in: &selectIdentityDropdownMenuViewModel.disposeBag)
         viewModel.titleViewHeight.assign(to: \.value, on: selectIdentityDropdownMenuViewModel.cellEntryViewHeight).store(in: &disposeBag)
         coordinator.present(scene: .selectIdentityDropdownMenu(viewModel: selectIdentityDropdownMenuViewModel, delegate: self), from: self, transition: .custom(transitioningDelegate: transitionController))

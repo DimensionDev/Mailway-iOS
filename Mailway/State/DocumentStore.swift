@@ -19,6 +19,7 @@ class DocumentStore: ObservableObject {
 
 extension DocumentStore {
     
+    // create ChatMessage and seal the payload use signer key
     static func createChatMessage(into context: NSManagedObjectContext, plaintextData plaintext: Data, recipientPublicKeys recipients: [Ed25519.PublicKey], signerPrivateKey signer: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
         Future { promise in
             DispatchQueue.global().async {
@@ -41,6 +42,7 @@ extension DocumentStore {
                         armoredMessage: armoredMessage,
                         payload: plaintext,
                         payloadKind: .plaintext,
+                        isDraft: false,
                         messageTimestamp: message.timestamp,
                         composeTimestamp: timestamp,
                         receiveTimestamp: timestamp,
@@ -48,7 +50,7 @@ extension DocumentStore {
                     )
                     
                     var subscription: AnyCancellable?
-                    subscription = DocumentStore.saveChatMessage(into: context, chatMessageProperty: chatMessageProperty, identityPrivateKey: signer)
+                    subscription = DocumentStore.saveChatMessageAndCreateChat(into: context, chatMessageProperty: chatMessageProperty, identityPrivateKey: signer)
                         .sink(receiveCompletion: { _ in
                             os_log("%{public}s[%{public}ld], %{public}s: complete subscription: %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
                             subscription = nil
@@ -65,7 +67,100 @@ extension DocumentStore {
         }   // end Future
     }
     
-    static func saveChatMessage(into context: NSManagedObjectContext, chatMessageProperty: ChatMessage.Property, identityPrivateKey identity: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
+    // create draft ChatMessage without seal
+    static func createDraftChatMessage(into context: NSManagedObjectContext, plaintextData plaintext: Data, recipientPublicKeys recipients: [Ed25519.PublicKey], signerPrivateKey signer: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
+        Future { promise in
+            DispatchQueue.global().async {
+                do {
+                    let signerPublicKey = signer.publicKey.serialize()
+                    let recipientPublicKeys = Array(Set(recipients)).map { $0.serialize() }.filter { $0 != signerPublicKey }
+                    
+                    let timestamp = Date()
+                    
+                    let chatMessageProperty = ChatMessage.Property(
+                        messageID: UUID().uuidString,
+                        senderPublicKey: signerPublicKey,
+                        recipientPublicKeys: recipientPublicKeys,
+                        version: CryptoService.Version.current.rawValue,
+                        armoredMessage: nil,
+                        payload: plaintext,
+                        payloadKind: .plaintext,
+                        isDraft: true,
+                        messageTimestamp: timestamp,
+                        composeTimestamp: timestamp,
+                        receiveTimestamp: timestamp,
+                        shareTimestamp: nil
+                    )
+                    
+                    var chatMessage: ChatMessage?
+                    var subscription: AnyCancellable?
+                    subscription = context.performChanges {
+                        chatMessage = ChatMessage.insert(into: context, property: chatMessageProperty, chat: nil, quoteMessage: nil)
+                    }
+                    .sink(receiveCompletion: { _ in
+                        os_log("%{public}s[%{public}ld], %{public}s: complete subscription", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+                        subscription = nil
+                    }, receiveValue: { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success:
+                                guard let chatMessage = chatMessage else {
+                                    // return error when output not found
+                                    promise(.success(Result.failure(DocumentStoreError.internal)))
+                                    return
+                                }
+                                promise(.success(Result.success(chatMessage)))
+                                
+                            case .failure(let error):
+                                promise(.success(Result.failure(error)))
+                            }
+                        }
+                    })
+                    
+                } catch {
+                    DispatchQueue.main.async {
+                        promise(.success(Result.failure(error)))
+                    }
+                }
+            }   // end DispatchQueue.global().async
+        }   // end Future
+    }
+    
+    static func updateDraftChatMessage(into context: NSManagedObjectContext, draft: ChatMessage, plaintextData plaintext: Data, recipientPublicKeys recipients: [Ed25519.PublicKey], signerPrivateKey signer: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
+        Future { promise in
+            var subscription: AnyCancellable?
+            subscription = context.performChanges {
+                if draft.payload != plaintext {
+                    draft.update(payload: plaintext)
+                }
+                let recipientPublicKeys = recipients.map { $0.serialize() }
+                if Set(draft.recipientPublicKeys) != Set(recipientPublicKeys) {
+                    draft.update(recipientPublicKeys: recipientPublicKeys)
+                }
+                let senderPublicKey = signer.publicKey.serialize()
+                if draft.senderPublicKey != senderPublicKey {
+                    draft.update(senderPublicKey: senderPublicKey)
+                }
+            }
+            .sink(receiveCompletion: { _ in
+                os_log("%{public}s[%{public}ld], %{public}s: complete subscription", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+                subscription = nil
+            }, receiveValue: { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        promise(.success(Result.success(draft)))
+                        
+                    case .failure(let error):
+                        promise(.success(Result.failure(error)))
+                    }
+                }
+            })
+        }
+    }
+    
+    // save ChatMessage and create chat with selected identity
+    static func saveChatMessageAndCreateChat(into context: NSManagedObjectContext, chatMessageProperty: ChatMessage.Property, identityPrivateKey identity: Ed25519.PrivateKey) -> Future<Result<ChatMessage, Error>, Never> {
         Future { promise in
             DispatchQueue.global().async {
                 let identityPublicKey = identity.publicKey.serialize()
@@ -214,6 +309,7 @@ extension DocumentStore {
             if try context.count(for: Contact.sortedFetchRequest) == 0 {
                 setupAlice(for: context)
                 setupBob(for: context)
+                setupEva(for: context)
             } else {
                 os_log("%{public}s[%{public}ld], %{public}s: skip alice & bob setup", ((#file as NSString).lastPathComponent), #line, #function)
             }
@@ -263,6 +359,23 @@ extension DocumentStore {
         })
     }
     
+    private func setupEva(for context: NSManagedObjectContext) {
+        let (contactProperty, keypairProperty) = DocumentStore.eva
+        
+        var subscription: AnyCancellable?
+        subscription = context.performChanges {
+            let keypair = Keypair.insert(into: context, property: keypairProperty)
+            let twitterContactChannel = ContactChannel.insert(into: context, property: ContactChannel.Property(name: .twitter, value: "@eva"))
+            Contact.insert(into: context, property: contactProperty, keypair: keypair, channels: [twitterContactChannel], businessCard: nil)
+        }
+        .sink(receiveCompletion: { _ in
+            os_log("%{public}s[%{public}ld], %{public}s: finish subscription: %s", ((#file as NSString).lastPathComponent), #line, #function, subscription.debugDescription)
+            subscription = nil
+        }, receiveValue: { result in
+            os_log("%{public}s[%{public}ld], %{public}s: setup bob: %s", ((#file as NSString).lastPathComponent), #line, #function, String(describing: result))
+        })
+    }
+    
 }
 #endif
 
@@ -291,6 +404,21 @@ extension DocumentStore {
         
         
         let ed25519PrivateKey = Ed25519.PrivateKey.deserialize(from: "pri1pu3uaqqvdyne0q92g09ls5u64kcupqy6ha2q6av3dnfgq94k4qdq85048p-Ed25519")!
+        let ed25519PublicKey = ed25519PrivateKey.publicKey
+        let keypairProperty = Keypair.Property(privateKey: nil,
+                                               publicKey: ed25519PublicKey.serialize(),
+                                               keyID: ed25519PublicKey.keyID)
+        
+        return (contactProperty, keypairProperty)
+    }
+    
+    static var eva: (Contact.Property, Keypair.Property) {
+        let contactProperty = Contact.Property(name: "Eva",
+                                               note: "She is Eva.",
+                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"))
+        
+        
+        let ed25519PrivateKey = Ed25519.PrivateKey.deserialize(from: "pri18xqde04j45z0xtyrgw4xd6gwcj9kswzxnp82y5nseydppz4qylkq8f8zzt-Ed25519")!
         let ed25519PublicKey = ed25519PrivateKey.publicKey
         let keypairProperty = Keypair.Property(privateKey: nil,
                                                publicKey: ed25519PublicKey.serialize(),

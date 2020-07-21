@@ -198,7 +198,7 @@ extension SidebarViewController: UITableViewDelegate {
             case .subInbox:
                 break   // TODO:
             case .drafts:
-                break   // TODO:
+                NotificationCenter.default.post(name: SidebarViewController.didSelectEntry, object: Entry.drafts)
             case .contacts:
                 NotificationCenter.default.post(name: SidebarViewController.didSelectEntry, object: Entry.contacts)
             case .plugins:

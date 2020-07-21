@@ -17,12 +17,8 @@ final class IdentitySelectEntryView: UIView {
         return bar
     }()
     
-    let avatarImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.placeholder(color: .systemFill)
-        imageView.contentMode = .scaleToFill
-        return imageView
-    }()
+    private lazy var avatarView = AvatarView(viewModel: avatarViewModel)
+    let avatarViewModel = AvatarViewModel()
     
     let nameLabel: UILabel = {
         let label = UILabel()
@@ -61,22 +57,23 @@ final class IdentitySelectEntryView: UIView {
 extension IdentitySelectEntryView {
     
     private func _init() {
-        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(avatarImageView)
+        let hostingController = UIHostingController(rootView: avatarView)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(hostingController.view)
         NSLayoutConstraint.activate([
-            avatarImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            avatarImageView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 4),
-            avatarImageView.widthAnchor.constraint(equalTo: avatarImageView.heightAnchor, multiplier: 1.0),
+            hostingController.view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            hostingController.view.centerYAnchor.constraint(equalTo: centerYAnchor),
+            hostingController.view.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor, constant: 4),
+            hostingController.view.widthAnchor.constraint(equalTo: hostingController.view.heightAnchor, multiplier: 1.0),
         ])
         
         colorBarView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(colorBarView)
         NSLayoutConstraint.activate([
-            colorBarView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            colorBarView.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
-            colorBarView.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
+            colorBarView.leadingAnchor.constraint(equalTo: hostingController.view.trailingAnchor, constant: 16),
+            colorBarView.topAnchor.constraint(equalTo: hostingController.view.topAnchor),
+            colorBarView.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
             colorBarView.widthAnchor.constraint(equalToConstant: 2),
             colorBarView.heightAnchor.constraint(equalToConstant: 32).priority(.defaultHigh),
         ])
@@ -126,8 +123,8 @@ extension IdentitySelectEntryView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        avatarImageView.layer.masksToBounds = true
-        avatarImageView.layer.cornerRadius = avatarImageView.frame.width * 0.5
+        // avatarImageView.layer.masksToBounds = true
+        // avatarImageView.layer.cornerRadius = avatarImageView.frame.width * 0.5
     }
     
 }

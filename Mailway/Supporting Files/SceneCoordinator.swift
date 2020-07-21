@@ -69,6 +69,9 @@ extension SceneCoordinator {
         case selectChatIdentity(viewModel: SelectChatIdentityViewModel, delegate: SelectChatIdentityViewControllerDelegate)
         case chatRoom(viewModel: ChatViewModel)
         
+        // drafts
+        
+        
         // contacts
         case addContact
         case contactDetail(viewModel: ContactDetailViewModel)

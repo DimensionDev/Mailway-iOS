@@ -121,6 +121,8 @@
 		DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */; };
 		DBBFABD124BEDE3C008C40F2 /* DecryptMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBBFABD024BEDE3C008C40F2 /* DecryptMessageViewController.swift */; };
 		DBC9931B249788B9004C1264 /* ContactChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC9931A249788B9004C1264 /* ContactChannel.swift */; };
+		DBCB202B24C68D8900074F7A /* DraftListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB202A24C68D8900074F7A /* DraftListViewController.swift */; };
+		DBCB202F24C68F6D00074F7A /* DraftListMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB202E24C68F6D00074F7A /* DraftListMessageTableViewCell.swift */; };
 		DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040032492303000C5184D /* ContactDetailViewController.swift */; };
 		DBE040072492413600C5184D /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040062492413600C5184D /* ContactDetailView.swift */; };
 		DBE04010249343B000C5184D /* MailwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0400F249343B000C5184D /* MailwayUITests.swift */; };
@@ -354,6 +356,8 @@
 		DBB9814824864AD500FB2FE8 /* PlaceholderDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderDetailViewController.swift; sourceTree = "<group>"; };
 		DBBFABD024BEDE3C008C40F2 /* DecryptMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptMessageViewController.swift; sourceTree = "<group>"; };
 		DBC9931A249788B9004C1264 /* ContactChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactChannel.swift; sourceTree = "<group>"; };
+		DBCB202A24C68D8900074F7A /* DraftListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftListViewController.swift; sourceTree = "<group>"; };
+		DBCB202E24C68F6D00074F7A /* DraftListMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftListMessageTableViewCell.swift; sourceTree = "<group>"; };
 		DBE040032492303000C5184D /* ContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
 		DBE040062492413600C5184D /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		DBE0400D249343B000C5184D /* MailwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MailwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1014,6 +1018,31 @@
 			path = DecryptMessage;
 			sourceTree = "<group>";
 		};
+		DBCB202C24C68D8C00074F7A /* Drafts */ = {
+			isa = PBXGroup;
+			children = (
+				DBCB202D24C68DA400074F7A /* DraftList */,
+			);
+			path = Drafts;
+			sourceTree = "<group>";
+		};
+		DBCB202D24C68DA400074F7A /* DraftList */ = {
+			isa = PBXGroup;
+			children = (
+				DBCB203024C68F7200074F7A /* View */,
+				DBCB202A24C68D8900074F7A /* DraftListViewController.swift */,
+			);
+			path = DraftList;
+			sourceTree = "<group>";
+		};
+		DBCB203024C68F7200074F7A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DBCB202E24C68F6D00074F7A /* DraftListMessageTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		DBE04005249233E700C5184D /* ContactDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1125,6 +1154,7 @@
 				DBE306DB2474EDC800EB7193 /* MainTab */,
 				DB1E85E824A092D600B1558B /* Sidebar */,
 				DBE306DD2474EDD700EB7193 /* Chats */,
+				DBCB202C24C68D8C00074F7A /* Drafts */,
 				DBE306DC2474EDD000EB7193 /* Contracts */,
 				DB772FF724A84E4B00558F37 /* Identitys */,
 				DBE306DE2474EDDD00EB7193 /* Settings */,
@@ -1721,6 +1751,7 @@
 				DB17253324B866610090DFA9 /* IdentityCardCollectionViewModel.swift in Sources */,
 				DB17253724B86B710090DFA9 /* SnappingCollectionViewFlowLayout.swift in Sources */,
 				DBE306D12474ECE100EB7193 /* ViewStateStore.swift in Sources */,
+				DBCB202B24C68D8900074F7A /* DraftListViewController.swift in Sources */,
 				DB6DEC77247E4AA90040C817 /* ChatViewController.swift in Sources */,
 				DB1E85E724A092D200B1558B /* SidebarViewController.swift in Sources */,
 				DB25C75924B733F800813755 /* IdentityCardCollectionViewCell.swift in Sources */,
@@ -1756,6 +1787,7 @@
 				DB255F6C24C1BB09000958CE /* IdentitySelectionNavigationItemTitleView.swift in Sources */,
 				DB1938912477E4CD00E24AFB /* IdentityDetailView.swift in Sources */,
 				DB4B9CA82480C3B1009F06BE /* MessageInputView.swift in Sources */,
+				DBCB202F24C68F6D00074F7A /* DraftListMessageTableViewCell.swift in Sources */,
 				DB1E85E024A081A900B1558B /* SidebarAnimatedTransitioning.swift in Sources */,
 				DB970C9E24A84FF300DE481C /* IdentityListAddIdentityTableViewCell.swift in Sources */,
 				DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */,

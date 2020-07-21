@@ -47,7 +47,7 @@ final class SelectIdentityDropdownMenuViewModel: NSObject {
 
 extension SelectIdentityDropdownMenuViewModel {
     static func configure(cell: IdentitySelectionEntryTableViewCell, identity: Contact) {
-        cell.entryView.avatarImageView.image = identity.avatar ?? UIImage.placeholder(color: .systemFill)
+        cell.entryView.avatarViewModel.infos = [AvatarViewModel.Info(name: identity.name, image: identity.avatar)]
         cell.entryView.nameLabel.text = identity.name
         cell.entryView.shortKeyIDLabel.text = identity.keypair.flatMap { String($0.keyID.suffix(8)).separate(every: 4, with: " ") } ?? "-"
     }

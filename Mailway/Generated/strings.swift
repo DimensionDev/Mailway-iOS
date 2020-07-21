@@ -19,6 +19,22 @@ internal enum L10n {
   }
 
   internal enum ComposeMessage {
+    internal enum Alert {
+      internal enum DiscardCompose {
+        /// Discard
+        internal static let discard = L10n.tr("Localizable", "ComposeMessage.Alert.DiscardCompose.Discard")
+        /// Please confirm discard message composing or save as draft.
+        internal static let messageComposeOrSaveDraft = L10n.tr("Localizable", "ComposeMessage.Alert.DiscardCompose.MessageComposeOrSaveDraft")
+        /// Please confirm discard message composing or update draft.
+        internal static let messageComposeOrUpdateDraft = L10n.tr("Localizable", "ComposeMessage.Alert.DiscardCompose.MessageComposeOrUpdateDraft")
+        /// Save Draft
+        internal static let saveDraft = L10n.tr("Localizable", "ComposeMessage.Alert.DiscardCompose.SaveDraft")
+        /// Discard Compose
+        internal static let title = L10n.tr("Localizable", "ComposeMessage.Alert.DiscardCompose.Title")
+        /// Update Draft
+        internal static let updateDraft = L10n.tr("Localizable", "ComposeMessage.Alert.DiscardCompose.UpdateDraft")
+      }
+    }
     internal enum Error {
       internal enum EmptyMessage {
         /// Message Format Invalid
