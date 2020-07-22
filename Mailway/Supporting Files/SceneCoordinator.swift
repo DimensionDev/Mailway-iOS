@@ -89,6 +89,7 @@ extension SceneCoordinator {
         
         // misc
         case pickColor(viewModel: PickColorViewModel, delegate: PickColorViewControllerDelegate)
+        case bizcardScanner(delegate: BizcardScannerViewControllerDelegate)
         
         // debug only
         #if DEBUG
@@ -189,6 +190,10 @@ extension SceneCoordinator {
         case .pickColor(let viewModel, let delegate):
             let _viewController = PickColorViewController()
             _viewController.viewModel = viewModel
+            _viewController.delegate = delegate
+            viewController = _viewController
+        case .bizcardScanner(let delegate):
+            let _viewController = BizcardScannerViewController()
             _viewController.delegate = delegate
             viewController = _viewController
             

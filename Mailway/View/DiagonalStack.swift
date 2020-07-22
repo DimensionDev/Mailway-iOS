@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct DiagonalStack<Element, Content: View> {
-    var data: [Element]
+    let data: [Element]
     var scale: CGFloat = 0.7
     var content: (Element) -> Content
 }
@@ -18,12 +18,12 @@ struct DiagonalStack<Element, Content: View> {
 extension DiagonalStack: View {
     
     var body: some View {
-        GeometryReader { proxy in
+        return GeometryReader { proxy in
             ZStack(alignment: .topLeading) {
-                ForEach(self.data.indices, content: { ix in
-                    self.content(self.data[ix])
+                ForEach(Array(self.data.enumerated()), id: \.offset, content: { index, element in
+                    self.content(element)
                         .frame(width: 0.7 * proxy.size.width, height: 0.7 * proxy.size.height)
-                        .offset(self.computeOffset(index: ix, total: self.data.count, scale: self.scale, size: proxy.size))
+                        .offset(self.computeOffset(index: index, total: self.data.count, scale: self.scale, size: proxy.size))
                 })
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

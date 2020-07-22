@@ -26,8 +26,8 @@ extension SelectIdentityDropdownMenuAnimationTransitioning {
         super.animateTransition(using: transitionContext)
         
         switch operation {
-        case .push:     pushTransition(using: transitionContext).startAnimation()
-        case .pop:      popTransition(using: transitionContext).startAnimation()
+        case .push:     pushTransition(using: transitionContext, curve: .easeOut).startAnimation()
+        case .pop:      popTransition(using: transitionContext, curve: .easeIn).startAnimation()
         default:        return
         }
     }

@@ -401,6 +401,7 @@ extension ComposeMessageViewController {
                 guard let `self` = self else { return }
                 let entryView = self.identitySelectionNavigationItemTitleView.entryView
                 entryView.avatarViewModel.infos = [AvatarViewModel.Info(name: identity?.name ?? "A", image: identity?.avatar)]
+                entryView.colorBarView.backgroundColor = identity?.color ?? UIColor.systemPurple
                 entryView.nameLabel.text = identity?.name ?? "-"
                 entryView.shortKeyIDLabel.text = identity?.keypair.flatMap { String($0.keyID.suffix(8)).separate(every: 4, with: " ") } ?? "-"
             }

@@ -101,6 +101,9 @@
 		DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9DA32498C22600D39BAD /* ChatMessage.swift */; };
 		DB74ADE224C7E7D0002F0EDA /* PickColorTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB74ADE124C7E7D0002F0EDA /* PickColorTransitionController.swift */; };
 		DB74ADE524C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB74ADE424C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift */; };
+		DB74ADE824C82814002F0EDA /* ScanQRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB74ADE724C82813002F0EDA /* ScanQRViewController.swift */; };
+		DB74ADEB24C82BF2002F0EDA /* AVCaptureVideoOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB74ADEA24C82BF2002F0EDA /* AVCaptureVideoOrientation.swift */; };
+		DB74ADED24C82DA8002F0EDA /* BizcardScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB74ADEC24C82DA8002F0EDA /* BizcardScannerViewController.swift */; };
 		DB772FF224A8382E00558F37 /* SplitDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB772FF124A8382E00558F37 /* SplitDemoViewController.swift */; };
 		DB772FF524A8423800558F37 /* SettingEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB772FF424A8423800558F37 /* SettingEntryTableViewCell.swift */; };
 		DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */; };
@@ -336,6 +339,9 @@
 		DB6F9DA32498C22600D39BAD /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		DB74ADE124C7E7D0002F0EDA /* PickColorTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickColorTransitionController.swift; sourceTree = "<group>"; };
 		DB74ADE424C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickColorAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		DB74ADE724C82813002F0EDA /* ScanQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanQRViewController.swift; sourceTree = "<group>"; };
+		DB74ADEA24C82BF2002F0EDA /* AVCaptureVideoOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureVideoOrientation.swift; sourceTree = "<group>"; };
+		DB74ADEC24C82DA8002F0EDA /* BizcardScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BizcardScannerViewController.swift; sourceTree = "<group>"; };
 		DB772FF124A8382E00558F37 /* SplitDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitDemoViewController.swift; sourceTree = "<group>"; };
 		DB772FF424A8423800558F37 /* SettingEntryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingEntryTableViewCell.swift; sourceTree = "<group>"; };
 		DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListIdentityBannerTableViewCell.swift; sourceTree = "<group>"; };
@@ -811,6 +817,7 @@
 				DB65475224ACA6BB0039AFE5 /* String.swift */,
 				DB0E6DD824C58855000396C3 /* NSKeyValueObservation.swift */,
 				DBCF3C9A24C6E45A009407C7 /* UIApplication.swift */,
+				DB74ADEA24C82BF2002F0EDA /* AVCaptureVideoOrientation.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -887,6 +894,15 @@
 				DBCF3C9F24C6F09B009407C7 /* PickColorItemCollectionViewCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		DB74ADE924C82816002F0EDA /* ScanQR */ = {
+			isa = PBXGroup;
+			children = (
+				DB74ADE724C82813002F0EDA /* ScanQRViewController.swift */,
+				DB74ADEC24C82DA8002F0EDA /* BizcardScannerViewController.swift */,
+			);
+			path = ScanQR;
 			sourceTree = "<group>";
 		};
 		DB772FF324A83BA000558F37 /* SplitDemo */ = {
@@ -1202,6 +1218,7 @@
 				DB772FF724A84E4B00558F37 /* Identitys */,
 				DBE306DE2474EDDD00EB7193 /* Settings */,
 				DBCF3C9E24C6EE2B009407C7 /* PickColor */,
+				DB74ADE924C82816002F0EDA /* ScanQR */,
 				DB772FF324A83BA000558F37 /* SplitDemo */,
 			);
 			path = Scene;
@@ -1782,6 +1799,7 @@
 				DB193884247693D000E24AFB /* AutoFocusTextField.swift in Sources */,
 				DB25C75524B725A400813755 /* LargeRoundedButtonStyle.swift in Sources */,
 				DB1E860424A2189200B1558B /* SidebarPresentationController.swift in Sources */,
+				DB74ADED24C82DA8002F0EDA /* BizcardScannerViewController.swift in Sources */,
 				DBB9814924864AD500FB2FE8 /* PlaceholderDetailViewController.swift in Sources */,
 				DBE306D72474ED0700EB7193 /* AppError.swift in Sources */,
 				DB1E860124A1FB2B00B1558B /* strings.swift in Sources */,
@@ -1830,6 +1848,7 @@
 				DB1E85DE24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift in Sources */,
 				DB1EC2E02488EB4C002379A1 /* ShareService.swift in Sources */,
 				DB1997B224B6BD7100C1A293 /* AvatarView.swift in Sources */,
+				DB74ADEB24C82BF2002F0EDA /* AVCaptureVideoOrientation.swift in Sources */,
 				DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */,
 				DB74ADE524C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift in Sources */,
 				DB1EDEBF24AAF89A000C5E58 /* Bizcard.swift in Sources */,
@@ -1844,6 +1863,7 @@
 				DB970C9E24A84FF300DE481C /* IdentityListAddIdentityTableViewCell.swift in Sources */,
 				DB19388924778D3E00E24AFB /* CommonNames.swift in Sources */,
 				DBE306CF2474EA7500EB7193 /* AppContext.swift in Sources */,
+				DB74ADE824C82814002F0EDA /* ScanQRViewController.swift in Sources */,
 				DBBFABD124BEDE3C008C40F2 /* DecryptMessageViewController.swift in Sources */,
 				DB25C75D24B8225C00813755 /* HidingViews.swift in Sources */,
 				DB1191F424A890AD00C1342E /* EditableAvatarButtonStyle.swift in Sources */,

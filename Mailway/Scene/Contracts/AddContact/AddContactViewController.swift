@@ -8,6 +8,7 @@
 
 import os
 import UIKit
+import AVKit
 import Combine
 import CoreDataStack
 import NtgeCore
@@ -148,41 +149,9 @@ extension AddContactViewController {
     
 }
 
-// MARK: - UITableViewDelegate
-extension AddContactViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        switch AddContactViewModel.Section.allCases[indexPath.section] {
-        case .entry:
-            switch AddContactViewModel.Entry.allCases[indexPath.row] {
-            case .scanQR:
-                break
-            case .importFile:
-                present(documentPickerViewController, animated: true, completion: nil)
-            }
-        default:
-            return
-        }
-    }
-}
-
-extension AddContactViewController: UIDocumentPickerDelegate {
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first else {
-            return
-        }
-        
+extension AddContactViewController {
+    private func parseAndSaveBizcard(from serialized: String) {
         do {
-            guard url.startAccessingSecurityScopedResource() else {
-                throw Error.internal
-            }
-            defer {
-                url.stopAccessingSecurityScopedResource()
-            }
-            
-            // deserialize
-            let serialized = try String(contentsOf: url).trimmingCharacters(in: .whitespacesAndNewlines)
             guard let card = try Bizcard.deserialize(text: serialized).first else {
                 throw Error.notBizcard
             }
@@ -240,7 +209,8 @@ extension AddContactViewController: UIDocumentPickerDelegate {
                 }, receiveValue: { [weak self] result in
                     switch result {
                     case .success:
-                        break
+                        self?.dismiss(animated: true, completion: nil)
+                        
                     case .failure(let error):
                         let alertController = UIAlertController.standardAlert(of: error)
                         self?.present(alertController, animated: true, completion: nil)
@@ -250,12 +220,64 @@ extension AddContactViewController: UIDocumentPickerDelegate {
             case .failure:
                 throw Error.bizcardValidateFail
             }
+            
+        } catch {
+            os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, error.localizedDescription)
+            let alertController = UIAlertController.standardAlert(of: error)
+            present(alertController, animated: true, completion: nil)
+        }
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension AddContactViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        switch AddContactViewModel.Section.allCases[indexPath.section] {
+        case .entry:
+            switch AddContactViewModel.Entry.allCases[indexPath.row] {
+            case .scanQR:
+                coordinator.present(scene: .bizcardScanner(delegate: self), from: self, transition: .modal(animated: true, completion: nil))
+            case .importFile:
+                present(documentPickerViewController, animated: true, completion: nil)
+            }
+        default:
+            return
+        }
+    }
+}
+
+extension AddContactViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let url = urls.first else {
+            return
+        }
+        
+        do {
+            guard url.startAccessingSecurityScopedResource() else {
+                throw Error.internal
+            }
+            defer {
+                url.stopAccessingSecurityScopedResource()
+            }
+            
+            // deserialize
+            let serialized = try String(contentsOf: url).trimmingCharacters(in: .whitespacesAndNewlines)
+            parseAndSaveBizcard(from: serialized)
 
         } catch {
             os_log("%{public}s[%{public}ld], %{public}s: %s", ((#file as NSString).lastPathComponent), #line, #function, error.localizedDescription)
             let alertController = UIAlertController.standardAlert(of: error)
             present(alertController, animated: true, completion: nil)
         }
+    }
+}
+
+// MARK: - BizcardScannerViewControllerDelegate
+extension AddContactViewController: BizcardScannerViewControllerDelegate {
+    func bizcardScannerViewController(_ viewController: BizcardScannerViewController, didScanQRCode code: String) {
+        parseAndSaveBizcard(from: code)
     }
 }
 

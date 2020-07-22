@@ -65,8 +65,6 @@ extension PickColorViewModel: UICollectionViewDataSource {
 
 final class PickColorViewController: UIViewController, NeedsDependency, PickColorTransitionableViewController {
     
-    private(set) var transitionController: MainTabTransitionController!
-    
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
