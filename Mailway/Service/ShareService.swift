@@ -68,7 +68,26 @@ extension ShareService {
         
         let toQRCodeAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toQrCode, style: .default) { _ in
             os_log("%{public}s[%{public}ld], %{public}s: share as QR Code", ((#file as NSString).lastPathComponent), #line, #function)
-            
+            do {
+                let card = try ShareService.bizcard(identity: identity)
+                let serialized = try card.serialize()
+                
+                guard let qrCode = serialized.toQRCode() else {
+                    viewController.present(UIAlertController.standardAlert(of: ShareProfileError.internal), animated: true, completion: nil)
+                    return
+                }
+                
+                let activityViewController = UIActivityViewController(activityItems: [qrCode], applicationActivities: [])
+                activityViewController.completionWithItemsHandler = { type, result, items, error in
+                    os_log("%{public}s[%{public}ld], %{public}s: share activity complete: %s %s %s %s", ((#file as NSString).lastPathComponent), #line, #function, type.debugDescription, result.description, items?.debugDescription ?? "[]", error.debugDescription)
+                    // do nothing
+                }
+                activityViewController.setupAnchor(viewController: viewController, view: view)
+                viewController.present(activityViewController, animated: true)
+            } catch {
+                let errorAlertController = UIAlertController.standardAlert(of: error)
+                viewController.present(errorAlertController, animated: true, completion: nil)
+            }
         }
         alertController.addAction(toQRCodeAction)
         
@@ -110,7 +129,27 @@ extension ShareService {
         
         let toQRCodeAction = UIAlertAction(title: L10n.ContactDetail.Alert.ShareProfile.toQrCode, style: .default) { _ in
             os_log("%{public}s[%{public}ld], %{public}s: share as QR Code", ((#file as NSString).lastPathComponent), #line, #function)
-            
+            do {
+                guard let serialized = contact.businessCard?.businessCard else {
+                    throw ShareProfileError.bizcardNotFound
+                }
+                
+                guard let qrCode = serialized.toQRCode() else {
+                    viewController.present(UIAlertController.standardAlert(of: ShareProfileError.internal), animated: true, completion: nil)
+                    return
+                }
+                
+                let activityViewController = UIActivityViewController(activityItems: [qrCode], applicationActivities: [])
+                activityViewController.completionWithItemsHandler = { type, result, items, error in
+                    os_log("%{public}s[%{public}ld], %{public}s: share activity complete: %s %s %s %s", ((#file as NSString).lastPathComponent), #line, #function, type.debugDescription, result.description, items?.debugDescription ?? "[]", error.debugDescription)
+                    // do nothing
+                }
+                activityViewController.setupAnchor(viewController: viewController, view: view)
+                viewController.present(activityViewController, animated: true)
+            } catch {
+                let errorAlertController = UIAlertController.standardAlert(of: error)
+                viewController.present(errorAlertController, animated: true, completion: nil)
+            }
         }
         alertController.addAction(toQRCodeAction)
         
