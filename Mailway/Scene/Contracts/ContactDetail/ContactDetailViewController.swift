@@ -24,7 +24,7 @@ final class ContactDetailViewModel: ObservableObject {
     let removeButtonPressedPublisher = PassthroughSubject<Void, Never>()
     
     // output
-    @Published var avatar: UIImage
+    @Published var avatar: UIImage?
     @Published var name: String
     @Published var keyID: String
     @Published var contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
@@ -37,7 +37,7 @@ final class ContactDetailViewModel: ObservableObject {
     init(context: AppContext, contact: Contact) {
         self.context = context
         self.contact = contact
-        self.avatar = contact.avatar ?? UIImage.placeholder(color: .systemFill)
+        self.avatar = contact.avatar
         self.name = contact.name
         self.keyID = contact.keypair?.keyID ?? "-"
         let contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = {

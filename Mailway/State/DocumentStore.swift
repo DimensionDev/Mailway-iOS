@@ -385,7 +385,8 @@ extension DocumentStore {
     static var alice: (Contact.Property, Keypair.Property) {
         let contactProperty = Contact.Property(name: "Alice",
                                                note: "Her is Alice.",
-                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"))
+                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"),
+                                               color: .systemPurple)
 
         
         let ed25519PrivateKey = Ed25519.PrivateKey.deserialize(from: "pri1jt4x2ch75q80gy32j7kuqzgrmjydy298460mthpc3gwcxp2vll9s4apzap-Ed25519")!
@@ -400,7 +401,8 @@ extension DocumentStore {
     static var bob: (Contact.Property, Keypair.Property) {
         let contactProperty = Contact.Property(name: "Bob",
                                                note: "He is Bob.",
-                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"))
+                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"),
+                                               color: .systemPurple)
         
         
         let ed25519PrivateKey = Ed25519.PrivateKey.deserialize(from: "pri1pu3uaqqvdyne0q92g09ls5u64kcupqy6ha2q6av3dnfgq94k4qdq85048p-Ed25519")!
@@ -415,7 +417,8 @@ extension DocumentStore {
     static var eva: (Contact.Property, Keypair.Property) {
         let contactProperty = Contact.Property(name: "Eva",
                                                note: "She is Eva.",
-                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"))
+                                               avatar: UIImage(named: "elena-putina-GFhqDlwTSmI-unsplash"),
+                                               color: .systemPurple)
         
         
         let ed25519PrivateKey = Ed25519.PrivateKey.deserialize(from: "pri18xqde04j45z0xtyrgw4xd6gwcj9kswzxnp82y5nseydppz4qylkq8f8zzt-Ed25519")!

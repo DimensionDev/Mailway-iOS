@@ -87,6 +87,9 @@ extension SceneCoordinator {
         // sidebar
         case sidebar
         
+        // misc
+        case pickColor(viewModel: PickColorViewModel, delegate: PickColorViewControllerDelegate)
+        
         // debug only
         #if DEBUG
         case splitDemo(viewModel: SplitDemoViewModel)
@@ -183,6 +186,11 @@ extension SceneCoordinator {
             viewController = SettingsViewController()
         case .sidebar:
             viewController = SidebarViewController()
+        case .pickColor(let viewModel, let delegate):
+            let _viewController = PickColorViewController()
+            _viewController.viewModel = viewModel
+            _viewController.delegate = delegate
+            viewController = _viewController
             
         #if DEBUG
         case .splitDemo(viewModel: let viewModel):

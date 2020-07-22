@@ -1,5 +1,5 @@
 //
-//  AddIdentityView.swift
+//  EditProfileView.swift
 //  Mailway
 //
 //  Created by Cirno MainasuK on 2020-6-28.
@@ -9,9 +9,32 @@
 import SwiftUI
 import Combine
 
-struct AddIdentityView: View {
+struct AddIdenittyView: View {
     
-    @EnvironmentObject var context: AppContext
+    @ObservedObject var viewModel: AddIdentityViewModel
+    
+    var body: some View {
+        EditProfileView(
+            avatar: $viewModel.avatar,
+            name: $viewModel.name,
+            color: $viewModel.color,
+            infoDict: $viewModel.infoDict,
+            note: $viewModel.note,
+            pickColorAction: { self.viewModel.pickColorActionPublisher.send() }
+        )
+    }
+}
+
+struct EditProfileView: View {
+    
+    @Binding var avatar: UIImage?
+    @Binding var name: String
+    @Binding var color: UIColor
+    @Binding var infoDict: [ContactInfo.InfoType: [ContactInfo]]
+    @Binding var note: Note
+    
+    var pickColorAction: () -> Void
+    
     @ObservedObject var keyboard = KeyboardResponder()
         
     var body: some View {
@@ -20,7 +43,7 @@ struct AddIdentityView: View {
             Button("Edit Avatar") {
                     print("Tap")
                 }
-            .buttonStyle(AvatarButtonStyle(avatarImage: context.viewStateStore.addIdentityView.avatarImage.image))
+            .buttonStyle(AvatarButtonStyle(avatarImage: self.avatar ?? UIImage.placeholder(color: .systemFill)))
                 .padding(.top, 16.0)
                 .padding(.bottom, 16.0)
             
@@ -29,7 +52,7 @@ struct AddIdentityView: View {
                 VStack(spacing: 2.0) {
                     Text("Name".uppercased())
                         .modifier(TextSectionHeaderStyleModifier())
-                    TextField("Name", text: $context.viewStateStore.addIdentityView.name)
+                    TextField("Name", text: $name)
                         .modifier(TextSectionBodyStyleModifier())
                 }
                 .modifier(SectionCellPaddingStyleModifier())
@@ -42,13 +65,17 @@ struct AddIdentityView: View {
                 HStack {
                     Text("Set ID Color")
                         .modifier(TextSectionBodyStyleModifier())
-                    Image(uiImage: UIImage.placeholder(color: context.viewStateStore.addIdentityView.color))
+                    Image(uiImage: UIImage.placeholder(color: color))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 18.0, height: 18.0)
                         .cornerRadius(18.0)
                 }
                 .modifier(SectionCellPaddingStyleModifier())
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    self.pickColorAction()
+                }
                 Divider()
             }
             .padding(.leading)
@@ -57,59 +84,6 @@ struct AddIdentityView: View {
             Color.clear
                 .frame(height: 24)
                 .frame(maxWidth: .infinity)
-            
-//            // Section private key
-//            Group {
-//                VStack(spacing: 2.0) {
-//                    Text("Private Key".uppercased())
-//                        .modifier(TextSectionHeaderStyleModifier())
-//                    HStack {
-//                        Text(privateKeyArmor)
-//                            .foregroundColor(Color(UIColor.label.withAlphaComponent(0.6)))
-//                            .lineLimit(1)
-//                            .truncationMode(.tail)
-//                            .modifier(TextSectionBodyStyleModifier())
-//                        Button(action: {
-//                            print("Copy")
-//                        }) {
-//                            Image(uiImage: Asset.Editing.copy.image)
-//                                .foregroundColor(Color(UIColor.label))
-//                        }
-//                    }
-//                }
-//                .modifier(SectionCellPaddingStyleModifier())
-//                Divider()
-//            }
-//            .padding(.leading)
-//
-//            // Section public key
-//            Group {
-//                VStack(spacing: 2.0) {
-//                    Text("Public Key".uppercased())
-//                        .modifier(TextSectionHeaderStyleModifier())
-//                    HStack {
-//                        Text(publicKeyArmor)
-//                            .foregroundColor(Color(UIColor.label.withAlphaComponent(0.6)))
-//                            .lineLimit(1)
-//                            .truncationMode(.tail)
-//                            .modifier(TextSectionBodyStyleModifier())
-//                        Button(action: {
-//                            print("Copy")
-//                        }) {
-//                            Image(uiImage: Asset.Editing.copy.image)
-//                                .foregroundColor(Color(UIColor.label))
-//                        }
-//                    }
-//                }
-//                .modifier(SectionCellPaddingStyleModifier())
-//                Divider()
-//            }
-//            .padding(.leading)
-            
-//            // additional section spacing
-//            Color.clear
-//                .frame(height: 24)
-//                .frame(maxWidth: .infinity)
             
             // Channel section header
             Text("Contacts".uppercased())
@@ -126,27 +100,38 @@ struct AddIdentityView: View {
                         }) {
                             AddEntryView(iconImage: type.iconImage, entryName: type.editSectionName)
                         }
-                        ForEach(Array((self.context.viewStateStore.addIdentityView.contactInfos[type] ?? []).enumerated()), id: \.1.id) { index, info in
+                        ForEach(Array((self.infoDict[type] ?? []).enumerated()), id: \.1.id) { index, info in
                             Group {
                                 if info.avaliable {
-                                    EditableContactInfoView(contactInfo: Binding(self.$context.viewStateStore.addIdentityView.contactInfos[type])![index])
+                                    EditableContactInfoView(
+                                        contactInfo: Binding(self.$infoDict[type])![index],
+                                        removeAction: {
+                                            withAnimation {
+                                                // fix iPad crash issue
+                                                UIApplication.shared.endEditing()
+                                                self.infoDict[type]?[index].avaliable = false
+                                            }
+                                        }
+                                    )
+                                    .transition(.slide)
+                                } else {
+                                    EmptyView()
                                 }
                             }
-                            .transition(.slide)
                         }
                     }
                 }
                 // note
                 Button(action: {
                     withAnimation {
-                        self.context.viewStateStore.addIdentityView.note.isEnabled = true
+                        self.note.isEnabled = true
                     }
                 }) {
                     AddEntryView(iconImage: Asset.Communication.listBubble.image, entryName: "Node")
                 }
                 Group {
-                    if context.viewStateStore.addIdentityView.note.isEnabled {
-                        EdiableNoteView(note: $context.viewStateStore.addIdentityView.note)
+                    if note.isEnabled {
+                        EdiableNoteView(note: $note)
                     }
                 }
                 .transition(.slide)
@@ -162,7 +147,7 @@ struct AddIdentityView: View {
     }
     
     func addContactInfoInputEntry(for type: ContactInfo.InfoType) {
-        let infos = context.viewStateStore.addIdentityView.contactInfos[type] ?? []
+        let infos = infoDict[type] ?? []
         let shouldAppendNewEntry: Bool = {
             if infos.isEmpty { return true }
             if let last = infos.last, !last.isEmptyInfo { return true }
@@ -173,7 +158,7 @@ struct AddIdentityView: View {
             return
         }
         
-        context.viewStateStore.addIdentityView.contactInfos[type] = infos + [ContactInfo(type: type, key: "", value: "")]
+        infoDict[type] = infos + [ContactInfo(type: type, key: "", value: "")]
     }
     
 }
@@ -188,26 +173,44 @@ struct AddIdentityView: View {
 //    static let addEntryVerticalCenterAlignment = VerticalAlignment(AddEntryVerticalCenterAlignmentID.self)
 //}
 
+extension EditProfileView {
+    struct Note {
+        var isEnabled = false
+        var input = ""
+    }
+}
+
+
+
 struct EditableContactInfoView: View {
     
     @Binding var contactInfo: ContactInfo
+    var removeAction: () -> Void
     
     var body: some View {
         VStack(spacing: 0) {
             // key (only for .custom)
             if contactInfo.type == .custom {
-                InputEntryView(isRemoveButtonEnabled: true && !isDeleteButtonHidden,
-                               removeButtonPressAction: { self.contactInfo.avaliable = false },
-                               placeholder: "Custom network",
-                               input: $contactInfo.key,
-                               available: $contactInfo.avaliable)
+                InputEntryView(
+                    isRemoveButtonEnabled: true && !isDeleteButtonHidden,
+                    removeButtonPressAction: {
+                        self.removeAction()
+                    },
+                    placeholder: "Custom network",
+                    input: $contactInfo.key,
+                    available: $contactInfo.avaliable
+                )
             }
             // value
-            InputEntryView(isRemoveButtonEnabled: contactInfo.type != .custom && !isDeleteButtonHidden,
-                           removeButtonPressAction: { self.contactInfo.avaliable = false },
-                           placeholder: valueInputPlaceholder,
-                           input: $contactInfo.value,
-                           available: $contactInfo.avaliable)
+            InputEntryView(
+                isRemoveButtonEnabled: contactInfo.type != .custom && !isDeleteButtonHidden,
+                removeButtonPressAction: {
+                    self.removeAction()
+                },
+                placeholder: valueInputPlaceholder,
+                input: $contactInfo.value,
+                available: $contactInfo.avaliable
+            )
         }
         
     }
@@ -232,12 +235,14 @@ struct EditableContactInfoView: View {
 
 struct EdiableNoteView: View {
     
-    @Binding var note: ViewState.AddIdentityView.Note
+    @Binding var note: EditProfileView.Note
     
     var body: some View {
         InputEntryView(
             isRemoveButtonEnabled: !isDeleteButtonHidden,
             removeButtonPressAction: {
+                // fix iPad crash issue
+                UIApplication.shared.endEditing()
                 self.note.input = ""
                 self.note.isEnabled = false
             },
@@ -320,7 +325,14 @@ struct InputEntryView: View {
 
 struct AddIdentityFormView_Previews: PreviewProvider {
     static var previews: some View {
-        AddIdentityView().environmentObject(AppContext.shared)
+        EditProfileView(
+            avatar: .constant(nil),
+            name: .constant(""),
+            color: .constant(.systemPurple),
+            infoDict: .constant([:]),
+            note: .constant(.init()),
+            pickColorAction: { print("pick color") }
+        ).environmentObject(AppContext.shared)
     }
 }
 

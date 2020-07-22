@@ -23,7 +23,7 @@
 		DB0E6DD524C54943000396C3 /* SelectIdentityDropdownMenuAnimationTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E6DD424C54943000396C3 /* SelectIdentityDropdownMenuAnimationTransitioning.swift */; };
 		DB0E6DD724C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E6DD624C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift */; };
 		DB0E6DD924C58855000396C3 /* NSKeyValueObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E6DD824C58855000396C3 /* NSKeyValueObservation.swift */; };
-		DB1191EF24A887A400C1342E /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1191EE24A887A400C1342E /* AddIdentityView.swift */; };
+		DB1191EF24A887A400C1342E /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1191EE24A887A400C1342E /* EditProfileView.swift */; };
 		DB1191F124A887CD00C1342E /* EditableAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB970CA424A86DB200DE481C /* EditableAvatarView.swift */; };
 		DB1191F424A890AD00C1342E /* EditableAvatarButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1191F324A890AD00C1342E /* EditableAvatarButtonStyle.swift */; };
 		DB17252E24B8420E0090DFA9 /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB17252D24B8420E0090DFA9 /* CALayer.swift */; };
@@ -99,6 +99,8 @@
 		DB6F9DA02498BE7700D39BAD /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9D9F2498BE7700D39BAD /* Chat.swift */; };
 		DB6F9DA22498BFC800D39BAD /* ChatMemberNameStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9DA12498BFC800D39BAD /* ChatMemberNameStub.swift */; };
 		DB6F9DA42498C22600D39BAD /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F9DA32498C22600D39BAD /* ChatMessage.swift */; };
+		DB74ADE224C7E7D0002F0EDA /* PickColorTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB74ADE124C7E7D0002F0EDA /* PickColorTransitionController.swift */; };
+		DB74ADE524C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB74ADE424C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift */; };
 		DB772FF224A8382E00558F37 /* SplitDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB772FF124A8382E00558F37 /* SplitDemoViewController.swift */; };
 		DB772FF524A8423800558F37 /* SettingEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB772FF424A8423800558F37 /* SettingEntryTableViewCell.swift */; };
 		DB7E1E3E247BB68D002FC90E /* ContactListContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E1E3D247BB68D002FC90E /* ContactListContactTableViewCell.swift */; };
@@ -124,6 +126,10 @@
 		DBCB202B24C68D8900074F7A /* DraftListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB202A24C68D8900074F7A /* DraftListViewController.swift */; };
 		DBCB202F24C68F6D00074F7A /* DraftListMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB202E24C68F6D00074F7A /* DraftListMessageTableViewCell.swift */; };
 		DBCB203724C6D2ED00074F7A /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCB203624C6D2ED00074F7A /* UIImage.swift */; };
+		DBCF3C9924C6D923009407C7 /* ContactInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF3C9824C6D923009407C7 /* ContactInfo.swift */; };
+		DBCF3C9B24C6E45A009407C7 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF3C9A24C6E45A009407C7 /* UIApplication.swift */; };
+		DBCF3C9D24C6E9E4009407C7 /* PickColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF3C9C24C6E9E4009407C7 /* PickColorViewController.swift */; };
+		DBCF3CA024C6F09B009407C7 /* PickColorItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF3C9F24C6F09B009407C7 /* PickColorItemCollectionViewCell.swift */; };
 		DBE040042492303000C5184D /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040032492303000C5184D /* ContactDetailViewController.swift */; };
 		DBE040072492413600C5184D /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE040062492413600C5184D /* ContactDetailView.swift */; };
 		DBE04010249343B000C5184D /* MailwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE0400F249343B000C5184D /* MailwayUITests.swift */; };
@@ -242,7 +248,7 @@
 		DB0E6DD424C54943000396C3 /* SelectIdentityDropdownMenuAnimationTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectIdentityDropdownMenuAnimationTransitioning.swift; sourceTree = "<group>"; };
 		DB0E6DD624C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectIdentityDropdownMenuViewController.swift; sourceTree = "<group>"; };
 		DB0E6DD824C58855000396C3 /* NSKeyValueObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSKeyValueObservation.swift; sourceTree = "<group>"; };
-		DB1191EE24A887A400C1342E /* AddIdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityView.swift; sourceTree = "<group>"; };
+		DB1191EE24A887A400C1342E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		DB1191F324A890AD00C1342E /* EditableAvatarButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableAvatarButtonStyle.swift; sourceTree = "<group>"; };
 		DB17252D24B8420E0090DFA9 /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		DB17253224B866610090DFA9 /* IdentityCardCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCardCollectionViewModel.swift; sourceTree = "<group>"; };
@@ -328,6 +334,8 @@
 		DB6F9D9F2498BE7700D39BAD /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		DB6F9DA12498BFC800D39BAD /* ChatMemberNameStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMemberNameStub.swift; sourceTree = "<group>"; };
 		DB6F9DA32498C22600D39BAD /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		DB74ADE124C7E7D0002F0EDA /* PickColorTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickColorTransitionController.swift; sourceTree = "<group>"; };
+		DB74ADE424C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickColorAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		DB772FF124A8382E00558F37 /* SplitDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitDemoViewController.swift; sourceTree = "<group>"; };
 		DB772FF424A8423800558F37 /* SettingEntryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingEntryTableViewCell.swift; sourceTree = "<group>"; };
 		DB7E1E3B247BA75F002FC90E /* ContactListIdentityBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListIdentityBannerTableViewCell.swift; sourceTree = "<group>"; };
@@ -360,6 +368,10 @@
 		DBCB202A24C68D8900074F7A /* DraftListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftListViewController.swift; sourceTree = "<group>"; };
 		DBCB202E24C68F6D00074F7A /* DraftListMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftListMessageTableViewCell.swift; sourceTree = "<group>"; };
 		DBCB203624C6D2ED00074F7A /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		DBCF3C9824C6D923009407C7 /* ContactInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactInfo.swift; sourceTree = "<group>"; };
+		DBCF3C9A24C6E45A009407C7 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		DBCF3C9C24C6E9E4009407C7 /* PickColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickColorViewController.swift; sourceTree = "<group>"; };
+		DBCF3C9F24C6F09B009407C7 /* PickColorItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickColorItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		DBE040032492303000C5184D /* ContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
 		DBE040062492413600C5184D /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		DBE0400D249343B000C5184D /* MailwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MailwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -545,7 +557,7 @@
 		DB1191F024A887A800C1342E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DB1191EE24A887A400C1342E /* AddIdentityView.swift */,
+				DB1191EE24A887A400C1342E /* EditProfileView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -679,6 +691,7 @@
 				DB1E85DC24A0808F00B1558B /* ViewControllerAnimatedTransitioningDelegate.swift */,
 				DB1E85E124A082BD00B1558B /* MainTab-Sidebar */,
 				DB0E6DD324C54577000396C3 /* ComposeMessage-SelectChatIdentity */,
+				DB74ADE324C7E7D7002F0EDA /* EditProfile-PickColor */,
 			);
 			path = Transition;
 			sourceTree = "<group>";
@@ -797,6 +810,7 @@
 				DB65475424AD897C0039AFE5 /* UIView.swift */,
 				DB65475224ACA6BB0039AFE5 /* String.swift */,
 				DB0E6DD824C58855000396C3 /* NSKeyValueObservation.swift */,
+				DBCF3C9A24C6E45A009407C7 /* UIApplication.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -854,6 +868,23 @@
 			children = (
 				DB6DEC83247F745F0040C817 /* ChatListChatRoomTableViewCell.swift */,
 				DB6DEC80247F5C4F0040C817 /* ChatListInboxBannerTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DB74ADE324C7E7D7002F0EDA /* EditProfile-PickColor */ = {
+			isa = PBXGroup;
+			children = (
+				DB74ADE124C7E7D0002F0EDA /* PickColorTransitionController.swift */,
+				DB74ADE424C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift */,
+			);
+			path = "EditProfile-PickColor";
+			sourceTree = "<group>";
+		};
+		DB74ADE624C80C88002F0EDA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DBCF3C9F24C6F09B009407C7 /* PickColorItemCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1046,6 +1077,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		DBCF3C9E24C6EE2B009407C7 /* PickColor */ = {
+			isa = PBXGroup;
+			children = (
+				DB74ADE624C80C88002F0EDA /* View */,
+				DBCF3C9C24C6E9E4009407C7 /* PickColorViewController.swift */,
+			);
+			path = PickColor;
+			sourceTree = "<group>";
+		};
 		DBE04005249233E700C5184D /* ContactDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1161,6 +1201,7 @@
 				DBE306DC2474EDD000EB7193 /* Contracts */,
 				DB772FF724A84E4B00558F37 /* Identitys */,
 				DBE306DE2474EDDD00EB7193 /* Settings */,
+				DBCF3C9E24C6EE2B009407C7 /* PickColor */,
 				DB772FF324A83BA000558F37 /* SplitDemo */,
 			);
 			path = Scene;
@@ -1224,6 +1265,7 @@
 			isa = PBXGroup;
 			children = (
 				DB1EDEBE24AAF89A000C5E58 /* Bizcard.swift */,
+				DBCF3C9824C6D923009407C7 /* ContactInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1716,12 +1758,14 @@
 				DB60BF12247527D80001F9C0 /* FileStorage.swift in Sources */,
 				DBE306E0247515C000EB7193 /* DocumentStore.swift in Sources */,
 				DB1997A524B2F87300C1A293 /* ComposeMessageViewController.swift in Sources */,
+				DBCF3C9B24C6E45A009407C7 /* UIApplication.swift in Sources */,
 				DBE306E724751AB700EB7193 /* ViewState.swift in Sources */,
 				DBCB203724C6D2ED00074F7A /* UIImage.swift in Sources */,
 				DB0E6DD724C56733000396C3 /* SelectIdentityDropdownMenuViewController.swift in Sources */,
 				DB255F6A24C1BA7A000958CE /* IdentitySelectionEntryTableViewCell.swift in Sources */,
 				DB65474F24AC39970039AFE5 /* ViewState+AddIdentityView.swift in Sources */,
 				DB58E66D24BD932D0072FED2 /* CreateContactEntryTableViewCell.swift in Sources */,
+				DB74ADE224C7E7D0002F0EDA /* PickColorTransitionController.swift in Sources */,
 				DB25C75B24B7344D00813755 /* IdentityCardView.swift in Sources */,
 				DB2813A02484F64B001CDD19 /* NSLayoutConstraint.swift in Sources */,
 				DB1E85FC24A1F67C00B1558B /* SidebarEntryTableViewCell.swift in Sources */,
@@ -1744,8 +1788,10 @@
 				DB65475124AC66460039AFE5 /* UIAlertController.swift in Sources */,
 				DB1E85E324A0858600B1558B /* CGPoint.swift in Sources */,
 				DB1EDED024AB0D3F000C5E58 /* DateFormatter.swift in Sources */,
+				DBCF3C9D24C6E9E4009407C7 /* PickColorViewController.swift in Sources */,
 				DB255F6724C1A1C3000958CE /* IdentitySelectEntryView.swift in Sources */,
 				DB17253F24BD8FA30090DFA9 /* AddContactViewController.swift in Sources */,
+				DBCF3CA024C6F09B009407C7 /* PickColorItemCollectionViewCell.swift in Sources */,
 				DBA5F9EC247F90B700C9B552 /* ChatMessageTableViewCell.swift in Sources */,
 				DBE306A82474DF7B00EB7193 /* SceneDelegate.swift in Sources */,
 				DB6DEC7C247E6D300040C817 /* SelectChatIdentityViewController.swift in Sources */,
@@ -1773,6 +1819,7 @@
 				DB193887247782F500E24AFB /* MainTabBarController.swift in Sources */,
 				DB0E6DD224C543C3000396C3 /* ComposeMessageTransitionController.swift in Sources */,
 				DB772FF224A8382E00558F37 /* SplitDemoViewController.swift in Sources */,
+				DBCF3C9924C6D923009407C7 /* ContactInfo.swift in Sources */,
 				DB1E85E524A085A200B1558B /* CGVector.swift in Sources */,
 				DB7E1E43247BC8A1002FC90E /* IdentityListIdentityTableViewCell.swift in Sources */,
 				DB1997B424B6EB5400C1A293 /* IdentityDetailViewController.swift in Sources */,
@@ -1784,6 +1831,7 @@
 				DB1EC2E02488EB4C002379A1 /* ShareService.swift in Sources */,
 				DB1997B224B6BD7100C1A293 /* AvatarView.swift in Sources */,
 				DB1B0136247D09E700098254 /* UIViewPreview.swift in Sources */,
+				DB74ADE524C7E9F4002F0EDA /* PickColorAnimatedTransitioning.swift in Sources */,
 				DB1EDEBF24AAF89A000C5E58 /* Bizcard.swift in Sources */,
 				DB1E860224A1FB2B00B1558B /* Assets.swift in Sources */,
 				DB60BF16247528E20001F9C0 /* FileHelper.swift in Sources */,
@@ -1799,7 +1847,7 @@
 				DBBFABD124BEDE3C008C40F2 /* DecryptMessageViewController.swift in Sources */,
 				DB25C75D24B8225C00813755 /* HidingViews.swift in Sources */,
 				DB1191F424A890AD00C1342E /* EditableAvatarButtonStyle.swift in Sources */,
-				DB1191EF24A887A400C1342E /* AddIdentityView.swift in Sources */,
+				DB1191EF24A887A400C1342E /* EditProfileView.swift in Sources */,
 				DB1938952477E8BA00E24AFB /* ContactListViewController.swift in Sources */,
 				DB1997AA24B42A5B00C1A293 /* CryptoService.swift in Sources */,
 				DB25C75324B7236800813755 /* ProfileView.swift in Sources */,

@@ -13,33 +13,37 @@ import Combine
 import CoreDataStack
 import NtgeCore
 
-final class AddIdentityViewModel: NSObject {
+final class AddIdentityViewModel: ObservableObject {
     
     var disposeBag = Set<AnyCancellable>()
     
+    // input
     let context: AppContext
+    let pickColorActionPublisher = PassthroughSubject<Void, Never>()
     
     // output
+    @Published var avatar: UIImage?
+    @Published var name = ""
+    @Published var color = UIColor.pickPanelColors.dropLast().randomElement()!
+    @Published var infoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
+    @Published var note = EditProfileView.Note()
+    
+    
     let isAddBarButtonItemEnabled = CurrentValueSubject<Bool, Never>(false)
     let insertedContact = PassthroughSubject<Contact, Never>()
     
     init(context: AppContext) {
-        context.viewStateStore.addIdentityView = ViewState.AddIdentityView()    // reset state
         self.context = context
         
-        super.init()
-        
-        context.viewStateStore.addIdentityView.namePublisher
+        $name
             .map { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
             .assign(to: \.value, on: isAddBarButtonItemEnabled)
             .store(in: &disposeBag)
     }
     
     func createIdentity() -> Future<Result<Void, Swift.Error>, Never> {
-        let viewState = context.viewStateStore.addIdentityView
-        
         // 1. check name
-        let name = viewState.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let name = self.name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else {
             return Future { $0(.success(Result.failure(Error.nameEmpty))) }
         }
@@ -51,7 +55,7 @@ final class AddIdentityViewModel: NSObject {
         var orderedContactInfo: [ContactInfo] = []
         var validContactChannelProperties: [ContactChannel.Property] = []
         for infoType in ContactInfo.InfoType.allCases {
-            orderedContactInfo.append(contentsOf: viewState.contactInfos[infoType] ?? [])
+            orderedContactInfo.append(contentsOf: infoDict[infoType] ?? [])
         }
         for info in orderedContactInfo {
             guard info.avaliable else { continue }      // skip removed info
@@ -66,7 +70,7 @@ final class AddIdentityViewModel: NSObject {
         }
 
         // 3. check note
-        let note = viewState.note.input.trimmingCharacters(in: .whitespacesAndNewlines)
+        let note = self.note.input.trimmingCharacters(in: .whitespacesAndNewlines)
         guard note.count <= 512 else {
             return Future { $0(.success(Result.failure(Error.noteTooLong))) }
         }
@@ -75,7 +79,7 @@ final class AddIdentityViewModel: NSObject {
         // TODO:
         
         // prepare database stuff
-        let contactProperty = Contact.Property(name: name, note: note.isEmpty ? nil : note, avatar: nil, color: UIColor.pickPanelColors.randomElement()!)
+        let contactProperty = Contact.Property(name: name, note: note.isEmpty ? nil : note, avatar: nil, color: color)
         
         let ed25519Keypair = Ed25519.Keypair()
         let privateKey = ed25519Keypair.privateKey
@@ -204,7 +208,7 @@ extension AddIdentityViewModel {
     
 }
 
-final class AddIdentityViewController: UIViewController, NeedsDependency {
+final class AddIdentityViewController: UIViewController, NeedsDependency, EditProfileTransitionableViewController {
     
     var disposeBag = Set<AnyCancellable>()
     
@@ -212,6 +216,8 @@ final class AddIdentityViewController: UIViewController, NeedsDependency {
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     private(set) lazy var viewModel = AddIdentityViewModel(context: context)
+    
+    private(set) var transitionController: PickColorTransitionController!
     
     private lazy var closeBarButtonItem: UIBarButtonItem = {
         let item = UIBarButtonItem()
@@ -234,7 +240,7 @@ final class AddIdentityViewController: UIViewController, NeedsDependency {
         return item
     }()
     
-    let addIdentityView = AddIdentityView()
+    private lazy var addIdentityView = AddIdenittyView(viewModel: viewModel)
     
 }
 
@@ -242,6 +248,8 @@ extension AddIdentityViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        transitionController = PickColorTransitionController(viewController: self)
         
         view.backgroundColor = .systemBackground
         navigationItem.leftBarButtonItem = closeBarButtonItem
@@ -268,6 +276,14 @@ extension AddIdentityViewController {
             .sink { [weak self] contact in
                 os_log("%{public}s[%{public}ld], %{public}s: did insert contact %s", ((#file as NSString).lastPathComponent), #line, #function, contact.debugDescription)
                 self?.dismiss(animated: true, completion: nil)
+            }
+            .store(in: &disposeBag)
+        
+        viewModel.pickColorActionPublisher
+            .sink { [weak self] _ in
+                guard let `self` = self else { return }
+                let pickColorViewModel = PickColorViewModel(colors: UIColor.pickPanelColors, initialSelectColor: self.viewModel.color)
+                self.coordinator.present(scene: .pickColor(viewModel: pickColorViewModel, delegate: self), from: self, transition: .custom(transitioningDelegate: self.transitionController))
             }
             .store(in: &disposeBag)
     }
@@ -306,6 +322,15 @@ extension AddIdentityViewController: UIAdaptivePresentationControllerDelegate {
         } else {
             return .fullScreen
         }
+    }
+    
+}
+
+// MARK: - PickColorViewControllerDelegate
+extension AddIdentityViewController: PickColorViewControllerDelegate {
+    
+    func pickColorViewController(_ viewController: PickColorViewController, didPickColor color: UIColor) {
+        viewModel.color = color
     }
     
 }

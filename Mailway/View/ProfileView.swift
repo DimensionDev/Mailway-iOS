@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @Binding var avatar: UIImage
+    @Binding var avatar: UIImage?
     @Binding var colorBarColor: UIColor
     @Binding var name: String
     @Binding var isMyProfile: Bool
@@ -29,7 +29,7 @@ struct ProfileView: View {
                 // Banner
                 Group {
                     // avatar
-                    ProfileAvatarView(avatar: $avatar)
+                    ProfileAvatarView(avatar: avatar, name: name)
                     // 14pt padding
                     Color.clear.frame(width: .leastNonzeroMagnitude, height: 14)
                     // color bar
@@ -192,13 +192,31 @@ fileprivate struct TextSectionHeaderStyleModifier: ViewModifier {
 }
 
 struct ProfileAvatarView: View {
-    @Binding var avatar: UIImage
     
+    let avatar: UIImage?
+    let name: String
+
     var body: some View {
-        Image(uiImage: avatar)
-            .resizable()
-            .frame(width: 135, height: 135)
-            .cornerRadius(135 * 0.5)
+        ZStack {
+            if avatar != nil {
+                Circle()
+                    .overlay(
+                        GeometryReader { proxy in
+                            Image(uiImage: self.avatar!)
+                                .resizable()
+                                .cornerRadius(proxy.size.width * 0.5)
+                        }
+                )
+            } else {
+                Circle()
+                    .foregroundColor(Color(Asset.Color.Background.blue.color))
+                Text(String(name.prefix(1)))
+                    .font(.system(size: 72, weight: .medium))
+                    .foregroundColor(.white)
+            }
+        }
+        .frame(width: 135, height: 135)
+        .cornerRadius(135 * 0.5)
     }
 }
 
@@ -222,7 +240,7 @@ struct ProfileView_Previews: PreviewProvider {
         ]
         return Group {
             ProfileView(
-                avatar: .constant(UIImage.placeholder(color: .systemFill)),
+                avatar: .constant(UIImage.placeholder(color: .systemTeal)),
                 colorBarColor: .constant(.systemPurple),
                 name: .constant("Alice"),
                 isMyProfile: .constant(true),
@@ -235,7 +253,7 @@ struct ProfileView_Previews: PreviewProvider {
             )
             
             ProfileView(
-                avatar: .constant(UIImage.placeholder(color: .systemFill)),
+                avatar: .constant(nil),
                 colorBarColor: .constant(.systemPurple),
                 name: .constant("Alice"),
                 isMyProfile: .constant(true),

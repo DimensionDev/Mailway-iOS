@@ -24,7 +24,7 @@ final class IdentityDetailViewModel: ObservableObject {
     let copyKeyIDActionPublisher = PassthroughSubject<Void, Never>()
     
     // output
-    @Published var avatar: UIImage
+    @Published var avatar: UIImage?
     @Published var color: UIColor
     @Published var name: String
     @Published var keyID: String
@@ -35,8 +35,8 @@ final class IdentityDetailViewModel: ObservableObject {
     init(context: AppContext, identity: Contact) {
         self.context = context
         self.identity = identity
-        self.avatar = identity.avatar ?? UIImage.placeholder(color: .systemFill)
-        self.color = .systemPurple
+        self.avatar = identity.avatar
+        self.color = identity.color
         self.name = identity.name
         self.keyID = identity.keypair?.keyID ?? "-"
         let contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = {

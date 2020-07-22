@@ -6,15 +6,11 @@
 //  Copyright © 2020 Dimension. All rights reserved.
 //
 
+import os
 import UIKit
 
-protocol ComposeMessageTransitionableViewController: UIViewController {
-    
-}
-
-protocol SelectIdentityDropdownMenuTransitionableViewController: UIViewController {
-    
-}
+protocol ComposeMessageTransitionableViewController: UIViewController { }
+protocol SelectIdentityDropdownMenuTransitionableViewController: UIViewController { }
 
 final class ComposeMessageTransitionController: NSObject {
     
@@ -42,6 +38,10 @@ final class ComposeMessageTransitionController: NSObject {
     
     init(viewController: ComposeMessageTransitionableViewController) {
         self.composeMessageTransitionableViewController = viewController
+    }
+    
+    deinit {
+        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
     }
     
 }

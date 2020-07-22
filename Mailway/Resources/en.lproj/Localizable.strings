@@ -71,3 +71,4 @@ You can export any Bizcard from the contact list";
 "Error.InternalError.RecoverySuggestion" = "Please try again.";
 "Error.InternalError.Title" = "Internal Error";
 "Inbox.Title" = "Inbox";
+"PickColor.Title" = "Pick Color";
