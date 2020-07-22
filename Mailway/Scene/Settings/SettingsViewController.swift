@@ -23,7 +23,8 @@ extension SettingsViewModel {
     static func configure(cell: SettingEntryTableViewCell, section: Section) {
         switch section {
         case .identity:
-            cell.iconImageView.image = Asset.Human.personCropCircle.image
+            cell.iconImageView.image = Asset.Human.personCropCircle.image.withRenderingMode(.alwaysTemplate)
+            cell.iconImageView.tintColor = .label
             cell.titleLabel.text = "Identity"
         }
     }

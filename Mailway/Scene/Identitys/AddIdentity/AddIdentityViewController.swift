@@ -12,6 +12,7 @@ import SwiftUI
 import Combine
 import CoreDataStack
 import NtgeCore
+import TOCropViewController
 
 final class AddIdentityViewModel: ObservableObject {
     
@@ -19,6 +20,7 @@ final class AddIdentityViewModel: ObservableObject {
     
     // input
     let context: AppContext
+    let pickAvatarActionPublisher = PassthroughSubject<Void, Never>()
     let pickColorActionPublisher = PassthroughSubject<Void, Never>()
     
     // output
@@ -76,10 +78,10 @@ final class AddIdentityViewModel: ObservableObject {
         }
         
         // 4. avatar
-        // TODO:
+        // TODO: resize
         
         // prepare database stuff
-        let contactProperty = Contact.Property(name: name, note: note.isEmpty ? nil : note, avatar: nil, color: color)
+        let contactProperty = Contact.Property(name: name, note: note.isEmpty ? nil : note, avatar: avatar, color: color)
         
         let ed25519Keypair = Ed25519.Keypair()
         let privateKey = ed25519Keypair.privateKey
@@ -242,6 +244,8 @@ final class AddIdentityViewController: UIViewController, NeedsDependency, EditPr
     
     private lazy var addIdentityView = AddIdenittyView(viewModel: viewModel)
     
+    let imagePickerController = UIImagePickerController()
+    
 }
 
 extension AddIdentityViewController {
@@ -268,6 +272,10 @@ extension AddIdentityViewController {
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.delegate = self
+        // imagePickerController.allowsEditing = true
+        
         viewModel.isAddBarButtonItemEnabled
             .assign(to: \.isEnabled, on: addBarButtonItem)
             .store(in: &disposeBag)
@@ -276,6 +284,13 @@ extension AddIdentityViewController {
             .sink { [weak self] contact in
                 os_log("%{public}s[%{public}ld], %{public}s: did insert contact %s", ((#file as NSString).lastPathComponent), #line, #function, contact.debugDescription)
                 self?.dismiss(animated: true, completion: nil)
+            }
+            .store(in: &disposeBag)
+        
+        viewModel.pickAvatarActionPublisher
+            .sink { [weak self] in
+                guard let `self` = self else { return }
+                self.present(self.imagePickerController, animated: true, completion: nil)
             }
             .store(in: &disposeBag)
         
@@ -324,6 +339,29 @@ extension AddIdentityViewController: UIAdaptivePresentationControllerDelegate {
         }
     }
     
+}
+
+// MARK: - UIImagePickerControllerDelegate
+extension AddIdentityViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.originalImage] as? UIImage else {
+            return
+        }
+        
+        let cropViewController = TOCropViewController(croppingStyle: .circular, image: image)
+        cropViewController.delegate = self
+        picker.dismiss(animated: true) {
+            self.present(cropViewController, animated: true, completion: nil)
+        }
+    }
+}
+
+// MARK: - TOCropViewControllerDelegate
+extension AddIdentityViewController: TOCropViewControllerDelegate {
+    func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
+        viewModel.avatar = image
+        cropViewController.dismiss(animated: true, completion: nil)
+    }
 }
 
 // MARK: - PickColorViewControllerDelegate

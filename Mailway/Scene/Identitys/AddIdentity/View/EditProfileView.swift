@@ -20,6 +20,7 @@ struct AddIdenittyView: View {
             color: $viewModel.color,
             infoDict: $viewModel.infoDict,
             note: $viewModel.note,
+            pickAvatarAction: { self.viewModel.pickAvatarActionPublisher.send() },
             pickColorAction: { self.viewModel.pickColorActionPublisher.send() }
         )
     }
@@ -33,6 +34,7 @@ struct EditProfileView: View {
     @Binding var infoDict: [ContactInfo.InfoType: [ContactInfo]]
     @Binding var note: Note
     
+    var pickAvatarAction: () -> Void
     var pickColorAction: () -> Void
     
     @ObservedObject var keyboard = KeyboardResponder()
@@ -41,8 +43,8 @@ struct EditProfileView: View {
         ScrollView {
             // Section avatar
             Button("Edit Avatar") {
-                    print("Tap")
-                }
+                self.pickAvatarAction()
+            }
             .buttonStyle(AvatarButtonStyle(avatarImage: self.avatar ?? UIImage.placeholder(color: .systemFill)))
                 .padding(.top, 16.0)
                 .padding(.bottom, 16.0)
@@ -331,6 +333,7 @@ struct AddIdentityFormView_Previews: PreviewProvider {
             color: .constant(.systemPurple),
             infoDict: .constant([:]),
             note: .constant(.init()),
+            pickAvatarAction: { print("pick avatar") },
             pickColorAction: { print("pick color") }
         ).environmentObject(AppContext.shared)
     }
