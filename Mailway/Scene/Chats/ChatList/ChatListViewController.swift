@@ -64,15 +64,69 @@ extension ChatListViewModel {
 extension ChatListViewModel {
     
     static func configure(cell: ChatListChatRoomTableViewCell, with chat: Chat) {
+        // do not display identity when not only identity in the chat
+        
+        let recipientStubs = chat.memberNameStubs?
+            .filter { $0.publicKey != chat.identityPublicKey }  // remove self
+            .sorted(by: { lhs, rhs in
+                switch (lhs.name, rhs.name) {
+                case (.some(let l), .some(let r)):      return l < r
+                case (.some, .none):                    return true
+                case (.none, .some):                    return false
+                case (.none, .none):                    return true
+                }
+            }) ?? []
+        let identityStub = chat.memberNameStubs?.first(where: { $0.publicKey == chat.identityPublicKey })
+        
+        let recipients: [Contact?] = recipientStubs.map { stub in
+            let request = Contact.sortedFetchRequest
+            request.predicate = Contact.predicate(publicKey: stub.publicKey)
+            request.fetchLimit = 1
+            do {
+                return try chat.managedObjectContext?.fetch(request).first
+            } catch {
+                assertionFailure(error.localizedDescription)
+                return nil
+            }
+        }
+        
+        cell.avatarViewModel.infos = {
+            let infos: [AvatarViewModel.Info] = zip(recipientStubs, recipients).lazy.map { stub, recipient in
+                let name = stub.name ?? "A"
+                let image = recipient?.avatar
+                return AvatarViewModel.Info(name: name, image: image)
+            }
+            .prefix(3)
+            .reversed()
+            
+            guard !infos.isEmpty else {
+                let avatar: UIImage? = {
+                    guard let stub = identityStub else {
+                        return nil
+                    }
+                    let request = Contact.sortedFetchRequest
+                    request.predicate = Contact.predicate(publicKey: stub.publicKey)
+                    request.fetchLimit = 1
+                    do {
+                        return try chat.managedObjectContext?.fetch(request).first?.avatar
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                        return nil
+                    }
+                }()
+                
+                return [AvatarViewModel.Info(name: identityStub?.name ?? "A", image: avatar)]
+            }
+            return infos
+        }()
+        
         cell.titleLabel.text = {
             guard let title = chat.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                let names = chat.memberNameStubs?
-                    .filter { $0.publicKey != chat.identityPublicKey }  // remove sender
-                    .compactMap { $0.i18nName ?? $0.name } ?? []
-                
+                let names = recipientStubs.compactMap { $0.name }
                 let text = names.sorted().joined(separator: ", ")
                 guard !text.isEmpty else {
-                    return "<Empty>"
+                    // no recipients but only sender
+                    return chat.memberNameStubs?.first?.name ?? "<Empty>"
                 }
                 return text
             }
@@ -207,14 +261,6 @@ final class ChatListViewController: UIViewController, NeedsDependency, MainTabTr
         return item
     }()
     
-//    private lazy var composeBarButtonItem: UIBarButtonItem = {
-//        let item = UIBarButtonItem()
-//        item.image = UIImage(systemName: "square.and.pencil")
-//        item.target = self
-//        item.action = #selector(ChatListViewController.composeBarButtonItemPressed(_:))
-//        return item
-//    }()
-    
     private lazy var floatyButton: Floaty = {
         let button = Floaty()
         button.plusColor = .white
@@ -272,6 +318,8 @@ extension ChatListViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        view.addSubview(floatyButton)
+        
         viewModel.tableView = tableView
         tableView.delegate = self
         do {
@@ -281,15 +329,6 @@ extension ChatListViewController {
         }
         tableView.dataSource = viewModel
         tableView.reloadData()
-        
-        view.addSubview(floatyButton)
-        
-//        viewModel.chats
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] _ in
-//                self?.tableView.reloadData()
-//            }
-//            .store(in: &disposeBag)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -332,7 +371,7 @@ extension ChatListViewController {
     }
     
     @objc private func receiveFloatyItemPressed(_ sender: FloatyItem) {
-        
+        coordinator.present(scene: .decryptMessage, from: self, transition: .modal(animated: true, completion: nil))
     }
     
 }
@@ -341,21 +380,15 @@ extension ChatListViewController {
 extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: true)
-//        guard let cell = tableView.cellForRow(at: indexPath) else  { return }
-//        
-//        if cell is ChatListInboxBannerTableViewCell {
-//            coordinator.present(scene: .inbox, from: self, transition: .modal(animated: true, completion: nil))
-//        }
-//    
-//        if cell is ChatListChatRoomTableViewCell, indexPath.row < viewModel.chats.value.count {
-//            let chat = viewModel.chats.value[indexPath.row]
-//            let chatViewModel = ChatViewModel(context: context, chat: chat)
-//            chatViewModel.items.value = context.documentStore.chatMessages
-//                .filter { chat.contains(message: $0) }
-//                .map { ChatViewModel.Item.chatMessage($0) }
-//            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
-//        }
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) else { return }
+
+        if cell is ChatListChatRoomTableViewCell {
+            let chat = viewModel.fetchedResultsController.object(at: indexPath)
+            let chatViewModel = ChatViewModel(context: context, chat: chat)
+
+            coordinator.present(scene: .chatRoom(viewModel: chatViewModel), from: self, transition: .showDetail)
+        }
     }
     
 }

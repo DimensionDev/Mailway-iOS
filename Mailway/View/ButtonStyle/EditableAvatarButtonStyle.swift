@@ -20,7 +20,7 @@ extension VerticalAlignment {
 
 struct AvatarButtonStyle: ButtonStyle {
     
-    @State var avatarImage = UIImage.placeholder(color: .systemFill)
+    var avatarImage: UIImage
     
     func makeBody(configuration: Configuration) -> some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .avatarBottomAlignment)) {
@@ -47,7 +47,7 @@ struct EditableAvatarButtonStyle_Previews: PreviewProvider {
         Button("Edit Avatar", action: {
             print("Tap")
         })
-        .buttonStyle(AvatarButtonStyle())
+        .buttonStyle(AvatarButtonStyle(avatarImage: UIImage.placeholder(color: .systemFill)))
         .previewLayout(.sizeThatFits)
     }
 }

@@ -62,13 +62,18 @@ extension SceneCoordinator {
     
     enum Scene {
         // chats
-        case inbox
         case createChat
         case composeMessage(viewModel: ComposeMessageViewModel)
-        // case selectChatIdentity(delegate: SelectChatIdentityViewControllerDelegate)
+        case selectIdentityDropdownMenu(viewModel: SelectIdentityDropdownMenuViewModel, delegate: SelectIdentityDropdownMenuViewControllerDelegate)
+        case decryptMessage
+        case selectChatIdentity(viewModel: SelectChatIdentityViewModel, delegate: SelectChatIdentityViewControllerDelegate)
         case chatRoom(viewModel: ChatViewModel)
         
+        // drafts
+        
+        
         // contacts
+        case addContact
         case contactDetail(viewModel: ContactDetailViewModel)
         
         // identities
@@ -81,6 +86,10 @@ extension SceneCoordinator {
         
         // sidebar
         case sidebar
+        
+        // misc
+        case pickColor(viewModel: PickColorViewModel, delegate: PickColorViewControllerDelegate)
+        case bizcardScanner(delegate: BizcardScannerViewControllerDelegate)
         
         // debug only
         #if DEBUG
@@ -137,29 +146,34 @@ extension SceneCoordinator {
 extension SceneCoordinator {
     private func get(scene: Scene) -> UIViewController {
         let viewController: UIViewController
-        
         switch scene {
-        case .inbox:
-            viewController = MessageInboxViewController()
         case .createChat:
             viewController = CreateChatViewController()
         case .composeMessage(let viewModel):
             let _viewController = ComposeMessageViewController()
             _viewController.viewModel = viewModel
             viewController = _viewController
-//        case .selectChatIdentity(let delegate):
-//            let _viewController = SelectChatIdentityViewController()
-//            _viewController.delegate = delegate
-//            viewController = _viewController
+        case .selectIdentityDropdownMenu(let viewModel, let delegate):
+            let _viewController = SelectIdentityDropdownMenuViewController()
+            _viewController.viewModel = viewModel
+            _viewController.delegate = delegate
+            viewController = _viewController
+        case .decryptMessage:
+            viewController = DecryptMessageViewController()
+        case .addContact:
+            viewController = AddContactViewController()
         case .contactDetail(let viewModel):
             let _viewController = ContactDetailViewController()
             _viewController.viewModel = viewModel
-            // _viewController.hidesBottomBarWhenPushed = true
+            viewController = _viewController
+        case .selectChatIdentity(let viewModel, let delegate):
+            let _viewController = SelectChatIdentityViewController()
+            _viewController.viewModel = viewModel
+            _viewController.delegate = delegate
             viewController = _viewController
         case .chatRoom(let viewModel):
             let _viewController = ChatViewController()
             _viewController.viewModel = viewModel
-            // _viewController.hidesBottomBarWhenPushed = true
             viewController = _viewController
         case .identityList:
             viewController = IdentityListViewController()
@@ -173,6 +187,15 @@ extension SceneCoordinator {
             viewController = SettingsViewController()
         case .sidebar:
             viewController = SidebarViewController()
+        case .pickColor(let viewModel, let delegate):
+            let _viewController = PickColorViewController()
+            _viewController.viewModel = viewModel
+            _viewController.delegate = delegate
+            viewController = _viewController
+        case .bizcardScanner(let delegate):
+            let _viewController = BizcardScannerViewController()
+            _viewController.delegate = delegate
+            viewController = _viewController
             
         #if DEBUG
         case .splitDemo(viewModel: let viewModel):

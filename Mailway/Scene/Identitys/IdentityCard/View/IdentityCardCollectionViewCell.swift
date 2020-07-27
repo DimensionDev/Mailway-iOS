@@ -42,7 +42,14 @@ extension IdentityCardCollectionViewCell {
             contentView.bottomAnchor.constraint(equalTo: identityCardView.bottomAnchor),
         ])
         
-        identityCardView.backgroundColor = .systemBackground
+        identityCardView.backgroundColor = UIColor(dynamicProvider: { traitCollection -> UIColor in
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                return .secondarySystemBackground   // elevate
+            default:
+                return .systemBackground
+            }
+        })
         identityCardView.layer.masksToBounds = true
         identityCardView.layer.cornerRadius = 16
     }

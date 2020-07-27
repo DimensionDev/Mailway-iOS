@@ -24,11 +24,12 @@ final class ContactDetailViewModel: ObservableObject {
     let removeButtonPressedPublisher = PassthroughSubject<Void, Never>()
     
     // output
-    @Published var avatar: UIImage
+    @Published var avatar: UIImage?
     @Published var name: String
     @Published var keyID: String
     @Published var contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
     @Published var note: String
+    @Published var isPlaceholderHidden: Bool
 
     let contactDidRemovedPublisher = PassthroughSubject<Void, Never>()
     let error = PassthroughSubject<Error, Never>()
@@ -36,10 +37,10 @@ final class ContactDetailViewModel: ObservableObject {
     init(context: AppContext, contact: Contact) {
         self.context = context
         self.contact = contact
-        self.avatar = contact.avatar ?? UIImage.placeholder(color: .systemFill)
+        self.avatar = contact.avatar
         self.name = contact.name
         self.keyID = contact.keypair?.keyID ?? "-"
-        self.contactInfoDict = {
+        let contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = {
             var infoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
             
             let infos = contact.channels?.compactMap { channel -> ContactInfo in
@@ -52,10 +53,10 @@ final class ContactDetailViewModel: ObservableObject {
             }
             return infoDict
         }()
-        self.note = contact.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        
-        // setup action
-        // TODO: Share Profile
+        self.contactInfoDict = contactInfoDict
+        let note = contact.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        self.note = note
+        self.isPlaceholderHidden = contactInfoDict.isEmpty && note.isEmpty
         
         copyKeyIDActionPublisher
             .sink { _ in
@@ -135,6 +136,14 @@ extension ContactDetailViewController {
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+        
+        viewModel.shareProfileActionPublisher
+            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: false)
+            .sink { [weak self] _ in
+                guard let `self` = self else { return }
+                ShareService.share(contact: self.viewModel.contact, from: self)
+            }
+            .store(in: &disposeBag)
         
         viewModel.contactDidRemovedPublisher
             .sink { [weak self] _ in

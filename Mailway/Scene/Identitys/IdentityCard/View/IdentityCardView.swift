@@ -19,14 +19,8 @@ final class IdentityCardView: UIView {
         return bar
     }()
     
-    let avatarImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.placeholder(color: .systemFill)
-        imageView.contentMode = .scaleToFill
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = 48 * 0.5
-        return imageView
-    }()
+    private lazy var avatarView = AvatarView(viewModel: avatarViewModel)
+    let avatarViewModel = AvatarViewModel()
     
     let nameLabel: UILabel = {
         let label = UILabel()
@@ -67,20 +61,22 @@ extension IdentityCardView {
             colorBarView.heightAnchor.constraint(equalToConstant: 28).priority(.defaultHigh),
         ])
         
-        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(avatarImageView)
+        let hostingController = UIHostingController(rootView: avatarView)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(hostingController.view)
         NSLayoutConstraint.activate([
-            avatarImageView.leadingAnchor.constraint(equalTo: colorBarView.trailingAnchor, constant: 18),
-            avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 48).priority(.defaultHigh),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 48).priority(.defaultHigh),
+            hostingController.view.leadingAnchor.constraint(equalTo: colorBarView.trailingAnchor, constant: 18),
+            hostingController.view.centerYAnchor.constraint(equalTo: centerYAnchor),
+            hostingController.view.widthAnchor.constraint(equalToConstant: 48).priority(.defaultHigh),
+            hostingController.view.heightAnchor.constraint(equalToConstant: 48).priority(.defaultHigh),
         ])
+        hostingController.view.backgroundColor = .clear
         
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         addSubview(container)
         NSLayoutConstraint.activate([
-            container.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 24).priority(.defaultHigh),
+            container.leadingAnchor.constraint(equalTo: hostingController.view.trailingAnchor, constant: 24).priority(.defaultHigh),
             layoutMarginsGuide.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             container.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])

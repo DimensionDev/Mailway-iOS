@@ -6,6 +6,14 @@
   Copyright © 2020 Dimension. All rights reserved.
 */
 
+"Common.Cancel" = "Cancel";
+"Common.Ok" = "OK";
+"ComposeMessage.Alert.DiscardCompose.Discard" = "Discard";
+"ComposeMessage.Alert.DiscardCompose.MessageComposeOrSaveDraft" = "Please confirm discard message composing or save as draft.";
+"ComposeMessage.Alert.DiscardCompose.MessageComposeOrUpdateDraft" = "Please confirm discard message composing or update draft.";
+"ComposeMessage.Alert.DiscardCompose.SaveDraft" = "Save Draft";
+"ComposeMessage.Alert.DiscardCompose.Title" = "Discard Compose";
+"ComposeMessage.Alert.DiscardCompose.UpdateDraft" = "Update Draft";
 "ComposeMessage.Error.EmptyMessage.ErrorDescription" = "Message Format Invalid";
 "ComposeMessage.Error.EmptyMessage.FailureReason" = "Cannot compose empty message.";
 "ComposeMessage.Error.EmptyMessage.Message" = "Cannot compose empty message. Please input message and try again.";
@@ -21,4 +29,46 @@
 "ComposeMessage.Error.RecipientNotFound.Message" = "Cannot compose message without recipient. Please select recipient and try again.";
 "ComposeMessage.Error.RecipientNotFound.RecoverySuggestion" = "Please select recipient and try again.";
 "ComposeMessage.Error.RecipientNotFound.Title" = "Recipient Not Found";
+"ContactDetail.Alert.ShareProfile.ToFile" = "To File";
+"ContactDetail.Alert.ShareProfile.ToQrCode" = "To QR Code";
+"ContactDetail.Error.ContactBizcardNotFound.ErrorDescription" = "Bizcard Not Found";
+"ContactDetail.Error.ContactBizcardNotFound.FailureReason" = "Cannot share bizcard because bizcard of this contact not found.";
+"ContactDetail.Error.ContactBizcardNotFound.Message" = "Cannot share bizcard because bizcard of this contact not found. Please try again.";
+"ContactDetail.Error.ContactBizcardNotFound.RecoverySuggestion" = "Please try again.";
+"ContactDetail.Error.ContactBizcardNotFound.Title" = "Bizcard Not Found";
+"ContactDetail.Error.SignerKeyNotFound.ErrorDescription" = "Key Not Found";
+"ContactDetail.Error.SignerKeyNotFound.FailureReason" = "Cannot share profile because signer key of this profile not found.";
+"ContactDetail.Error.SignerKeyNotFound.Message" = "Cannot share profile because signer key of this profile not found. Please try again.";
+"ContactDetail.Error.SignerKeyNotFound.RecoverySuggestion" = "Please try again.";
+"ContactDetail.Error.SignerKeyNotFound.Title" = "Key Not Found";
+"CreateContact.Error.BizcardValidateFail.ErrorDescription" = "Bizcard Invalid";
+"CreateContact.Error.BizcardValidateFail.FailureReason" = "Bizcard signature broken.";
+"CreateContact.Error.BizcardValidateFail.Message" = "Bizcard signature broken. Please select valid bizcard and try again.";
+"CreateContact.Error.BizcardValidateFail.RecoverySuggestion" = "Please select valid bizcard and try again.";
+"CreateContact.Error.BizcardValidateFail.Title" = "Bizcard Invalid";
+"CreateContact.Error.DuplicateContact.ErrorDescription" = "Duplicate Contact";
+"CreateContact.Error.DuplicateContact.FailureReason" = "Contact already exists.";
+"CreateContact.Error.DuplicateContact.Message" = "Contact already exists. Please select another bizcard and try again.";
+"CreateContact.Error.DuplicateContact.RecoverySuggestion" = "Please select another bizcard and try again.";
+"CreateContact.Error.DuplicateContact.Title" = "Duplicate Contact";
+"CreateContact.Error.NotBizcard.ErrorDescription" = "Bizcard Invalid";
+"CreateContact.Error.NotBizcard.FailureReason" = "Cannot read bizcard from this file.";
+"CreateContact.Error.NotBizcard.Message" = "Cannot read bizcard from this file. Please select valid bizcard and try again.";
+"CreateContact.Error.NotBizcard.RecoverySuggestion" = "Please select valid bizcard and try again.";
+"CreateContact.Error.NotBizcard.Title" = "Bizcard Invalid";
+"CreateContact.ImportFile" = "Import a Bizcard file";
+"CreateContact.Prompt" = "Import a QR code or Bizcard file to add a contact.
+You can export any Bizcard from the contact list";
+"CreateContact.ScanQrCode" = "Scan the Bizcard QR code";
+"CreateContact.Title" = "Add Contact";
+"DecryptMessage.DecryptFileButton" = "Decrypt a file";
+"DecryptMessage.DecryptResultPlaceholder" = "Decrypted Text";
+"DecryptMessage.InputPlaceholder" = "MsgBegin…";
+"DecryptMessage.Title" = "Decrypting";
+"Error.InternalError.ErrorDescription" = "Internal Error";
+"Error.InternalError.FailureReason" = "Unknown error.";
+"Error.InternalError.Message" = "Unknown error. Please try again.";
+"Error.InternalError.RecoverySuggestion" = "Please try again.";
+"Error.InternalError.Title" = "Internal Error";
 "Inbox.Title" = "Inbox";
+"PickColor.Title" = "Pick Color";

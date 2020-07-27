@@ -20,7 +20,7 @@ protocol SidebarTransitionableViewController: UIViewController {
 final class MainTabTransitionController: NSObject {
     
     enum TransitionType {
-        case presentationSidebar
+        case presentSidebar
         case dismissSidebar
     }
     
@@ -143,7 +143,7 @@ extension MainTabTransitionController {
         }
 
         switch transitionType {
-        case .presentationSidebar:
+        case .presentSidebar:
             wantsInteractive = true
             viewController?.coordinator.present(scene: .sidebar, from: viewController, transition: .custom(transitioningDelegate: self))
 
@@ -167,7 +167,7 @@ extension MainTabTransitionController {
         }
         
         switch transitionType {
-        case .presentationSidebar:
+        case .presentSidebar:
             assertionFailure()
             break
         case .dismissSidebar:
@@ -217,7 +217,7 @@ extension MainTabTransitionController: UIGestureRecognizerDelegate {
         }
         
         if gestureRecognizer === screenEdgePanGestureRecognizer, viewController != nil {
-            transitionType = .presentationSidebar
+            transitionType = .presentSidebar
             return true
         }
         

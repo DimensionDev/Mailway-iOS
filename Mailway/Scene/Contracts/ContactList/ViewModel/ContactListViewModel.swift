@@ -31,7 +31,7 @@ final class ContactListViewModel: NSObject {
             let fetchRequest = Contact.sortedFetchRequest
             fetchRequest.returnsObjectsAsFaults = false
             fetchRequest.fetchBatchSize = 20
-            // fetchRequest.predicate = Contact.notIdentityPredicate
+            fetchRequest.predicate = Contact.notIdentityPredicate
             let controller = NSFetchedResultsController(
                 fetchRequest: fetchRequest,
                 managedObjectContext: context.managedObjectContext,
@@ -60,7 +60,8 @@ extension ContactListViewModel {
 extension ContactListViewModel {
     
     static func configure(cell: ContactListContactTableViewCell, with contact: Contact) {
-        cell.nameLabel.text = contact.i18nName ?? contact.name
+        cell.nameLabel.text = contact.name
+        cell.avatarViewModel.infos = [AvatarViewModel.Info(name: contact.name, image: contact.avatar)]
     }
     
 }

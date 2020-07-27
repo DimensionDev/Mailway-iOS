@@ -7,18 +7,12 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class IdentityListIdentityTableViewCell: UITableViewCell {
-    
-    let avatarImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.placeholder(color: .systemFill)
-        imageView.contentMode = .scaleAspectFill
-        imageView.tintColor = .label
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = 40 * 0.5
-        return imageView
-    }()
+
+    private lazy var avatarView = AvatarView(viewModel: avatarViewModel)
+    let avatarViewModel = AvatarViewModel()
     
     let colorBarView: UIView = {
         let bar = UIView()
@@ -58,21 +52,23 @@ final class IdentityListIdentityTableViewCell: UITableViewCell {
 extension IdentityListIdentityTableViewCell {
     
     private func _init() {
-        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(avatarImageView)
+        let hostingController = UIHostingController(rootView: avatarView)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(hostingController.view)
         NSLayoutConstraint.activate([
-            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
-            avatarImageView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 18),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 40),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 40).priority(.defaultHigh),
+            hostingController.view.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
+            hostingController.view.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor, constant: 18),
+            hostingController.view.widthAnchor.constraint(equalToConstant: 40),
+            hostingController.view.heightAnchor.constraint(equalToConstant: 40).priority(.defaultHigh),
         ])
+        hostingController.view.backgroundColor = .clear
         
         colorBarView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(colorBarView)
         NSLayoutConstraint.activate([
-            colorBarView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            colorBarView.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
+            colorBarView.leadingAnchor.constraint(equalTo: hostingController.view.trailingAnchor, constant: 16),
+            colorBarView.centerYAnchor.constraint(equalTo: hostingController.view.centerYAnchor),
             colorBarView.widthAnchor.constraint(equalToConstant: 2),
             colorBarView.heightAnchor.constraint(equalToConstant: 40 - 2 * 4),
         ])

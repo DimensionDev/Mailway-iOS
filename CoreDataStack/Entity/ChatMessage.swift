@@ -12,6 +12,7 @@ import CoreData
 final public class ChatMessage: NSManagedObject {
     
     @NSManaged public private(set) var id: UUID
+    @NSManaged public private(set) var messageID: String
     
     @NSManaged public private(set) var senderPublicKey: String?
     @NSManaged public private(set) var recipientPublicKeys: [String]
@@ -34,6 +35,7 @@ final public class ChatMessage: NSManagedObject {
             payloadKindRawValue = newValue.rawValue
         }
     }
+    @NSManaged public private(set) var isDraft: Bool
     
     @NSManaged public private(set) var createdAt: Date
     @NSManaged public private(set) var updatedAt: Date
@@ -77,12 +79,14 @@ extension ChatMessage {
     public static func insert(into context: NSManagedObjectContext, property: Property, chat: Chat?, quoteMessage: QuoteMessage?) -> ChatMessage {
         let chatMessage: ChatMessage = context.insertObject()
         
+        chatMessage.messageID = property.messageID
         chatMessage.senderPublicKey = property.senderPublicKey
         chatMessage.recipientPublicKeys = property.recipientPublicKeys
         chatMessage.version = property.version
         chatMessage.armoredMessage = property.armoredMessage
         chatMessage.payload = property.payload
         chatMessage.payloadKind = property.payloadKind
+        chatMessage.isDraft = property.isDraft
         chatMessage.messageTimestamp = property.messageTimestamp
         chatMessage.composeTimestamp = property.composeTimestamp
         chatMessage.receiveTimestamp = property.receiveTimestamp
@@ -94,10 +98,24 @@ extension ChatMessage {
         return chatMessage
     }
     
+    public func update(payload: Data) {
+        self.payload = payload
+    }
+    
+    public func update(recipientPublicKeys: [String]) {
+        self.recipientPublicKeys = recipientPublicKeys
+    }
+    
+    public func update(senderPublicKey: String) {
+        self.senderPublicKey = senderPublicKey
+    }
+    
 }
 
 extension ChatMessage {
     public struct Property {
+        public let messageID: String
+        
         public let senderPublicKey: String?
         public let recipientPublicKeys: [String]
         
@@ -106,24 +124,35 @@ extension ChatMessage {
         public let armoredMessage: String?
         public let payload: Data
         public let payloadKind: PayloadKind
+        public let isDraft: Bool
+        
         public let messageTimestamp: Date?
         public let composeTimestamp: Date?
         public let receiveTimestamp: Date
         public let shareTimestamp: Date?
         
-        public init(senderPublicKey: String?,
-                    recipientPublicKeys: [String],
-                    version: Int,
-                    armoredMessage: String?,
-                    payload: Data,
-                    payloadKind: PayloadKind, messageTimestamp: Date?, composeTimestamp: Date?, receiveTimestamp: Date, shareTimestamp: Date?)
-        {
+        public init(
+            messageID: String,
+            senderPublicKey: String?,
+            recipientPublicKeys: [String],
+            version: Int,
+            armoredMessage: String?,
+            payload: Data,
+            payloadKind: PayloadKind,
+            isDraft: Bool,
+            messageTimestamp: Date?,
+            composeTimestamp: Date?,
+            receiveTimestamp: Date,
+            shareTimestamp: Date?
+        ) {
+            self.messageID = messageID
             self.senderPublicKey = senderPublicKey
             self.recipientPublicKeys = recipientPublicKeys
             self.version = Int64(version)
             self.armoredMessage = armoredMessage
             self.payload = payload
             self.payloadKind = payloadKind
+            self.isDraft = isDraft
             self.messageTimestamp = messageTimestamp
             self.composeTimestamp = composeTimestamp
             self.receiveTimestamp = receiveTimestamp
@@ -147,7 +176,17 @@ extension ChatMessage {
 }
 
 extension ChatMessage {
+    
     public static func predicate(chat: Chat) -> NSPredicate {
         return NSPredicate(format: "%K == %@", #keyPath(ChatMessage.chat), chat)
     }
+    
+    public static func predicate(messageID: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(ChatMessage.messageID), messageID)
+    }
+    
+    public static var isDraftPredicate: NSPredicate {
+        return NSPredicate(format: "%K == YES", #keyPath(ChatMessage.isDraft))
+    }
+    
 }

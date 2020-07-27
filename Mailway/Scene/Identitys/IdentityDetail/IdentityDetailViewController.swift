@@ -12,31 +12,34 @@ import SwiftUI
 import Combine
 import CoreDataStack
 
+// TODO: refactor use UIKit
 final class IdentityDetailViewModel: ObservableObject {
     
     var disposeBag = Set<AnyCancellable>()
 
     // input
     let context: AppContext
+    let identity: Contact
     let shareProfileActionPublisher = PassthroughSubject<Void, Never>()
     let copyKeyIDActionPublisher = PassthroughSubject<Void, Never>()
     
     // output
-    @Published var avatar: UIImage
+    @Published var avatar: UIImage?
     @Published var color: UIColor
     @Published var name: String
     @Published var keyID: String
     @Published var contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
     @Published var note: String
+    @Published var isPlaceholderHidden: Bool
 
     init(context: AppContext, identity: Contact) {
         self.context = context
-        
-        self.avatar = identity.avatar ?? UIImage.placeholder(color: .systemFill)
-        self.color = .systemPurple
+        self.identity = identity
+        self.avatar = identity.avatar
+        self.color = identity.color
         self.name = identity.name
         self.keyID = identity.keypair?.keyID ?? "-"
-        self.contactInfoDict = {
+        let contactInfoDict: [ContactInfo.InfoType: [ContactInfo]] = {
             var infoDict: [ContactInfo.InfoType: [ContactInfo]] = [:]
             
             let infos = identity.channels?.compactMap { channel -> ContactInfo in
@@ -49,7 +52,10 @@ final class IdentityDetailViewModel: ObservableObject {
             }
             return infoDict
         }()
-        self.note = identity.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        self.contactInfoDict = contactInfoDict
+        let note = identity.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        self.note = note
+        self.isPlaceholderHidden = contactInfoDict.isEmpty && note.isEmpty
         
         copyKeyIDActionPublisher
             .sink { _ in
@@ -105,6 +111,7 @@ extension IdentityDetailViewController {
             .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: false)
             .sink { _ in
                 os_log("%{public}s[%{public}ld], %{public}s: share profile", ((#file as NSString).lastPathComponent), #line, #function)
+                ShareService.share(identity: self.viewModel.identity, from: self)
             }
             .store(in: &disposeBag)
     }

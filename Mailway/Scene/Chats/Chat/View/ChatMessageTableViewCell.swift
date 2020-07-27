@@ -10,155 +10,60 @@ import UIKit
 import SwiftUI
 
 protocol ChatMessageTableViewCellDelegate: class {
-    func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, shareButtonPressed button: UIButton)
+    func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, replyButtonPressed button: UIButton)
+    func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, moreButtonPressed button: UIButton)
 }
 
 final class ChatMessageTableViewCell: UITableViewCell {
     
     weak var delegate: ChatMessageTableViewCellDelegate?
     
-    let avatarImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.crop.circle.fill")
-        imageView.contentMode = .scaleAspectFill
-        imageView.tintColor = .label
-        return imageView
-    }()
+    private lazy var avatarView = AvatarView(viewModel: avatarViewModel)
+    let avatarViewModel = AvatarViewModel()
     
-    let senderContactInfoView: ContactInfoView = {
-        let infoView = ContactInfoView()
-        infoView.shortKeyIDLabel.isUserInteractionEnabled = false
-        return infoView
-    }()
-
-    // Not use stack view spacing to avoid AutoLayout warning issue
-    private(set) lazy var composeInfoContainer: UIView = {
-        let container = UIView()
-        
-        composeTimestampLabel.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(composeTimestampLabel)
-        NSLayoutConstraint.activate([
-            composeTimestampLabel.topAnchor.constraint(equalTo: container.topAnchor),
-            composeTimestampLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            container.bottomAnchor.constraint(equalTo: composeTimestampLabel.bottomAnchor),
-        ])
-        let middlePaddingView = UIView()
-        middlePaddingView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(middlePaddingView)
-        NSLayoutConstraint.activate([
-            middlePaddingView.topAnchor.constraint(equalTo: container.topAnchor),
-            middlePaddingView.leadingAnchor.constraint(equalTo: composeTimestampLabel.trailingAnchor),
-            middlePaddingView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            middlePaddingView.widthAnchor.constraint(equalToConstant: 4).priority(.defaultHigh),
-        ])
-        composeIconImageView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(composeIconImageView)
-        NSLayoutConstraint.activate([
-            composeIconImageView.topAnchor.constraint(equalTo: container.topAnchor),
-            composeIconImageView.leadingAnchor.constraint(equalTo: middlePaddingView.trailingAnchor),
-            composeIconImageView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-        ])
-        let trailingPaddingView = UIView()
-        trailingPaddingView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(trailingPaddingView)
-        NSLayoutConstraint.activate([
-            trailingPaddingView.topAnchor.constraint(equalTo: container.topAnchor),
-            trailingPaddingView.leadingAnchor.constraint(equalTo: composeIconImageView.trailingAnchor),
-            trailingPaddingView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            trailingPaddingView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            trailingPaddingView.widthAnchor.constraint(equalToConstant: 8).priority(.defaultHigh),
-        ])
-        
-        return container
-    }()
-
-    let composeIconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "signature",
-                                  withConfiguration: UIImage.SymbolConfiguration(pointSize: 13, weight: .light))
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .secondaryLabel
-        imageView.transform = CGAffineTransform(translationX: 0, y: -2)
-        return imageView
-    }()
-    
-    let composeTimestampLabel: UILabel = {
+    let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 11, weight: .regular)
-        label.text = "YYYY/MM/DD"
-        label.textColor = .secondaryLabel
+        label.font = .systemFont(ofSize: 16)
+        label.text = "<Unknown>"
         return label
     }()
     
-    private(set) lazy var receiveInfoContainer: UIView = {
-        let container = UIView()
-        
-        receiveTimestampLabel.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(receiveTimestampLabel)
-        NSLayoutConstraint.activate([
-            receiveTimestampLabel.topAnchor.constraint(equalTo: container.topAnchor),
-            receiveTimestampLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            container.bottomAnchor.constraint(equalTo: receiveTimestampLabel.bottomAnchor),
-        ])
-        let middlePaddingView = UIView()
-        middlePaddingView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(middlePaddingView)
-        NSLayoutConstraint.activate([
-            middlePaddingView.topAnchor.constraint(equalTo: container.topAnchor),
-            middlePaddingView.leadingAnchor.constraint(equalTo: receiveTimestampLabel.trailingAnchor),
-            middlePaddingView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            middlePaddingView.widthAnchor.constraint(equalToConstant: 4).priority(.defaultLow),
-        ])
-        receiveIconImageView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(receiveIconImageView)
-        NSLayoutConstraint.activate([
-            receiveIconImageView.topAnchor.constraint(equalTo: container.topAnchor),
-            receiveIconImageView.leadingAnchor.constraint(equalTo: middlePaddingView.trailingAnchor),
-            receiveIconImageView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            receiveIconImageView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-        ])
-        
-        return container
+    let replyButton: UIButton = {
+        let button = HitTestExpandedButton(type: .system)
+        button.expandEdgeInsets = UIEdgeInsets(top: -12, left: -12, bottom: -12, right: -12)
+        let image = Asset.Communication.arrowshapeTurnUpLeftFill.image.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: .normal)
+        button.tintColor = UIColor.label.withAlphaComponent(0.54)
+        return button
     }()
     
-    let receiveIconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "tray.and.arrow.down",
-                                  withConfiguration: UIImage.SymbolConfiguration(pointSize: 13, weight: .light))
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .secondaryLabel
-        imageView.transform = CGAffineTransform(translationX: 0, y: -1)
-        return imageView
+    let moreButton: UIButton = {
+        let button = HitTestExpandedButton(type: .system)
+        button.expandEdgeInsets = UIEdgeInsets(top: -12, left: -12, bottom: -12, right: -12)
+        let image = Asset.Editing.moreVertical.image.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: .normal)
+        button.tintColor = UIColor.label.withAlphaComponent(0.54)
+        return button
+    }()
+    
+    let messageLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14)
+        label.numberOfLines = 3
+        label.textColor = .secondaryLabel
+        label.contentMode = .top
+        return label
     }()
     
     let receiveTimestampLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 11, weight: .regular)
-        label.text = "YYYY/MM/DD"
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.text = "-"
         label.textColor = .secondaryLabel
         return label
     }()
     
-    private(set) lazy var shareButton: UIButton = {
-        let button = HitTestExpandedButton()
-        button.expandEdgeInsets = UIEdgeInsets(top: -20, left: -20, bottom: -20, right: 0)
-        let shareIcon = UIImage(systemName: "square.and.arrow.up",
-                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 13, weight: .light))!
-        button.setImage(shareIcon, for: .normal)
-        button.tintColor = .secondaryLabel
-        button.addTarget(self, action: #selector(ChatMessageTableViewCell.shareButtonPressed(_:)), for: .touchUpInside)
-        return button
-    }()
-    
-    let messageContentTextView: UITextView = {
-        let textView = UITextView()
-        textView.isScrollEnabled = false
-        textView.isEditable = false
-        textView.isSelectable = false
-        textView.font = .preferredFont(forTextStyle: .body)
-        textView.isUserInteractionEnabled = false
-        return textView
-    }()
+    let separatorLine = UIView.separatorLine
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -177,68 +82,67 @@ extension ChatMessageTableViewCell {
     private func _init() {
         selectionStyle = .none
         
-        // header
-        let headerStackView = UIStackView()
-        headerStackView.axis = .horizontal
-        headerStackView.spacing = 4
-        
-        headerStackView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(headerStackView)
+        let hostingController = UIHostingController(rootView: avatarView)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(hostingController.view)
         NSLayoutConstraint.activate([
-            headerStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            headerStackView.leadingAnchor.constraint(equalTo: contentView.readableContentGuide.leadingAnchor),
-            contentView.readableContentGuide.trailingAnchor.constraint(equalTo: headerStackView.trailingAnchor),            
+            hostingController.view.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            hostingController.view.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            hostingController.view.widthAnchor.constraint(equalToConstant: 32).priority(.defaultHigh),
+            hostingController.view.heightAnchor.constraint(equalToConstant: 32).priority(.defaultHigh),
+        ])
+        hostingController.view.backgroundColor = .clear
+        
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(nameLabel)
+        NSLayoutConstraint.activate([
+            nameLabel.centerYAnchor.constraint(equalTo: hostingController.view.centerYAnchor),
+            nameLabel.leadingAnchor.constraint(equalTo: hostingController.view.trailingAnchor, constant: 16),
+        ])
+        nameLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        
+        replyButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(replyButton)
+        NSLayoutConstraint.activate([
+            replyButton.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
+            replyButton.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 16),
         ])
         
-        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        headerStackView.addArrangedSubview(avatarImageView)
+        moreButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(moreButton)
         NSLayoutConstraint.activate([
-            avatarImageView.widthAnchor.constraint(equalToConstant: 44),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 44).priority(.defaultHigh),
-        ])
-
-        let textContainerStackView: UIStackView = {
-            let stackView = UIStackView()
-            stackView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.axis = .vertical
-            stackView.distribution = .fillProportionally
-            stackView.spacing = 0
-            stackView.accessibilityIdentifier = "Text Container StackView"
-         
-            return stackView
-        }()
-
-        senderContactInfoView.translatesAutoresizingMaskIntoConstraints = false
-        textContainerStackView.addArrangedSubview(senderContactInfoView)
-
-        let timestampStackView = UIStackView()
-        timestampStackView.accessibilityIdentifier = "Timestamp StackView"
-        timestampStackView.axis = .horizontal
-        timestampStackView.addArrangedSubview(composeInfoContainer)
-        timestampStackView.addArrangedSubview(receiveInfoContainer)
-        timestampStackView.addArrangedSubview(UIView()) // padding
-
-        textContainerStackView.addArrangedSubview(timestampStackView)
-        headerStackView.addArrangedSubview(textContainerStackView)
-        
-        shareButton.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(shareButton)
-        NSLayoutConstraint.activate([
-            headerStackView.trailingAnchor.constraint(equalTo: shareButton.trailingAnchor),
-            shareButton.centerYAnchor.constraint(equalTo: timestampStackView.centerYAnchor),
+            moreButton.centerYAnchor.constraint(equalTo: replyButton.centerYAnchor),
+            moreButton.leadingAnchor.constraint(equalTo: replyButton.trailingAnchor, constant: 24),
+            contentView.layoutMarginsGuide.trailingAnchor.constraint(equalTo: moreButton.trailingAnchor),
         ])
         
-        // content
-        messageContentTextView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(messageContentTextView)
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(messageLabel)
         NSLayoutConstraint.activate([
-            messageContentTextView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
-            messageContentTextView.leadingAnchor.constraint(equalTo: contentView.readableContentGuide.leadingAnchor),
-            contentView.readableContentGuide.trailingAnchor.constraint(equalTo: messageContentTextView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: messageContentTextView.bottomAnchor).priority(.defaultHigh),
+            messageLabel.topAnchor.constraint(equalTo: hostingController.view.bottomAnchor, constant: 16),
+            messageLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentView.layoutMarginsGuide.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor),
         ])
         
-        contentView.bringSubviewToFront(shareButton)
+        receiveTimestampLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(receiveTimestampLabel)
+        NSLayoutConstraint.activate([
+            receiveTimestampLabel.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 13),
+            contentView.layoutMarginsGuide.trailingAnchor.constraint(equalTo: receiveTimestampLabel.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: receiveTimestampLabel.bottomAnchor, constant: 13),
+        ])
+        
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(separatorLine)
+        NSLayoutConstraint.activate([
+            separatorLine.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentView.layoutMarginsGuide.trailingAnchor.constraint(equalTo: separatorLine.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: separatorLine.bottomAnchor),
+            separatorLine.heightAnchor.constraint(equalToConstant: UIView.separatorLineHeight(of: separatorLine)),
+        ])
+        
+        replyButton.addTarget(self, action: #selector(ChatMessageTableViewCell.replyButtonPressed(_:)), for: .touchUpInside)
+        moreButton.addTarget(self, action: #selector(ChatMessageTableViewCell.moreButtonPressed(_:)), for: .touchUpInside)
     }
     
     override var intrinsicContentSize: CGSize {
@@ -248,9 +152,15 @@ extension ChatMessageTableViewCell {
 }
 
 extension ChatMessageTableViewCell {
-    @objc private func shareButtonPressed(_ sender: UIButton) {
-        delegate?.chatMessageTableViewCell(self, shareButtonPressed: sender)
+    
+    @objc private func replyButtonPressed(_ sender: UIButton) {
+        delegate?.chatMessageTableViewCell(self, replyButtonPressed: sender)
     }
+    
+    @objc private func moreButtonPressed(_ sender: UIButton) {
+        delegate?.chatMessageTableViewCell(self, moreButtonPressed: sender)
+    }
+    
 }
 
 #if DEBUG
@@ -258,15 +168,7 @@ struct ChatMessageTableViewCell_Previews: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
             let cell = ChatMessageTableViewCell()
-            cell.senderContactInfoView.nameLabel.text = "Alice"
-            cell.senderContactInfoView.shortKeyIDLabel.text = String("0816fe6c1edebe9fbb83af9102ad9c899abec1a87a1d123bc24bf119035a2853".suffix(8)).uppercased()
-            cell.composeTimestampLabel.text = {
-                let date = Date().advanced(by: -1 * 24 * 60 * 60)
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateStyle = .medium
-                dateFormatter.timeStyle = .none
-                return dateFormatter.string(from: date)
-            }()
+            cell.nameLabel.text = "Alice"
             cell.receiveTimestampLabel.text = {
                 let date = Date()
                 let dateFormatter = DateFormatter()
@@ -275,13 +177,13 @@ struct ChatMessageTableViewCell_Previews: PreviewProvider {
                 return dateFormatter.string(from: date)
             }()
             
-            cell.messageContentTextView.text = """
+            cell.messageLabel.text = """
             You knock on the door but nobody answers. Cupping your hands around your face you peer through the side-panel of frosted glass. A kettle is whistling, a woman singing as she sets the table. This is a familiar house. You knock again. Inside, the sounds are festive. Glasses clink and a band starts up. Pressing your ear to the door, you hear the sound of your own laughter. This is the house you grew up in. You're sure of it now.
             The revelers are boisterous, their dancing shadows on the lawn. Your legs are cold, there's frost on your shoes, and the cabby calls impatiently from the street. You remember a song that eluded you all day.
             """
             return cell
         }
-        .previewLayout(.fixed(width: 320, height: 500))
+        .previewLayout(.fixed(width: 320, height: 200))
     }
 }
 #endif

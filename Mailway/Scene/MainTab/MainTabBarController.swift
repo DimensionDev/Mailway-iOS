@@ -20,12 +20,14 @@ final class MainTabBarController: UITabBarController {
     
     enum Tabs: Int, CaseIterable {
         case chats
+        case drafts
         case contacts
         case settings
         
         var title: String {
             switch self {
             case .chats:    return "Chats"
+            case .drafts:   return "Drafts"
             case .contacts: return "Contacts"
             case .settings: return "Settings"
             }
@@ -34,6 +36,7 @@ final class MainTabBarController: UITabBarController {
         var image: UIImage {
             switch self {
             case .chats:    return UIImage(systemName: "message.fill")!
+            case .drafts:   return UIImage(systemName: "archivebox")!
             case .contacts: return UIImage(systemName: "person.crop.circle")!
             case .settings: return UIImage(systemName: "gear")!
             }
@@ -44,6 +47,11 @@ final class MainTabBarController: UITabBarController {
             switch self {
             case .chats:
                 let viewController = ChatListViewController()
+                viewController.context = context
+                viewController.coordinator = coordinator
+                navigationController = UINavigationController(rootViewController: viewController)
+            case .drafts:
+                let viewController = DraftListViewController()
                 viewController.context = context
                 viewController.coordinator = coordinator
                 navigationController = UINavigationController(rootViewController: viewController)
@@ -79,6 +87,8 @@ final class MainTabBarController: UITabBarController {
                 switch entry {
                 case .inbox:
                     self.selectedIndex = Tabs.chats.rawValue
+                case .drafts:
+                    self.selectedIndex = Tabs.drafts.rawValue
                 case .contacts:
                     self.selectedIndex = Tabs.contacts.rawValue
                 case .settings:

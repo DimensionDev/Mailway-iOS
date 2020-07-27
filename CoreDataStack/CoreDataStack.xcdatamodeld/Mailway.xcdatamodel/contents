@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="BusinessCard" representedClassName=".BusinessCard" syncable="YES">
+        <attribute name="businessCard" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="contact" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="businessCard" inverseEntity="Contact"/>
+    </entity>
     <entity name="Chat" representedClassName=".Chat" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -11,7 +18,6 @@
     </entity>
     <entity name="ChatMemberNameStub" representedClassName=".ChatMemberNameStub" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="i18nNames" optional="YES" attributeType="Transformable" valueTransformerName="i18NameTransformer" customClassName="."/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="keyID" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -24,12 +30,14 @@
         <attribute name="composeTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isDraft" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="messageID" optional="YES" attributeType="String"/>
         <attribute name="messageTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="payload" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="payloadKind" optional="YES" transient="YES" attributeType="String"/>
         <attribute name="payloadKindRawValue" optional="YES" attributeType="String"/>
         <attribute name="receiveTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="recipientPublicKeys" optional="YES" attributeType="Transformable" valueTransformerName="KeysTransformer" customClassName="."/>
+        <attribute name="recipientPublicKeys" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="[String]"/>
         <attribute name="senderPublicKey" optional="YES" attributeType="String"/>
         <attribute name="shareTimestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -38,15 +46,15 @@
         <relationship name="quoteMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="QuoteMessage" inverseName="chatMessage" inverseEntity="QuoteMessage"/>
     </entity>
     <entity name="Contact" representedClassName=".Contact" syncable="YES">
-        <attribute name="avatar" optional="YES" transient="YES" attributeType="String"/>
         <attribute name="avatarData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="color" optional="YES" attributeType="Transformable" customClassName="UIColor"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="i18nNames" optional="YES" attributeType="Transformable" valueTransformerName="i18NameTransformer" customClassName="."/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="nameFirstInitial" optional="YES" transient="YES" attributeType="String"/>
         <attribute name="note" optional="YES" attributeType="String"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="businessCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BusinessCard" inverseName="contact" inverseEntity="BusinessCard"/>
         <relationship name="channels" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ContactChannel" inverseName="contact" inverseEntity="ContactChannel"/>
         <relationship name="keypair" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Keypair" inverseName="contact" inverseEntity="Keypair"/>
     </entity>
@@ -79,9 +87,10 @@
         <relationship name="chatMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChatMessage" inverseName="quoteMessage" inverseEntity="ChatMessage"/>
     </entity>
     <elements>
+        <element name="BusinessCard" positionX="-234" positionY="153" width="128" height="118"/>
         <element name="Chat" positionX="-54" positionY="63" width="128" height="148"/>
-        <element name="ChatMemberNameStub" positionX="-62.14453125" positionY="332.484375" width="128" height="163"/>
-        <element name="ChatMessage" positionX="135.08984375" positionY="98.80859375" width="128" height="283"/>
+        <element name="ChatMemberNameStub" positionX="-62.14453125" positionY="332.484375" width="128" height="148"/>
+        <element name="ChatMessage" positionX="135.08984375" positionY="98.80859375" width="128" height="313"/>
         <element name="Contact" positionX="-257.73828125" positionY="213.62890625" width="128" height="208"/>
         <element name="ContactChannel" positionX="-213.74609375" positionY="41.3125" width="128" height="133"/>
         <element name="Keypair" positionX="-439.5078125" positionY="1.25390625" width="128" height="148"/>

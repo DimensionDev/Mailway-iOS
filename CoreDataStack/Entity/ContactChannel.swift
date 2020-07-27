@@ -54,7 +54,7 @@ extension ContactChannel {
             self.value = value
         }
         
-        public enum ChannelName {
+        public enum ChannelName: Hashable {
             case email
             case twitter
             case facebook
@@ -82,6 +82,15 @@ extension ContactChannel {
                 case .telegram:             return "telegram"
                 case .discord:              return "discord"
                 case .custom(let name):     return name.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+            }
+            
+            public var isCustom: Bool {
+                switch self {
+                case .custom:
+                    return true
+                default:
+                    return false
                 }
             }
             

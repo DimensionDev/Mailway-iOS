@@ -13,9 +13,9 @@ final public class Contact: NSManagedObject {
     
     @NSManaged public private(set) var id: UUID
     @NSManaged public private(set) var name: String
-    @NSManaged public private(set) var i18nNames: [String: String]?
     @NSManaged public private(set) var note: String?
     @NSManaged public private(set) var avatarData: Data?
+    @NSManaged public private(set) var color: UIColor
     
     @NSManaged public private(set) var createdAt: Date
     @NSManaged public private(set) var updatedAt: Date
@@ -23,8 +23,7 @@ final public class Contact: NSManagedObject {
     // transient property
     @objc public var nameFirstInitial: String {
         willAccessValue(forKey: #keyPath(nameFirstInitial))
-        let usingName = i18nName ?? name
-        let mutableString = NSMutableString(string: usingName.trimmingCharacters(in: .whitespacesAndNewlines)) as CFMutableString
+        let mutableString = NSMutableString(string: name.trimmingCharacters(in: .whitespacesAndNewlines)) as CFMutableString
         CFStringTransform(mutableString, nil, kCFStringTransformToLatin, false)                // to Latin
         CFStringTransform(mutableString, nil, kCFStringTransformStripCombiningMarks, false)    // remove accent
         let latin = mutableString as String
@@ -42,53 +41,28 @@ final public class Contact: NSManagedObject {
         return firstInitial
     }
     
-    public var i18nName: String? {
-        var i18nName: String?
-        let i18nNames = self.i18nNames ?? [:]
-        if !i18nNames.isEmpty {
-            let preferredLanguages = Locale.preferredLanguages
-            for language in preferredLanguages {
-                let locale = Locale(identifier: language)
-                guard let languageCode = locale.languageCode else {
-                    continue
-                }
-                
-                i18nName = i18nNames[languageCode]
-                break
-            }
-        }
-        
-        return i18nName
-    }
-    
-    // primitive property
-    @NSManaged private var primitiveAvatar: UIImage?
-    
     // transient property
-    @objc public private(set) var avatar: UIImage? {
+    @objc public var avatar: UIImage? {
         get {
             willAccessValue(forKey: #keyPath(avatar))
-            var image = primitiveAvatar
+            let image = avatarData.flatMap { UIImage(data: $0) }
             didAccessValue(forKey: #keyPath(avatar))
-            
-            if image == nil {
-                image = avatarData.flatMap { UIImage(data: $0) }
-                primitiveAvatar = image
-            }
             
             return image
         }
         set {
             willChangeValue(forKey: #keyPath(avatar))
-            primitiveAvatar = newValue
-            didChangeValue(forKey: #keyPath(avatar))
-            
             avatarData = newValue?.pngData()
+            didChangeValue(forKey: #keyPath(avatar))
         }
     }
     
     // one-to-one keypair
     @NSManaged public private(set) var keypair: Keypair?
+    
+    // one-to-one keypair
+    @NSManaged public private(set) var businessCard: BusinessCard?
+    
     // one-to-many relationship
     @NSManaged public private(set) var channels: Set<ContactChannel>?
     
@@ -107,33 +81,39 @@ extension Contact {
     }
     
     @discardableResult
-    public static func insert(into context: NSManagedObjectContext, property: Property, keypair: Keypair, channels: [ContactChannel]) -> Contact {
+    public static func insert(into context: NSManagedObjectContext, property: Property, keypair: Keypair, channels: [ContactChannel], businessCard: BusinessCard?) -> Contact {
         let contact: Contact = context.insertObject()
         contact.name = property.name
-        contact.i18nNames = property.i18nNames
         contact.note = property.note
         contact.avatar = property.avatar
+        contact.color = property.color
         
         contact.keypair = keypair
+        contact.businessCard = businessCard
         contact.channels = Set(channels)
 //        contact.mutableSetValue(forKey: #keyPath(Contact.channels)).addObjects(from: channels)
         return contact
     }
+    
+    public func update(color: UIColor) {
+        self.color = color
+    }
+    
 }
 
 
 extension Contact {
     public struct Property {
         public let name: String
-        public let i18nNames: [String:String]?
         public let note: String?
         public let avatar: UIImage?
+        public let color: UIColor
         
-        public init(name: String, i18nNames: [String: String]? = nil, note: String? = nil, avatar: UIImage? = nil) {
+        public init(name: String, note: String? = nil, avatar: UIImage? = nil, color: UIColor) {
             self.name = name
-            self.i18nNames = i18nNames
             self.note = note
             self.avatar = avatar
+            self.color = color
         }
     }
 }

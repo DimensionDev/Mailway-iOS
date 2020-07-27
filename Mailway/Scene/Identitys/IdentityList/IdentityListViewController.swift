@@ -43,11 +43,6 @@ final class IdentityListViewModel: NSObject {
         super.init()
         
         fetchedResultsController.delegate = self
-        
-//        context.documentStore.$contacts
-//            .map { $0.filter { $0.isIdentity }}
-//            .assign(to: \.value, on: self.identities)
-//            .store(in: &disposeBag)
     }
     
 }
@@ -62,8 +57,8 @@ extension IdentityListViewModel {
 extension IdentityListViewModel {
     
     static func configure(cell: IdentityListIdentityTableViewCell, with identity: Contact) {
-        cell.avatarImageView.image = identity.avatar ?? UIImage.placeholder(color: .systemFill)
-        // TODO: color bar
+        cell.avatarViewModel.infos = [.init(name: identity.name, image: identity.avatar)]
+        cell.colorBarView.backgroundColor = identity.color
         cell.nameLabel.text = identity.name
         cell.keyIDLabel.text = identity.keypair.flatMap { String($0.keyID.suffix(8)).separate(every: 4, with: " ") } ?? "-"
     }

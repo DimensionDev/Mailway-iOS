@@ -75,7 +75,8 @@ extension SidebarViewModel: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView is SidebarViewController.SettingsEntryTableView {
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: SidebarEntryTableViewCell.self), for: indexPath) as! SidebarEntryTableViewCell
-            cell.entryView.iconImageView.image = Asset.Sidebar.settings.image
+            cell.entryView.iconImageView.image = Asset.Sidebar.settings.image.withRenderingMode(.alwaysTemplate)
+            cell.entryView.iconImageView.tintColor = .label
             cell.entryView.titleLabel.text = "Settings"
             return cell
         }
@@ -198,7 +199,7 @@ extension SidebarViewController: UITableViewDelegate {
             case .subInbox:
                 break   // TODO:
             case .drafts:
-                break   // TODO:
+                NotificationCenter.default.post(name: SidebarViewController.didSelectEntry, object: Entry.drafts)
             case .contacts:
                 NotificationCenter.default.post(name: SidebarViewController.didSelectEntry, object: Entry.contacts)
             case .plugins:

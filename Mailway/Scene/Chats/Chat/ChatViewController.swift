@@ -10,176 +10,181 @@ import os
 import UIKit
 import Combine
 import NtgeCore
+import CoreData
 import CoreDataStack
+import Floaty
 
 final class ChatViewModel: NSObject {
     
     var disposeBag = Set<AnyCancellable>()
     
+    let fetchedResultsController: NSFetchedResultsController<ChatMessage>
+    
     // input
     let context: AppContext
     let chat: Chat
-    //let chatMessages = PassthroughSubject<[ChatMessage], Never>()
-    
-    var shouldEnterEditModeAtAppear = false
+    weak var tableView: UITableView?
     
     // output
-    var diffableDataSource: UITableViewDiffableDataSource<Section, Item>!
-    var items = CurrentValueSubject<[Item], Never>([])
+    // var diffableDataSource: UITableViewDiffableDataSource<Section, Item>!
+    // var items = CurrentValueSubject<[Item], Never>([])
     
     init(context: AppContext, chat: Chat) {
+        self.fetchedResultsController = {
+            let fetchRequest = ChatMessage.sortedFetchRequest
+            fetchRequest.returnsObjectsAsFaults = false
+            fetchRequest.fetchBatchSize = 20
+            fetchRequest.predicate = ChatMessage.predicate(chat: chat)
+            let controller = NSFetchedResultsController(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context.managedObjectContext,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            
+            return controller
+        }()
         self.context = context
         self.chat = chat
         super.init()
         
-//        chatMessages
-//            .map { chatMessages -> [Item] in
-//                let items = chatMessages
-//                    .filter{ chat.contains(message: $0) }
-//                    .map { Item.chatMessage($0) }
-//                return items
-//            }
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] newItems in
-//                guard let `self` = self else {
-//                    assertionFailure()
-//                    return
-//                }
-//                self.items.value = newItems
-//                //print("sink: \(newItems.count)")
-//            }
-//            .store(in: &disposeBag)
+        fetchedResultsController.delegate = self
     }
     
 }
 
 extension ChatViewModel {
     
-    func sendMessage(plaintext: String) {
-//        var recipients: [Contact] = []
-//        var recipientKeys: [Key] = []
-//        var recipientPublicKeys: [Ed25519.PublicKey] = []
-//        
-//        guard let identity = context.documentStore.contacts.first(where: { $0.keyID == chat.identityKeyID }),
-//        let identityKey = context.documentStore.keys.first(where: { $0.keyID == chat.identityKeyID }),
-//        let identityPrivateKey = Ed25519.PrivateKey.deserialize(from: identityKey.privateKey) else {
-//            return
-//        }
-//        
-//        for keyID in chat.memberKeyIDs {
-//            guard let recipient = context.documentStore.contacts.first(where: { $0.keyID == keyID }),
-//            let key = context.documentStore.keys.first(where: { $0.keyID == keyID }),
-//            let publicKey = Ed25519.PublicKey.deserialize(serialized: key.publicKey) else {
-//                continue
-//            }
-//            
-//            recipients.append(recipient)
-//            recipientKeys.append(key)
-//            recipientPublicKeys.append(publicKey)
-//        }
-//        
-//        guard !recipients.isEmpty else {
-//            return
-//        }
-//    
-//        let encryptor = Message.Encryptor(publicKeys: recipientPublicKeys.map { $0.x25519 })
-//        let plaintextData = Data(plaintext.utf8)
-//        
-//        // TODO: extra
-//        do {
-//            let message = encryptor.encrypt(plaintext: plaintextData, extraPlaintext: nil, signatureKey: identityPrivateKey)
-//            guard let armor = try? message.serialize() else {
-//                return
-//            }
-//            
-//            let chatMessage = ChatMessage(plaintextData: plaintextData,
-//                                          composeTimestamp: Date(),
-//                                          receiveTimestamp: Date(),
-//                                          senderName: identity.name,
-//                                          senderEmail: identity.email,
-//                                          senderKeyID: identity.keyID,
-//                                          message: armor,
-//                                          createTimestamp: Date(),
-//                                          version: 1,
-//                                          recipientKeyIDs: recipientPublicKeys.map { $0.keyID })
-//            context.documentStore.create(chatMessage: chatMessage, forChat: chat)
-//        } catch {
-//            
-//        }
+    static func configure(cell: ChatMessageTableViewCell, with chatMessage: ChatMessage) {
+        let senderStub = chatMessage.chat?.memberNameStubs?.first(where: { $0.publicKey == chatMessage.senderPublicKey })
+        let sender: Contact? = {
+            guard let publicKey = senderStub?.publicKey else { return nil }
+            let request = Contact.sortedFetchRequest
+            request.predicate = Contact.predicate(publicKey: publicKey)
+            request.fetchLimit = 1
+            do {
+                return try chatMessage.managedObjectContext?.fetch(request).first
+            } catch {
+                assertionFailure(error.localizedDescription)
+                return nil
+            }
+        }()
+        
+        cell.avatarViewModel.infos = [AvatarViewModel.Info(name: senderStub?.name ?? "A", image: sender?.avatar)]
+        cell.nameLabel.text = senderStub?.name ?? "<Unknown>"
+        cell.messageLabel.text = {
+            switch chatMessage.payloadKind {
+            case .plaintext:
+                return String(data: chatMessage.payload, encoding: .utf8) ?? "<Empty>"
+            default:
+                return "<Raw Data>"
+            }
+        }()
+        // TODO: expand check
+        // cell.messageLabel.numberOfLines = 3
+        cell.messageLabel.numberOfLines = 0
+        cell.receiveTimestampLabel.text = {
+            let dateFormatter = DateFormatter()
+            // TODO: expand check
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .none
+            return dateFormatter.string(from: chatMessage.receiveTimestamp)
+        }()
+        
+        // FIXME: reply logic
+        cell.replyButton.isHidden = true
     }
     
 }
 
 extension ChatViewModel {
     enum Section: CaseIterable {
-        case main
-    }
-    
-    enum Item: Hashable {
-//        case chatMessage(ChatMessage)
+        case message
     }
 }
 
-extension ChatViewModel {
+// MARK: - NSFetchedResultsControllerDelegate
+extension ChatViewModel: NSFetchedResultsControllerDelegate {
     
-//    func configureDataSource(tableView: UITableView) {
-//        let dataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView) { [weak self] tableView, indexPath, item -> UITableViewCell? in
-//            guard let `self` = self else { return nil }
-//            switch item {
-//            case .chatMessage(let chatMessage):
-//                let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatMessageTableViewCell.self), for: indexPath) as! ChatMessageTableViewCell
-//                cell.senderContactInfoView.nameLabel.text = chatMessage.senderName
-//                cell.senderContactInfoView.emailLabel.text = chatMessage.senderEmail
-//                cell.senderContactInfoView.shortKeyIDLabel.text = String(chatMessage.senderKeyID.suffix(8)).uppercased()
-//
-//                let dateFormatter = DateFormatter()
-//                dateFormatter.dateStyle = .medium
-//                dateFormatter.timeStyle = .none
-//
-//                if let composeTimestamp = chatMessage.composeTimestamp.flatMap({ dateFormatter.string(from: $0) }) {
-//                    cell.composeTimestampLabel.text = composeTimestamp
-//                } else {
-//                    cell.composeTimestampLabel.text = "-"
-//                }
-//                cell.receiveTimestampLabel.text = dateFormatter.string(from: chatMessage.receiveTimestamp)
-//                cell.messageContentTextView.text = {
-//                    switch chatMessage.plaintextKind {
-//                    case .text:
-//                        return String(data: chatMessage.plaintextData, encoding: .utf8) ?? "<invalid message content>"
-//                    case .image:
-//                        return ""
-//                    case .file:
-//                        return "File: \(chatMessage.plaintextData.count)"
-//                    }
-//                }()
-//                return cell
-//            }
-//        }   // end let dataSource = …
-//
-//        diffableDataSource = dataSource
-//    }   // end func configureDataSource(:) { … }
-
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView?.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .update:
+            break
+        case .move:
+            break
+        case .delete:
+            tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else { fatalError("Index Path should be not nil") }
+            tableView?.insertRows(at: [newIndexPath], with: .fade)
+            
+        case .update:
+            guard let indexPath = indexPath else {
+                fatalError("Index Path should be not nil")
+            }
+            let chatMessage = fetchedResultsController.object(at: indexPath)
+            guard let cell = tableView?.cellForRow(at: indexPath) as? ChatMessageTableViewCell else {
+                return
+            }
+            
+            ChatViewModel.configure(cell: cell, with: chatMessage)
+            
+        case .move:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
+            
+            tableView?.deleteRows(at: [indexPath], with: .fade)
+            tableView?.insertRows(at: [newIndexPath], with: .fade)
+            
+        case .delete:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            tableView?.deleteRows(at: [indexPath], with: .fade)
+            
+        @unknown default:
+            assertionFailure()
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.endUpdates()
+    }
+    
 }
 
 // MARK: - UITableViewDataSource
-// extension ChatViewModel: UITableViewDataSource {
-//
-//     func numberOfSections(in tableView: UITableView) -> Int {
-//         return 1
-//     }
-//
-//     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//         return chatMessages.value.count
-//     }
-//
-//     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatMessageTableViewCell.self), for: indexPath) as! ChatMessageTableViewCell
-//         let chatMessage = chatMessages.value[indexPath.row]
-//
-//         return cell
-//     }
-//
-// }
+ extension ChatViewModel: UITableViewDataSource {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ChatMessageTableViewCell.self), for: indexPath) as! ChatMessageTableViewCell
+        
+        let chatMessage = fetchedResultsController.object(at: indexPath)
+        ChatViewModel.configure(cell: cell, with: chatMessage)
+        
+        return cell
+    }
+
+ }
 
 final class ChatViewController: UIViewController, NeedsDependency {
 
@@ -194,19 +199,34 @@ final class ChatViewController: UIViewController, NeedsDependency {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ChatMessageTableViewCell.self, forCellReuseIdentifier: String(describing: ChatMessageTableViewCell.self))
-        tableView.keyboardDismissMode = .onDrag
-        // FIXME:
-        // system not offer real time keyboard frame anymore
-        // needs some hacks when not use inputAccessoryView to update inputView frame
-        // tableView.keyboardDismissMode = .interactive
+        tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         return tableView
     }()
     
-    lazy var messageInputView: MessageInputView = {
-        let inputView = MessageInputView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        inputView.delegate = self
-        return inputView
+    private lazy var floatyButton: Floaty = {
+        let button = Floaty()
+        button.buttonColor = UIColor(dynamicProvider: { traitCollection -> UIColor in
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                return UIColor.white.withAlphaComponent(0.8)
+            default:
+                return .systemBackground
+            }
+        })
+        button.buttonImage = Asset.Communication.arrowshapeTurnUpLeft2Fill.image
+        button.handleFirstItemDirectly = true
+        
+        let replyAll: FloatyItem = {
+            let item = FloatyItem()
+            item.title = "Reply All"
+            item.handler = self.replyAllFloatyItemPressed
+            return item
+        }()
+        
+        button.addItem(item: replyAll)
+        
+        return button
     }()
     
     deinit {
@@ -232,116 +252,38 @@ extension ChatViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
-        messageInputView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(messageInputView)
-        NSLayoutConstraint.activate([
-            messageInputView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: messageInputView.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: messageInputView.bottomAnchor),
-        ])
+        view.addSubview(floatyButton)
                 
+        viewModel.tableView = tableView
         tableView.delegate = self
-//        viewModel.configureDataSource(tableView: tableView)
-//        viewModel.diffableDataSource.defaultRowAnimation = .none
-//        tableView.dataSource = viewModel.diffableDataSource
-        
-//        context.documentStore.$chatMessages
-//            .sink { [weak self] chatMessages in
-//                self?.viewModel.chatMessages.send(chatMessages)
-//            }
-//            .store(in: &disposeBag)
-        
-        viewModel.items
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] items in
-                guard let `self` = self else { return }
-                guard let dataSource = self.viewModel.diffableDataSource else { return }
-                var snapshot = NSDiffableDataSourceSnapshot<ChatViewModel.Section, ChatViewModel.Item>()
-                snapshot.appendSections([.main])
-                snapshot.appendItems(items, toSection: .main)
-                
-                dataSource.apply(snapshot)
-                
-                let numberOfSections = self.tableView.numberOfSections
-                guard numberOfSections > 0 else { return }
-                let numberOfRowsInLastSection = self.tableView.numberOfRows(inSection: numberOfSections - 1)
-                guard numberOfRowsInLastSection > 0 else { return }
-                self.tableView.scrollToRow(
-                    at: IndexPath(row: numberOfRowsInLastSection - 1, section: numberOfSections - 1),
-                    at: .bottom,
-                    animated: self.isViewAppeared
-                )
-                self.isViewAppeared = true
-            }
-            .store(in: &disposeBag)
-        
-        NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification, object: nil)
-            .sink { notification in
-
-                guard let beginFrame = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect,
-                let endFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
-                    return
-                }
-
-                guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-                let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
-
-                let option = UIView.AnimationOptions(rawValue: curve << 16)
-                self.messageInputView.keyboardPaddingViewHeightLayoutConstraint.constant = endFrame.size != .zero ? endFrame.height + 8 : 0
-                UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, option], animations: {
-                    let oldInputViewHeight = self.messageInputView.frame.height
-                    self.messageInputView.setNeedsLayout()
-                    self.messageInputView.layoutIfNeeded()
-                
-                    // move tableView content when visible cell overlapped
-                    self.tableView.visibleCells.last?.layoutIfNeeded()
-                    if let lastCellFrame = self.tableView.visibleCells.last?.frame {
-                        let inputViewMinYInTable = self.tableView.contentOffset.y + self.tableView.frame.height - self.messageInputView.frame.height
-                        let lastCellMaxYInTable = lastCellFrame.maxY
-                        
-                        if lastCellMaxYInTable > inputViewMinYInTable {
-                            let offset = min(lastCellMaxYInTable - inputViewMinYInTable, self.messageInputView.frame.height - oldInputViewHeight)
-                            self.tableView.contentOffset.y += offset
-                        }
-                    }
-                }, completion: { _ in
-
-                })
-            }
-            .store(in: &disposeBag)
-
-        NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification, object: nil)
-            .sink { notification in
-                guard let beginFrame = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect,
-                let endFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
-                    return
-                }
-
-                guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-                    let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
-                
-                let option = UIView.AnimationOptions(rawValue: curve << 16)
-                self.messageInputView.keyboardPaddingViewHeightLayoutConstraint.constant = .leastNonzeroMagnitude
-                UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, option], animations: {
-                    self.messageInputView.setNeedsLayout()
-                    self.messageInputView.layoutIfNeeded()
-                }, completion: { _ in
-                    
-                })
-            }
-            .store(in: &disposeBag)
+        do {
+            try viewModel.fetchedResultsController.performFetch()
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+        tableView.dataSource = viewModel
+        tableView.reloadData()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        tableView.reloadData()
+        //tableView.reloadData()
         //DispatchQueue.main.async {
         //    // async it to fix keyboard transition animation bug
         //    if self.viewModel.shouldEnterEditModeAtAppear {
         //        self.messageInputView.inputTextView.becomeFirstResponder()
         //    }
         //}
+    }
+    
+}
+
+extension ChatViewController {
+    
+    @objc private func replyAllFloatyItemPressed(_ sender: FloatyItem) {
+        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+
     }
     
 }
@@ -361,29 +303,32 @@ extension ChatViewController: UITableViewDelegate {
 
 }
 
-// MARK: - MessageInputViewDelegate
-extension ChatViewController: MessageInputViewDelegate {
-        
-    func messageInputView(_ inputView: MessageInputView, submitButtonPressed button: UIButton) {
-        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
-        guard let plaintext = inputView.inputTextView.text, !plaintext.isEmpty else {
-            return
-        }
-        
-        viewModel.sendMessage(plaintext: plaintext)
-        inputView.inputTextView.text = ""
-    }
-    
-    func messageInputView(_ inputView: MessageInputView, boundsDidUpdate bounds: CGRect) {
-        tableView.contentInset.bottom = bounds.height - view.safeAreaInsets.bottom
-        tableView.verticalScrollIndicatorInsets.bottom = bounds.height - view.safeAreaInsets.bottom
-    }
-    
-}
+//// MARK: - MessageInputViewDelegate
+//extension ChatViewController: MessageInputViewDelegate {
+//
+//    func messageInputView(_ inputView: MessageInputView, submitButtonPressed button: UIButton) {
+//        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+////        guard let plaintext = inputView.inputTextView.text, !plaintext.isEmpty else {
+////            return
+////        }
+////
+////        viewModel.sendMessage(plaintext: plaintext)
+////        inputView.inputTextView.text = ""
+//    }
+//
+//    func messageInputView(_ inputView: MessageInputView, boundsDidUpdate bounds: CGRect) {
+//        tableView.contentInset.bottom = bounds.height - view.safeAreaInsets.bottom
+//        tableView.verticalScrollIndicatorInsets.bottom = bounds.height - view.safeAreaInsets.bottom
+//    }
+//
+//}
 
 // MARK: - ChatMessageTableViewCellDelegate
 extension ChatViewController: ChatMessageTableViewCellDelegate {
-    func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, shareButtonPressed button: UIButton) {
+    
+    func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, replyButtonPressed button: UIButton) {
+        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+
 //        guard let indexPath = tableView.indexPath(for: cell), indexPath.row < viewModel.items.value.count else {
 //            return
 //        }
@@ -393,4 +338,16 @@ extension ChatViewController: ChatMessageTableViewCellDelegate {
 //            ShareService.shared.share(chatMessage: chatMessage, sender: self, sourceView: button)
 //        }
     }
+    
+    func chatMessageTableViewCell(_ cell: ChatMessageTableViewCell, moreButtonPressed button: UIButton) {
+        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+        
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        
+        let chatMessage = viewModel.fetchedResultsController.object(at: indexPath)
+        ShareService.share(chatMessage: chatMessage, from: self, anchor: cell.contentView)
+    }
+    
 }

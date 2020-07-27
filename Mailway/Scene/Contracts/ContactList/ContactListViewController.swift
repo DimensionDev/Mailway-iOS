@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 import Combine
+import Floaty
 
 final class ContactListViewController: UIViewController, NeedsDependency, MainTabTransitionableViewController {
 
@@ -36,6 +37,24 @@ final class ContactListViewController: UIViewController, NeedsDependency, MainTa
         return tableView
     }()
     
+    private lazy var floatyButton: Floaty = {
+        let button = Floaty()
+        button.plusColor = .white
+        button.buttonColor = Asset.Color.Background.blue.color
+        button.handleFirstItemDirectly = true
+        
+        let addContact: FloatyItem = {
+            let item = FloatyItem()
+            item.title = "Add Contact"
+            item.handler = self.createContactFloatyItemPressed
+            return item
+        }()
+        
+        button.addItem(item: addContact)
+        
+        return button
+    }()
+    
     private(set) lazy var viewModel = ContactListViewModel(context: context)
     
 }
@@ -57,6 +76,8 @@ extension ContactListViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+        
+        view.addSubview(floatyButton)
         
         viewModel.tableView = tableView
         tableView.delegate = self
@@ -97,6 +118,10 @@ extension ContactListViewController {
     
     @objc private func sidebarBarButtonItemPressed(_ sender: UIBarButtonItem) {
         coordinator.present(scene: .sidebar, from: self, transition: .custom(transitioningDelegate: transitionController))
+    }
+    
+    @objc private func createContactFloatyItemPressed(_ sender: FloatyItem) {
+        coordinator.present(scene: .addContact, from: self, transition: .modal(animated: true, completion: nil))
     }
     
 }
