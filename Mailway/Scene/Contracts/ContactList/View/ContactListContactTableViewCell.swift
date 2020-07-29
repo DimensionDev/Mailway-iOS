@@ -8,9 +8,11 @@
 
 import UIKit
 import SwiftUI
-
+import Combine
 
 final class ContactListContactTableViewCell: UITableViewCell {
+    
+    var disposeBag = Set<AnyCancellable>()
     
     private lazy var avatarView = AvatarView(viewModel: avatarViewModel)
     let avatarViewModel = AvatarViewModel()
@@ -22,7 +24,20 @@ final class ContactListContactTableViewCell: UITableViewCell {
         return label
     }()
     
+    let checkmarkImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = Asset.Editing.circle.image
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     let separatorLine = UIView.separatorLine
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.disposeBag = Set()
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -57,8 +72,17 @@ extension ContactListContactTableViewCell {
         contentView.addSubview(nameLabel)
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: hostingController.view.trailingAnchor, constant: 32),
-            nameLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             nameLabel.centerYAnchor.constraint(equalTo: hostingController.view.centerYAnchor),
+        ])
+        nameLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        
+        checkmarkImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(checkmarkImageView)
+        NSLayoutConstraint.activate([
+            checkmarkImageView.centerYAnchor.constraint(equalTo: hostingController.view.centerYAnchor),
+            contentView.layoutMarginsGuide.trailingAnchor.constraint(equalTo: checkmarkImageView.trailingAnchor),
+            checkmarkImageView.widthAnchor.constraint(equalToConstant: 24),
+            checkmarkImageView.heightAnchor.constraint(equalToConstant: 24).priority(.defaultHigh),
         ])
                 
         separatorLine.translatesAutoresizingMaskIntoConstraints = false

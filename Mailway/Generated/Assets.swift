@@ -61,6 +61,8 @@ internal enum Asset {
     internal static let trayAndArrowDown = ImageAsset(name: "Communication/tray.and.arrow.down")
   }
   internal enum Editing {
+    internal static let checkmarkCircleFill = ImageAsset(name: "Editing/checkmark.circle.fill")
+    internal static let circle = ImageAsset(name: "Editing/circle")
     internal static let close = ImageAsset(name: "Editing/close")
     internal static let docOnDoc = ImageAsset(name: "Editing/doc.on.doc")
     internal static let moreVertical = ImageAsset(name: "Editing/more.vertical")

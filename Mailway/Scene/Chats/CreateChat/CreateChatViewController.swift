@@ -56,6 +56,27 @@ final class CreateChatViewModel: NSObject {
     
 }
 
+extension CreateChatViewModel {
+    
+    func configure(cell: ContactListContactTableViewCell, with contact: Contact) {
+        ContactListViewModel.configure(cell: cell, with: contact)
+        
+        cell.checkmarkImageView.isHidden = false
+        selectedContacts.sink { contacts in
+            if contacts.contains(contact) {
+                cell.checkmarkImageView.image = Asset.Editing.checkmarkCircleFill.image
+                cell.checkmarkImageView.tintColor = nil
+            } else {
+                cell.checkmarkImageView.image = Asset.Editing.circle.image.withRenderingMode(.alwaysTemplate)
+                cell.checkmarkImageView.tintColor = .label
+            }
+        }
+        .store(in: &cell.disposeBag)
+    }
+    
+}
+
+
 // MARK: - NSFetchedResultsControllerDelegate
 extension CreateChatViewModel: NSFetchedResultsControllerDelegate {
     
@@ -88,12 +109,12 @@ extension CreateChatViewModel: NSFetchedResultsControllerDelegate {
             guard let indexPath = indexPath else {
                 fatalError("Index Path should be not nil")
             }
-            let identity = fetchedResultsController.object(at: indexPath)
-            guard let cell = tableView?.cellForRow(at: indexPath) as? IdentityListIdentityTableViewCell else {
+            let contact = fetchedResultsController.object(at: indexPath)
+            guard let cell = tableView?.cellForRow(at: indexPath) as? ContactListContactTableViewCell else {
                 assertionFailure()
                 return
             }
-            IdentityListViewModel.configure(cell: cell, with: identity)
+            configure(cell: cell, with: contact)
             
         case .move:
             guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
@@ -137,7 +158,7 @@ extension CreateChatViewModel: UITableViewDataSource {
             return cell
         }
         let contact = fetchedResultsController.object(at: indexPath)
-        ContactListViewModel.configure(cell: cell, with: contact)
+        configure(cell: cell, with: contact)
         
         return cell
     }
