@@ -48,14 +48,14 @@ struct AvatarView: View {
             if viewModel.infos.count <= 1 {
                 ZStack {
                     if viewModel.infos.first?.image != nil {
-                        Circle()
-                            .overlay(
-                                GeometryReader { proxy in
-                                    Image(uiImage: self.viewModel.infos.first?.image ?? UIImage.placeholder(color: .systemFill))
-                                        .resizable()
-                                        .cornerRadius(proxy.size.width * 0.5)
-                                }
-                            )
+                        GeometryReader { proxy in
+                            Image(uiImage: self.viewModel.infos.first?.image ?? UIImage.placeholder(color: .systemFill))
+                                .resizable()
+                                .cornerRadius(proxy.size.width * 0.5)
+                        }
+//                        Circle()
+//                            .overlay(
+//                            )
                     } else {
                         Circle()
                             .foregroundColor(Color(Asset.Color.Background.blue.color))
@@ -69,31 +69,20 @@ struct AvatarView: View {
                 DiagonalStack(data: Array(viewModel.infos.enumerated()), scale: 0.7) { i, item in
                     ZStack {
                         if self.viewModel.infos.first?.image != nil {
-                            Circle()
-                                .overlay(
-                                    GeometryReader { proxy in
-                                        Image(uiImage: self.viewModel.infos.first?.image ?? UIImage.placeholder(color: .systemFill))
-                                            .resizable()
-                                            .cornerRadius(proxy.size.width * 0.5)
-                                    }
-                                )
+                            GeometryReader { proxy in
+                                Image(uiImage: self.viewModel.infos.first?.image ?? UIImage.placeholder(color: .systemFill))
+                                    .resizable()
+                                    .cornerRadius(proxy.size.width * 0.5)
+                            }
                         } else {
-                            Circle()
+                            Rectangle()
                                 .foregroundColor(AvatarViewModel.backgroundColor(at: i, total: self.viewModel.infos.count))
                             Text(String((item.name).prefix(1)))
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.white)
                         }
                     }
-                    .overlay(
-                        GeometryReader { proxy in
-                            Circle()
-                                .strokeBorder(Color.white, lineWidth: 2, antialiased: true)         // use .strokeBorder to add border inside
-                                .frame(width: proxy.size.width + 4, height: proxy.size.height + 4)  // add spacing for border
-                        }
-                    )
                 }
-                // .border(Color.black)
             }
         }
         .edgesIgnoringSafeArea(.all)

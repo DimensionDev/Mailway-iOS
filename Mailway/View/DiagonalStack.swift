@@ -18,12 +18,19 @@ struct DiagonalStack<Element, Content: View> {
 extension DiagonalStack: View {
     
     var body: some View {
+        let count = data.count
         return GeometryReader { proxy in
             ZStack(alignment: .topLeading) {
                 ForEach(Array(self.data.enumerated()), id: \.offset, content: { index, element in
                     self.content(element)
-                        .frame(width: 0.7 * proxy.size.width, height: 0.7 * proxy.size.height)
-                        .offset(self.computeOffset(index: index, total: self.data.count, scale: self.scale, size: proxy.size))
+                        .frame(width: self.scale * proxy.size.width, height: self.scale * proxy.size.height)
+                        .mask(Circle().inset(by: 1))
+                        .mask(
+                            self.computeMask(index: index, total: count, scale: self.scale, size: proxy.size)
+                            .fill(style: FillStyle(eoFill: true))
+                        )
+                        .offset(self.computeOffset(index: index, total: count, scale: self.scale, size: proxy.size))
+                    
                 })
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -47,6 +54,30 @@ extension DiagonalStack: View {
         )
         
         return offset
+    }
+    
+    func computeMask(index: Int, total: Int, scale: CGFloat, size: CGSize) -> Path {
+        let contentSize = CGSize(width: scale * size.width, height: scale * size.height)
+        let contentFrame = CGRect(origin: .zero, size: contentSize)
+        guard index != total - 1 else {
+            return Circle().path(in: contentFrame)
+        }
+        
+        let currentOffset = computeOffset(index: index, total: total, scale: scale, size: size)
+        let nextOffset = computeOffset(index: index + 1, total: total, scale: scale, size: size)
+
+        var shape = Circle().path(in: contentFrame)
+        
+        shape.addPath(
+            Circle()
+                .offset(x: nextOffset.width - currentOffset.width,
+                        y: nextOffset.height - currentOffset.height)
+                .path(in:
+                    contentFrame
+                        .insetBy(dx: -UIScreen.main.scale, dy: -UIScreen.main.scale)
+                )
+        )
+        return shape
     }
 }
 
